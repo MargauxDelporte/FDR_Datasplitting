@@ -2,9 +2,12 @@
 rm(list = ls())
 
 mywd='C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
+
 setwd(mywd)
 source('HelperFunctions.R')
 source('TriangleLinRegTrainMS.R')
+source('TriangleBoosterTrainMS.R')
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
 source(paste0(mywd,'/Functions Dai/MBHq.R'))
@@ -147,4 +150,52 @@ PlotPermute=ggarrange(
   common.legend = TRUE, legend = "right"
 )
 PlotPermute
+
+
+##########apply linear boosrter###############
+Compare_SignalStrenght=function(i,s){
+  set.seed(s)
+  ResultsDataFrame=data.frame()
+  delta <- i
+  X <- mvrnorm(n, mu = rep(0, p), Sigma = diag(p))
+  
+  ### randomly generate the true beta i=4
+  beta_star <- rep(0, p)
+  beta_star[signal_index] <- rnorm(p0, mean = 0, sd = delta*sqrt(log(p)/n))
+  
+  ### generate y
+  y <- X%*%beta_star + rnorm(n, mean = 0, sd = 1)
+  
+  ###my own methods:
+  g=ApplyTriangleBoostTrain(X, y, q=0.1,num_split=10,mybooster='gblinear', signal_index=signal_index, amountTrain=0.333, myseed = 1)
+  
+  ResultsDataFrame=c('LinBooster DS',i, as.numeric(g$DS_fdp),as.numeric(g$DS_power))
+  ResultsDataFrame=rbind(ResultsDataFrame,c('LinBooster MS',i, as.numeric(g$MDS_fdp),as.numeric(g$MDS_power)))
+  
+  ### Competition
+  DS_result <- DS(X,y, num_split=10, q=0.1)
+  ResultsDataFrame=rbind(ResultsDataFrame,c('DataSplitting',i,DS_result$DS_fdp,DS_result$DS_power))
+  ResultsDataFrame=rbind(ResultsDataFrame,c('MultipleDataSplitting',i,DS_result$MDS_fdp,DS_result$MDS_power))
+  
+  knockoff_result <- knockoff(X, y, q=0.1)
+  ResultsDataFrame=rbind(ResultsDataFrame,c('Knockoff',i,knockoff_result$fdp,knockoff_result$power))
+  
+  BH_result <- MBHq(X, y, q=0.1, num_split)
+  ResultsDataFrame=rbind(ResultsDataFrame,c('BH',i,BH_result$fdp,BH_result$power))
+  
+  ### save data
+  return(ResultsDataFrame)}
+
+Results=data.frame()
+for(s in 1:25){
+  for(i in seq(from=5,to=13,by=1)){
+    Results=rbind(Results,Compare_SignalStrenght(i,s))
+    print(Results)
+  }
+}
+names(Results)
+
+names(Results)=c('Method','SignalStrength', 'FDR','Power')
+
+write.xlsx(Results,file='VanillaResultsBooster.xlsx')
 
