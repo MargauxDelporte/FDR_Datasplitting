@@ -7,7 +7,7 @@ mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
 setwd(mywd)
 source('HelperFunctions.R')
 source('TriangleLinRegTrainMS.R')
-source('TriangleBoosterTrainMS.R')
+source(paste0(mywd,'NoSplit/NoSplitLM.R'))
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
 source(paste0(mywd,'/Functions Dai/MBHq.R'))
@@ -40,7 +40,7 @@ q <- 0.1
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-################################Triange: train test test each 30####################################
+################################Triange: train test test each 30#################################### i=25
 Compare_SignalStrenght=function(i,s){
   set.seed(s)
   ResultsDataFrame=data.frame()
@@ -55,10 +55,18 @@ Compare_SignalStrenght=function(i,s){
   y <- X%*%beta_star + rnorm(n, mean = 0, sd = 1)
   
   ###my own methods:
-  g=ApplyTriangleLinRegTrain(X=as.data.frame(X), y, q=0.1,num_split=10, signal_index=signal_index, amountTrain=0.333, myseed = 1)
+  #g=ApplyTriangleLinRegTrain(X=as.data.frame(X), y, q=0.1,num_split=10, signal_index=signal_index, amountTrain=0.333, myseed = 1)
   
-  ResultsDataFrame=c('LinReg DS',i, as.numeric(g$DS_fdp),as.numeric(g$DS_power))
-  ResultsDataFrame=rbind(ResultsDataFrame,c('LinReg MS',i, as.numeric(g$MDS_fdp),as.numeric(g$MDS_power)))
+  #ResultsDataFrame=c('LinReg DS',i, as.numeric(g$DS_fdp),as.numeric(g$DS_power))
+  #ResultsDataFrame=rbind(ResultsDataFrame,c('LinReg MS',i, as.numeric(g$MDS_fdp),as.numeric(g$MDS_power)))
+  
+  g2=ApplyLMNoSplit(X=as.data.frame(X), y, q=0.1,num_split=10, signal_index=signal_index, amountTrain=0.333, myseed = 1)
+  ResultsDataFrame=c('2 split DS',i, as.numeric(g2$DS_fdp),as.numeric(g2$DS_power))
+  ResultsDataFrame=rbind(ResultsDataFrame,c('2 splitMS',i, as.numeric(g2$MDS_fdp),as.numeric(g2$MDS_power)))
+  
+  
+  #ResultsDataFrame=c('LinReg DS',i, as.numeric(g$DS_fdp),as.numeric(g$DS_power))
+  #ResultsDataFrame=rbind(ResultsDataFrame,c('LinReg MS',i, as.numeric(g$MDS_fdp),as.numeric(g$MDS_power)))
   
   ### Competition
   DS_result <- DS(X,y, num_split=10, q=0.1)
@@ -172,7 +180,7 @@ Compare_SignalStrenght=function(i,s){
 
 Results=data.frame()
 for(s in 1:25){
-  for(i in seq(from=3,to=7,by=1)){
+  for(i in seq(from=5,to=13,by=1)){
     Results=rbind(Results,Compare_SignalStrenght(i,s))
     print(Results)
   }
@@ -194,7 +202,7 @@ colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
 Results2=Results
 Results2$FDR=round(as.numeric(Results2$FDR),3)
 Results2$Power=round(as.numeric(Results2$Power),2)
-#Results2=subset(Results2,SignalStrength%in%as.character(7:13))
+Results2=subset(Results2,SignalStrength%in%as.character(7:13))
 resultsagg <- Results2 %>%
   group_by(Method, SignalStrength) %>%
   summarize(
@@ -221,7 +229,7 @@ PowerPlot <- ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_Power),
   scale_x_continuous(breaks = seq(from = 5, to = 13, by = 1)) +
   geom_hline(yintercept = 0.8) +
   scale_color_manual(values = colors)+
-  coord_cartesian(ylim = c(0.1, 1)) 
+  coord_cartesian(ylim = c(0.5, 1)) 
 FDRPlot=ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_FDR ), color = Method)) +
   geom_point(size = 3) +
   geom_line()+

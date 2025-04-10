@@ -172,7 +172,7 @@ Compare_SignalStrenght=function(i,s){
 
 Results=data.frame()
 for(s in 1:25){
-  for(i in seq(from=3,to=7,by=1)){
+  for(i in seq(from=5,to=13,by=1)){
     Results=rbind(Results,Compare_SignalStrenght(i,s))
     print(Results)
   }
@@ -194,7 +194,7 @@ colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
 Results2=Results
 Results2$FDR=round(as.numeric(Results2$FDR),3)
 Results2$Power=round(as.numeric(Results2$Power),2)
-#Results2=subset(Results2,SignalStrength%in%as.character(7:13))
+Results2=subset(Results2,SignalStrength%in%as.character(7:13))
 resultsagg <- Results2 %>%
   group_by(Method, SignalStrength) %>%
   summarize(
@@ -221,7 +221,7 @@ PowerPlot <- ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_Power),
   scale_x_continuous(breaks = seq(from = 5, to = 13, by = 1)) +
   geom_hline(yintercept = 0.8) +
   scale_color_manual(values = colors)+
-  coord_cartesian(ylim = c(0.1, 1)) 
+  coord_cartesian(ylim = c(0.5, 1)) 
 FDRPlot=ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_FDR ), color = Method)) +
   geom_point(size = 3) +
   geom_line()+
