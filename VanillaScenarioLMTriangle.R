@@ -181,7 +181,7 @@ names(Results)
 
 names(Results)=c('Method','SignalStrength', 'FDR','Power')
 
-write.xlsx(Results,file='VanillaResults_train50.xlsx')
+write.xlsx(Results,file='VanillaResults_smallersignals.xlsx')
 #Results=read.xlsx('Vanilla.xlsx')
 
 ####Visualise the results
@@ -218,7 +218,7 @@ PowerPlot <- ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_Power),
   geom_point(size = 3) +
   geom_line()+
   labs(x = "Signal", y = "Power") +
-  scale_x_continuous(breaks = seq(from = 5, to = 13, by = 1)) +
+  scale_x_continuous(breaks = seq(from = 3, to = 13, by = 1)) +
   geom_hline(yintercept = 0.8) +
   scale_color_manual(values = colors)+
   coord_cartesian(ylim = c(0.1, 1)) 
@@ -226,7 +226,7 @@ FDRPlot=ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_FDR ), color
   geom_point(size = 3) +
   geom_line()+
   labs(x = "Signal", y = "FDP")+
-  scale_x_continuous(breaks=seq(from=5,to=13,by=1))+
+  scale_x_continuous(breaks=seq(from=3,to=13,by=1))+
   geom_hline(yintercept=0.1)+
   scale_color_manual(values = colors)
 PlotPermute=ggarrange(
