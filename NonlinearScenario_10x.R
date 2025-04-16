@@ -8,6 +8,9 @@ setwd(mywd)
 source('HelperFunctions.R')
 #source('TriangleLinRegTrainMS.R')
 source(paste0(mywd,'/TriangleBoosterTrainMS.R'))
+source(paste0(mywd,'/TriangleRangerTrainMS.R'))
+source(paste0(mywd,'/TriangleGBMTrainMS.R'))
+
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
 source(paste0(mywd,'/Functions Dai/MBHq.R'))
@@ -16,20 +19,18 @@ source(paste0(mywd,'/Functions Dai/fdp_power.R'))
 
 #devtools::install_github("Jeremy690/DSfdr/DSfdr",force = TRUE)
 library(xgboost)
+library(gbm)
+library(ranger)
 library(MASS)
+
+
 library(glmnet)
 library(knockoff)
 library(mvtnorm)
 library(hdi)
-library(dplyr)
-library(ggplot2)
-library(RColorBrewer)
-library(openxlsx)
-library(ggpubr)
-library(viridis)
 
 ### algorithmic settings
-num_split <- 1
+num_split <- 10
 n <-1500
 p <- 250
 p0 <- 25
@@ -38,56 +39,142 @@ q <- 0.1
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-################################Triange: train test test each 30#################################### i=10
-Compare_SignalStrenght=function(i,s){
+#######set up the method for the comparison#############
+Compare_SignalStrength <- function(i, s) {
   set.seed(s)
-  ResultsDataFrame=data.frame()
   delta <- i
+  
+  # simulate data
   X <- mvrnorm(n, mu = rep(0, p), Sigma = diag(p))
+  beta_star <- numeric(p)
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*10
+  y <- scale(X^2 %*% beta_star + rnorm(n))
   
-  ### randomly generate the true beta i=4
-  beta_star <- rep(0, p)
-  beta_star[signal_index] <- rnorm(p0, mean = 0, sd = delta*sqrt(log(p)/n))*5
+  # run your custom methods
+  g1 <- ApplyTriangleBoostTrain( X = X, y = y, q = q, num_split = num_split,
+                                 signal_index = signal_index, myseed = 1)
+  g2 <- ApplyTriangleGBMTrain(   X = X, y = y, q = q, num_split = num_split,
+                                 signal_index = signal_index, myseed = 1)
+  g3 <- ApplyTriangleRangerTrain(X = X, y = y, q = q, num_split = num_split,
+                                 signal_index = signal_index, myseed = 1)
   
-  ### generate y
-  y <- X^2%*%beta_star + rnorm(n, mean = 0, sd = 1)
-  y <-scale(y)
-  ###my own methods:
-  g2=ApplyTriangleBoostTrain(X=X, y,mybooster='gbtree', q=0.1,num_split=num_split, signal_index=signal_index, myseed = 1,myeta=0.4,mylambda=0)
-  g2
-  ResultsDataFrame=c('2 split DS',i, as.numeric(g2$DS_fdp),as.numeric(g2$DS_power))
-  ResultsDataFrame=rbind(ResultsDataFrame,c('2 splitMS',i, as.numeric(g2$MDS_fdp),as.numeric(g2$MDS_power)))
+  # FDR methods
+  DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
+  knockoff_result<- knockoff(    X = X, y = y, q = q)
+  BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
   
-  ### Competition
-  DS_result <- DS(X,y, num_split=10, q=0.1)
-  ResultsDataFrame=rbind(ResultsDataFrame,c('DataSplitting',i,DS_result$DS_fdp,DS_result$DS_power))
-  ResultsDataFrame=rbind(ResultsDataFrame,c('MultipleDataSplitting',i,DS_result$MDS_fdp,DS_result$MDS_power))
+  # init empty results df
+  ResultsDataFrame <- data.frame(
+    Method = character(),
+    Delta  = numeric(),
+    FDP    = numeric(),
+    Power  = numeric(),
+    stringsAsFactors = FALSE
+  )
   
-  knockoff_result <- knockoff(X, y, q=0.1)
-  ResultsDataFrame=rbind(ResultsDataFrame,c('Knockoff',i,knockoff_result$fdp,knockoff_result$power))
+  # bind all rows
+  ResultsDataFrame <- rbind(
+    ResultsDataFrame,
+    data.frame(Method = "Boost DS",                Delta = i, FDP = g1$DS_fdp,    Power = g1$DS_power),
+    data.frame(Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power),
+    data.frame(Method = "GBM DS",                  Delta = i, FDP = g2$DS_fdp,    Power = g2$DS_power),
+    data.frame(Method = "GBM MS",                  Delta = i, FDP = g2$MDS_fdp,   Power = g2$MDS_power),
+    data.frame(Method = "Ranger DS",               Delta = i, FDP = g3$DS_fdp,    Power = g3$DS_power),
+    data.frame(Method = "Ranger MS",               Delta = i, FDP = g3$MDS_fdp,   Power = g3$MDS_power),
+    data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
+    data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
+    data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
+    data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
+  )
   
-  BH_result <- MBHq(X, y, q=0.1, num_split)
-  ResultsDataFrame=rbind(ResultsDataFrame,c('BH',i,BH_result$fdp,BH_result$power))
-  
-  ### save data
-  return(ResultsDataFrame)}
+  return(ResultsDataFrame)
+}
 
-
-
+#######run the code#############
 Results=data.frame()
 for(s in 1:25){
   for(i in seq(from=5,to=13,by=1)){
-    Results=rbind(Results,Compare_SignalStrenght(i,s))
-    print(Results)
-  }
+  Results=rbind(Results,Compare_SignalStrength(i,s))
+  print(Results)
+}}
+
+library(parallel)
+
+mywd <- 'C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
+setwd(mywd)
+
+# Source helper and method files
+source('HelperFunctions.R')
+source(file.path(mywd, 'TriangleBoosterTrainMS.R'))
+source(file.path(mywd, 'TriangleRangerTrainMS.R'))
+source(file.path(mywd, 'TriangleGBMTrainMS.R'))
+
+# Dai’s routines
+source(file.path(mywd, 'Functions Dai', 'knockoff.R'))
+source(file.path(mywd, 'Functions Dai', 'analysis.R'))
+source(file.path(mywd, 'Functions Dai', 'MBHq.R'))
+source(file.path(mywd, 'Functions Dai', 'DS.R'))
+source(file.path(mywd, 'Functions Dai', 'fdp_power.R'))
+
+# Load required packages
+pkgs <- c('xgboost','gbm','ranger','MASS','glmnet','knockoff','mvtnorm','hdi',
+          'foreach','doParallel')
+lapply(pkgs, library, character.only = TRUE)
+
+# === PARAMETER GRID ===
+param_grid <- expand.grid(
+  s = 1:25,
+  i = seq(from = 5, to = 13, by = 1)
+)
+
+# === SET UP PARALLEL BACKEND ===
+cl <- makeCluster(detectCores() - 1)
+# export working dir so workers can source
+clusterExport(cl, 'mywd')
+# have each worker source & load libraries
+clusterEvalQ(cl, {
+  setwd(mywd)
+  source('HelperFunctions.R')
+  source(file.path(mywd, 'TriangleBoosterTrainMS.R'))
+  source(file.path(mywd, 'TriangleRangerTrainMS.R'))
+  source(file.path(mywd, 'TriangleGBMTrainMS.R'))
+  source(file.path(mywd, 'Functions Dai', 'knockoff.R'))
+  source(file.path(mywd, 'Functions Dai', 'analysis.R'))
+  source(file.path(mywd, 'Functions Dai', 'MBHq.R'))
+  source(file.path(mywd, 'Functions Dai', 'DS.R'))
+  source(file.path(mywd, 'Functions Dai', 'fdp_power.R'))
+  lapply(c('xgboost','gbm','ranger','MASS','glmnet','knockoff','mvtnorm','hdi'),
+         library, character.only = TRUE)
+})
+registerDoParallel(cl)
+
+# === RUN IN PARALLEL AND WRITE OUT ===
+results_list <- foreach(
+  k = seq_len(nrow(param_grid)),
+  .packages = pkgs,
+  .combine  = rbind
+) %dopar% {
+  s_val <- param_grid$s[k]
+  i_val <- param_grid$i[k]
+  
+  # compute chunk of results
+  chunk <- Compare_SignalStrength(i = i_val, s = s_val)
+  
+  # write out this chunk immediately
+  fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
+  write.csv(chunk, file = fname, row.names = FALSE)
+  
+  # return for final binding
+  chunk
 }
-names(Results)
 
-names(Results)=c('Method','SignalStrength', 'FDR','Power')
+# === CLEANUP AND FINAL SAVE ===
+stopCluster(cl)
 
-write.xlsx(Results,file='VanillaResults2split.xlsx')
-
-
+# combine all and save full dataset
+Results <- results_list
+write.csv(Results, file = "All_Results.csv", row.names = FALSE)
+##########visualise the results###########
 #Results=read.xlsx('VanillaResults.xlsx')
 colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
 Results2=Results
