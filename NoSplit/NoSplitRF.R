@@ -1,17 +1,17 @@
 library(MASS)
-library(randomForest)
+library(randomForestSRC)
 
 #mydata=data[remaining_index,]  j=1 model=rf
 permR2RFNoSplit<-function(mydata,j,model){
   dataPerm<-mydata[,-1]
   dataPerm[,j]<-sample(mydata[,j+1],replace=FALSE)
-  names(dataPerm)=c()
-  predictLM<-predict(model, newdata = as.matrix(dataPerm))
+  names(dataPerm)=paste0('X',1:p)
+  predictLM<-predict(model,dataPerm)$predicted
   rsquared=1-sum((mydata$y-predictLM)^2)/sum((mydata$y-mean(mydata$y))^2)
   return(rsquared)
 }
 
-ApplyRFNoSplit<-function(X, y, q,amountTrain=0.5,myseed,num_split=1,signal_index=signal_index){
+ApplyRFNoSplit<-function(X, y, q,  amountTrain=0.5, myseed,num_split=1,signal_index=signal_index){
   set.seed(myseed)
   n <- dim(X)[1]; p <- dim(X)[2]
   inclusion_rate <- matrix(0, nrow = num_split, ncol = p)
@@ -26,11 +26,11 @@ ApplyRFNoSplit<-function(X, y, q,amountTrain=0.5,myseed,num_split=1,signal_index
   colnames(dataTrain)<-c('y',paste0('X',1:p))
   colnames(data)<-c('y',paste0('X',1:p))
   names(X)=c(paste0('X',1:p))
-  rf<-randomForest(x = as.matrix(X[train_index, ]), y = y[train_index])
+  rf<-rfsrc.fast(y~.,data=dataTrain,max_depth=5,ntree=500,forest=TRUE)
   remaining_percent=1-amountTrain
   remaining_index<-c(setdiff(c(1:n),train_index),sample(train_index,size=remaining_percent*n))
-
-  predictLM1<-predict(rf, newdata = as.matrix(X[remaining_index, ]))
+  Testdata=data[remaining_index,]
+  predictLM1<-predict(rf,Testdata)$predicted
 
   R2orig1<-1-sum((y[remaining_index]-predictLM1)^2)/sum((y[remaining_index]-mean(y[remaining_index]))^2)
 
@@ -38,14 +38,11 @@ ApplyRFNoSplit<-function(X, y, q,amountTrain=0.5,myseed,num_split=1,signal_index
 
   Diff1=R2orig1-Rnew1
 
-  sd_X1 <- apply(X[sample_index1, ], 2, sd)
+  sd_X1 <- apply(X[remaining_index, ], 2, sd)
 
   beta1=sign(Diff1)*sqrt(abs(Diff1))*sd(y)/sd_X1
 
   mirror<-beta1
-  #mirror2=c()
-  #mirror2=c(mirror2,mirror)
-  #hist(mirror2)
   selected_index<-SelectFeatures(mirror,abs(mirror),0.1)
   
   ### number of selected variables j=1

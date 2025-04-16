@@ -7,7 +7,7 @@ mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
 setwd(mywd)
 source('HelperFunctions.R')
 #source('TriangleLinRegTrainMS.R')
-source(paste0(mywd,'/NoSplit/NoSplitBooster.R'))
+source(paste0(mywd,'/NoSplit/NoSplitRF.R'))
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
 source(paste0(mywd,'/Functions Dai/MBHq.R'))
@@ -32,7 +32,7 @@ library(viridis)
 
 ### algorithmic settings
 num_split <- 10
-n <-800
+n <-50
 p <- 100
 p0 <- 10
 q <- 0.1
@@ -47,15 +47,15 @@ Compare_SignalStrenght=function(i,s){
   delta <- i
   X <- mvrnorm(n, mu = rep(0, p), Sigma = diag(p))
   
-  ### randomly generate the true beta i=4
+  ### randomly generate the true beta i=23
   beta_star <- rep(0, p)
-  beta_star[signal_index] <- 0#25#rnorm(p0, mean = 0, sd = delta*sqrt(log(p)/n))
+  beta_star[signal_index] <- rnorm(p0, mean = 0, sd = delta*sqrt(log(p)/n))
   
   ### generate y
   y <- X^2%*%beta_star + rnorm(n, mean = 0, sd = 1)
   
   ###my own methods:
-  g2=ApplyBoostNoSplit(X=as.data.frame(X), y, q=0.1,num_split=5, signal_index=signal_index, amountTrain=0.5, myseed = 1)
+  g2=ApplyRFNoSplit(X=as.data.frame(X), y,  amountTrain=0.5, q=0.1,num_split=5, signal_index=signal_index, myseed = 1)
   ResultsDataFrame=c('2 split DS',i, as.numeric(g2$DS_fdp),as.numeric(g2$DS_power))
   ResultsDataFrame=rbind(ResultsDataFrame,c('2 splitMS',i, as.numeric(g2$MDS_fdp),as.numeric(g2$MDS_power)))
   

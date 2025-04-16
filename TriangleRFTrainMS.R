@@ -1,13 +1,13 @@
-permR2TriangleBoostTrain<-function(data,j,model){
-  dataPerm<-data[,-1]
-  dataPerm[,j]<-sample(data[,j+1],replace=FALSE)
-  names(dataPerm)=c()
-  predictLM<-predict(model,newdata=as.matrix(dataPerm))
-  rsquared=1-sum((data$y-predictLM)^2)/sum((data$y-mean(data$y))^2)
+permR2TriangleRFTrain<-function(mydata,j,model){
+  dataPerm<-mydata[,-1]
+  dataPerm[,j]<-sample(mydata[,j+1],replace=FALSE)
+  names(dataPerm)=paste0('X',1:p)
+  predictLM<-predict(model,dataPerm)$predicted
+  rsquared=1-sum((mydata$y-predictLM)^2)/sum((mydata$y-mean(mydata$y))^2)
   return(rsquared)
 }
 
-ApplyTriangleBoostTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.333,amountTest=1-amountTrain,regpm=1,myeta=0.005,myseed,mybooster='gblinear',num_split=1,signal_index=signal_index){
+ApplyTriangleRFTrain<-function(X, y, q,myseed, amountTrain=0.333,amountTest=1-amountTrain,num_split=1,signal_index=signal_index){
   set.seed(myseed)
   data<-data.frame(cbind(y,X))
   n <- dim(X)[1]; p <- dim(X)[2]
@@ -22,22 +22,23 @@ ApplyTriangleBoostTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.333,am
   colnames(dataTrain)<-c('y',paste0('X',1:p))
   colnames(data)<-c('y',paste0('X',1:p))
   
-  lm<-xgboost(data = as.matrix(X[train_index,]), label =y[train_index],nrounds=best_nrounds,lambda=regpm,eta=myeta,verbose=F,booster=mybooster)
-
+  rf<-rfsrc.fast(y~.,data=dataTrain,max_depth=5,ntree=500,forest=TRUE)
+  
   remaining_percent=1-amountTrain
   overlap=max(c(0,amountTest-remaining_percent))
   remaining_index<-c(setdiff(c(1:n),train_index),sample(train_index,size=overlap*n))
   sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)
   sample_index2 <- setdiff(remaining_index, sample_index1)
-
-  predictLM1<-predict(lm,newdata=as.matrix(X[sample_index1,]))
-  predictLM2<-predict(lm,newdata=as.matrix(X[sample_index2,]))
+  Testdata1=data[sample_index1,]
+  Testdata2=data[sample_index2,]
+  predictLM1<-predict(rf,Testdata1)$predicted
+  predictLM2<-predict(rf,Testdata2)$predicted
   
   R2orig1<-1-sum((y[sample_index1]-predictLM1)^2)/sum((y[sample_index1]-mean(y[sample_index1]))^2)
   R2orig2<-1-sum((y[sample_index2]-predictLM2)^2)/sum((y[sample_index2]-mean(y[sample_index2]))^2)
   
-  Rnew1<-sapply(1:ncol(X),function(j) permR2TriangleBoostTrain(data[sample_index1,],j,lm))
-  Rnew2<-sapply(1:ncol(X),function(j) permR2TriangleBoostTrain(data[sample_index2,],j,lm))
+  Rnew1<-sapply(1:ncol(X),function(j) permR2TriangleRFTrain(data[sample_index1,],j,rf))
+  Rnew2<-sapply(1:ncol(X),function(j) permR2TriangleRFTrain(data[sample_index2,],j,rf))
   
   Diff1=R2orig1-Rnew1
   Diff2=R2orig2-Rnew2
