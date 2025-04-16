@@ -1,19 +1,18 @@
-library(xgboost)
-library(MASS)
-#setwd("~/Desktop/temp") j=1 model=lm
-setwd('C:/Users/mde4023/Documents/GitHub/Mirror_DS_MSE')
-source('HelperFunctions.R')
-?xgboost
+#j=1
+#model=lm
 permR2TriangleBoostTrain<-function(data,j,model){
   dataPerm<-data[,-1]
   dataPerm[,j]<-sample(data[,j+1],replace=FALSE)
-  predictLM<-predict(model,newdata=as.matrix(dataPerm))
+  names(dataPerm)=paste0('X',1:p)
+  predictLM<-predict(model,newdata=data.matrix(dataPerm))
   rsquared=1-sum((data$y-predictLM)^2)/sum((data$y-mean(data$y))^2)
   return(rsquared)
 }
 
-ApplyTriangleBoostTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.333,amountTest=1-amountTrain,regpm=1,myeta=0.005,myseed,mybooster='gblinear',num_split=1,signal_index=signal_index){
+ApplyTriangleBoostTrain<-function(X, y, q,myseed,mybooster='gbtree',num_split=1,signal_index=signal_index,myeta=0.3,mylambda=1){
   set.seed(myseed)
+  amountTrain=0.333
+  amountTest=1-amountTrain
   data<-data.frame(cbind(y,X))
   n <- dim(X)[1]; p <- dim(X)[2]
   inclusion_rate <- matrix(0, nrow = num_split, ncol = p)
@@ -27,11 +26,11 @@ ApplyTriangleBoostTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.333,am
   colnames(dataTrain)<-c('y',paste0('X',1:p))
   colnames(data)<-c('y',paste0('X',1:p))
   
-  lm<-xgboost(data = as.matrix(X[train_index,]), label =y[train_index],nrounds=best_nrounds,lambda=regpm,eta=myeta,verbose=F,booster=mybooster)
-
-  remaining_percent=1-amountTrain
-  overlap=max(c(0,amountTest-remaining_percent))
-  remaining_index<-c(setdiff(c(1:n),train_index),sample(train_index,size=overlap*n))
+  Xtrain=X[train_index,]
+  names(Xtrain)=paste0('X',1:p)
+  lm<-xgboost(data = data.matrix(Xtrain), label =y[train_index],nrounds=1000,lambda=mylambda,eta=myeta,verbose=F,booster=mybooster)
+  #sort(train_index)
+  remaining_index<-c(setdiff(c(1:n),train_index))
   sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)
   sample_index2 <- setdiff(remaining_index, sample_index1)
 
@@ -43,7 +42,7 @@ ApplyTriangleBoostTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.333,am
   
   Rnew1<-sapply(1:ncol(X),function(j) permR2TriangleBoostTrain(data[sample_index1,],j,lm))
   Rnew2<-sapply(1:ncol(X),function(j) permR2TriangleBoostTrain(data[sample_index2,],j,lm))
-  
+
   Diff1=R2orig1-Rnew1
   Diff2=R2orig2-Rnew2
   
@@ -55,6 +54,7 @@ ApplyTriangleBoostTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.333,am
   beta2=sign(Diff2)*sqrt(abs(Diff2))*sd(y)/sd_X2
   
   mirror<-sign(beta1*beta2)*(abs(beta1))
+  hist(mirror[-signal_index])
   selected_index<-SelectFeatures(mirror,abs(mirror),0.1)
   
   ### number of selected variables j=1
@@ -101,6 +101,9 @@ ApplyTriangleBoostTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.333,am
     MDS_fdp <- 0
     MDS_power <- 0
   }
+  print(paste0('First R squared: ', round(Rnew1[1],3)))
+  print(paste0('Second R squared: ', round(Rnew2[1],3)))
+  print(paste0('DS_fdp = ', DS_fdp, ' DS_power = ', DS_power, ' MDS_fdp = ', MDS_fdp, ' MDS_power = ', MDS_power))
   return(list(DS_fdp = DS_fdp, DS_power = DS_power, MDS_fdp = MDS_fdp, MDS_power = MDS_power))
 }
 
