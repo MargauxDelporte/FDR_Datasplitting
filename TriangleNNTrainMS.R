@@ -1,5 +1,21 @@
-#j=1
-#model=lm
+library(reticulate)
+use_condaenv("r-tf-py310", required = TRUE)
+library(keras)
+library(tensorflow)
+
+model <- keras_model_sequential() %>%
+  # 1) square every input feature
+  layer_lambda(
+    f         = function(x) k_square(x),
+    input_shape = p,
+    name      = "quadratic_layer"
+  ) %>%
+  # 2) linear regression on the squared features
+  layer_dense(
+    units      = 1,
+    activation = "linear",
+    name       = "output"
+  )
 permR2TriangleNNTrain<-function(data,j,model){
   dataPerm<-data[,-1]
   dataPerm[,j]<-sample(data[,j+1],replace=FALSE)
@@ -32,16 +48,29 @@ ApplyTrianglNNTrain<-function(X, y, q,myseed,num_split=1,signal_index=signal_ind
   fmla <- as.formula(paste("y ~", paste(feature_names, collapse = " + ")))
   
   # 5) Fit the neural network
-  nn <- neuralnet(
+  scaled_train <- as.data.frame(scale(dataTrain))
+  scaled_train$y <- scale(dataTrain$y)
+  nn_fixed <- neuralnet(
     formula       = fmla,
-    data          = dataTrain,
-    hidden        = c(24, 16),    # two hidden layers: 100 then 50 neurons
-    linear.output = TRUE,          # for regression
-    lifesign      = "minimal",
-    threshold     = 0.01,
-    stepmax       = 1e6
+    data          = scaled_train,
+    hidden        = 50,              # much smaller than 250
+    act.fct       = function(x) x^2, # quadratic
+    linear.output = TRUE,
+    
+    algorithm     = "backprop",      # faster, more stable
+    learningrate  = 0.005,           # moderate rate
+    threshold     = 1e-4,            # stop when SSE change < 1e-4
+    stepmax       = 1e6,             # allow up to a million steps
+    rep           = 3,               # integer: run 3 random starts
+    lifesign      = "minimal"
   )
-  
+  nn = neuralnet(
+    fmla,
+    data=dataTrain,
+    hidden=c(240),
+    act.fct       = function(x) x^2,
+    linear.output = FALSE
+  )
   
   remaining_index<-c(setdiff(c(1:n),train_index))
   sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)

@@ -40,7 +40,7 @@ ApplyTriangleBoostTrain<-function(X, y, q,myseed=1,mybooster='gbtree',num_split=
   Xtrain=X[train_index,]
   names(Xtrain)=paste0('X',1:p)
 
-  lm<-xgboost(data = data.matrix(Xtrain), label =y[train_index],params=param,booster=mybooster,nrounds=500)
+  lm<-xgboost(data = data.matrix(Xtrain), label =y[train_index],params=param,booster=mybooster,nrounds=500,verbose=F)
   
   remaining_index<-c(setdiff(c(1:n),train_index))
   sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)

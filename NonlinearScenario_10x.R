@@ -22,7 +22,7 @@ library(xgboost)
 library(gbm)
 library(ranger)
 library(MASS)
-
+library(neuralnet)
 
 library(glmnet)
 library(knockoff)
@@ -31,15 +31,14 @@ library(hdi)
 
 ### algorithmic settings
 num_split <- 10
-n <-1500
+n <-7500
 p <- 250
 p0 <- 25
 q <- 0.1
 #set.seed(124)(123) i=5
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
-
-#######set up the method for the comparison#############
+#######set up the method for the comparison############# i=10
 Compare_SignalStrength <- function(i, s) {
   set.seed(s)
   delta <- i
@@ -53,10 +52,10 @@ Compare_SignalStrength <- function(i, s) {
   # run your custom methods
   g1 <- ApplyTriangleBoostTrain( X = X, y = y, q = q, num_split = num_split,
                                  signal_index = signal_index, myseed = 1)
-  g2 <- ApplyTriangleGBMTrain(   X = X, y = y, q = q, num_split = num_split,
-                                 signal_index = signal_index, myseed = 1)
-  g3 <- ApplyTriangleRangerTrain(X = X, y = y, q = q, num_split = num_split,
-                                 signal_index = signal_index, myseed = 1)
+  # g2 <- ApplyTriangleGBMTrain(   X = X, y = y, q = q, num_split = num_split,
+  #                                signal_index = signal_index, myseed = 1)
+  # g3 <- ApplyTriangleRangerTrain(X = X, y = y, q = q, num_split = num_split,
+  #                               signal_index = signal_index, myseed = 1)
   
   # FDR methods
   DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
@@ -77,10 +76,10 @@ Compare_SignalStrength <- function(i, s) {
     ResultsDataFrame,
     data.frame(Method = "Boost DS",                Delta = i, FDP = g1$DS_fdp,    Power = g1$DS_power),
     data.frame(Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power),
-    data.frame(Method = "GBM DS",                  Delta = i, FDP = g2$DS_fdp,    Power = g2$DS_power),
-    data.frame(Method = "GBM MS",                  Delta = i, FDP = g2$MDS_fdp,   Power = g2$MDS_power),
-    data.frame(Method = "Ranger DS",               Delta = i, FDP = g3$DS_fdp,    Power = g3$DS_power),
-    data.frame(Method = "Ranger MS",               Delta = i, FDP = g3$MDS_fdp,   Power = g3$MDS_power),
+    #data.frame(Method = "GBM DS",                  Delta = i, FDP = g2$DS_fdp,    Power = g2$DS_power),
+    #data.frame(Method = "GBM MS",                  Delta = i, FDP = g2$MDS_fdp,   Power = g2$MDS_power),
+    #data.frame(Method = "Ranger DS",               Delta = i, FDP = g3$DS_fdp,    Power = g3$DS_power),
+    #data.frame(Method = "Ranger MS",               Delta = i, FDP = g3$MDS_fdp,   Power = g3$MDS_power),
     data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
     data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
     data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
@@ -90,13 +89,17 @@ Compare_SignalStrength <- function(i, s) {
   return(ResultsDataFrame)
 }
 
+
+Compare_SignalStrength(1,5)
 #######run the code#############
-Results=data.frame()
-for(s in 1:25){
-  for(i in seq(from=5,to=13,by=1)){
-  Results=rbind(Results,Compare_SignalStrength(i,s))
-  print(Results)
-}}
+#Results=data.frame()
+#for(s in 1:25){
+#  for(i in seq(from=5,to=13,by=1)){
+#  Results=rbind(Results,Compare_SignalStrength(i,s))
+#  print(s)
+#  }
+#  print(Results)
+#  }
 
 library(parallel)
 
@@ -124,11 +127,11 @@ lapply(pkgs, library, character.only = TRUE)
 # === PARAMETER GRID ===
 param_grid <- expand.grid(
   s = 1:25,
-  i = seq(from = 5, to = 13, by = 1)
+  i = seq(from = 7, to = 13, by = 1)
 )
 
 # === SET UP PARALLEL BACKEND ===
-cl <- makeCluster(detectCores() - 1)
+cl <- makeCluster(detectCores() - 4)
 # export working dir so workers can source
 clusterExport(cl, 'mywd')
 # have each worker source & load libraries
@@ -170,7 +173,7 @@ results_list <- foreach(
 
 # === CLEANUP AND FINAL SAVE ===
 stopCluster(cl)
-
+warnings()
 # combine all and save full dataset
 Results <- results_list
 write.csv(Results, file = "All_Results.csv", row.names = FALSE)
