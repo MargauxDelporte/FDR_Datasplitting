@@ -182,6 +182,15 @@ write.csv(Results, file = "NonlinearScenario_10x_seed26_50.csv", row.names = FAL
 library(ggplot2)
 library(dplyr)
 library(ggpubr)
+library(readr)
+mywd <- 'C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting/Results'
+
+N1 <- read_csv("C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting/Results/NonlinearScenario_10x_seed26_50.csv")
+names(N1)=c('Method','SignalStrength','FDP','Power')
+N2 <- read_csv("C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting/Results/NonlinearScenario_10x.csv")
+names(N2)=c('Method','SignalStrength','FDP','Power')
+
+Results=rbind(N1,N2)
 #Results=read.xlsx('VanillaResults.xlsx')
 colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
 Results2=Results
