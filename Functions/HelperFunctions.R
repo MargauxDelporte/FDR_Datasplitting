@@ -7,7 +7,7 @@ SelectFeatures <- function(mm, ww, q){
   for(t in ww){
     ps <- length(mm[mm > t])
     ng <- length(na.omit(mm[mm < -t]))
-    rto <- (ng + 1)/max(ps, 1)
+    rto <- (ng+1)/max(ps, 1)
     if(rto <= q){
       cutoff_set <- c(cutoff_set, t)
     }
