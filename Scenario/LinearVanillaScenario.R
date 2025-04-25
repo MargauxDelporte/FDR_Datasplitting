@@ -139,24 +139,14 @@ stopCluster(cl)
 warnings()
 # combine all and save full dataset
 Results <- results_list
-write.csv(Results, file = "All_Results.csv", row.names = FALSE)
-
-Results=data.frame()
-for(s in 1:25){
-  for(i in seq(from=5,to=13,by=1)){
-    Results=rbind(Results,Compare_SignalStrenght(i,s))
-    print(Results)
-  }
-}
-names(Results)
-
+#write.csv(Results, file = "All_Results_vanillaLinear.csv", row.names = FALSE)
+Results=as.data.frame(Results)
 names(Results)=c('Method','SignalStrength', 'FDR','Power')
-
-write.xlsx(Results,file='~/Results/VanillaScenarioLMTriangle.xlsx')
-#1000 600
-
+head(Results)
+library(openxlsx)
 library(readr)
-Results <- read_csv("C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting/Results/VanillaScenarioLinear.csv")
+write.xlsx(Results,file='C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting/Results/VanillaScenarioLMTriangle.xlsx')
+#Results <- read_csv("C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting/Results/VanillaScenarioLinear.csv")
 
 names(Results)=c('Method','SignalStrength', 'FDR','Power')
 
