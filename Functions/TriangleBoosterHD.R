@@ -1,14 +1,18 @@
-permR2TriangleRFTrain<-function(mydata,j,model){
-  dataPerm<-mydata[,-1]
-  dataPerm[,j]<-sample(mydata[,j+1],replace=FALSE)
+#j=1
+#model=lm
+permR2TriangleBoostHD<-function(data,j,model){
+  dataPerm<-data[,-1]
+  dataPerm[,j]<-sample(data[,j+1],replace=FALSE)
   names(dataPerm)=paste0('X',1:p)
-  predictLM<-predict(model,dataPerm)$predicted
-  rsquared=1-sum((mydata$y-predictLM)^2)/sum((mydata$y-mean(mydata$y))^2)
+  predictLM<-predict(model,newdata=data.matrix(dataPerm))
+  rsquared=1-sum((data$y-predictLM)^2)/sum((data$y-mean(data$y))^2)
   return(rsquared)
 }
 
-ApplyTriangleRFTrain<-function(X, y, q,myseed, amountTrain=0.333,amountTest=1-amountTrain,num_split=1,signal_index=signal_index){
+ApplyTriangleBoostHD<-function(X, y, q,myseed=1,mybooster='gblinear',num_split=1,signal_index=signal_index,mylambda=1,myeta= 0.01){
   set.seed(myseed)
+  amountTrain=0.333
+  amountTest=1-amountTrain
   data<-data.frame(cbind(y,X))
   n <- dim(X)[1]; p <- dim(X)[2]
   inclusion_rate <- matrix(0, nrow = num_split, ncol = p)
@@ -22,24 +26,28 @@ ApplyTriangleRFTrain<-function(X, y, q,myseed, amountTrain=0.333,amountTest=1-am
   colnames(dataTrain)<-c('y',paste0('X',1:p))
   colnames(data)<-c('y',paste0('X',1:p))
   
-  rf<-rfsrc.fast(y~.,data=dataTrain,max_depth=5,ntree=500,forest=TRUE)
+  Xtrain=X[train_index,]
+  names(Xtrain)=paste0('X',1:p)
+
+  lm<-xgboost(data = data.matrix(Xtrain), label =y[train_index],nrounds=500,lambda=0,eta= 0.05,alpha=0.1,booster='gblinear')#),params=param,booster=mybooster,nrounds=500,verbose=F)
   
-  remaining_percent=1-amountTrain
-  overlap=max(c(0,amountTest-remaining_percent))
-  remaining_index<-c(setdiff(c(1:n),train_index),sample(train_index,size=overlap*n))
+  remaining_index<-c(setdiff(c(1:n),train_index))
   sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)
   sample_index2 <- setdiff(remaining_index, sample_index1)
-  Testdata1=data[sample_index1,]
-  Testdata2=data[sample_index2,]
-  predictLM1<-predict(rf,Testdata1)$predicted
-  predictLM2<-predict(rf,Testdata2)$predicted
+
+  predict_TRAIN<-predict(lm,newdata=as.matrix(X[train_index,]))
+  R2orig_TRAIN<-1-sum((y[train_index]-predict_TRAIN)^2)/sum((y[train_index]-mean(y[train_index]))^2)
+  R2orig_TRAIN
+  
+  predictLM1<-predict(lm,newdata=as.matrix(X[sample_index1,]))
+  predictLM2<-predict(lm,newdata=as.matrix(X[sample_index2,]))
   
   R2orig1<-1-sum((y[sample_index1]-predictLM1)^2)/sum((y[sample_index1]-mean(y[sample_index1]))^2)
   R2orig2<-1-sum((y[sample_index2]-predictLM2)^2)/sum((y[sample_index2]-mean(y[sample_index2]))^2)
   
-  Rnew1<-sapply(1:ncol(X),function(j) permR2TriangleRFTrain(data[sample_index1,],j,rf))
-  Rnew2<-sapply(1:ncol(X),function(j) permR2TriangleRFTrain(data[sample_index2,],j,rf))
-  
+  Rnew1<-sapply(1:ncol(X),function(j) permR2TriangleBoostHD(data[sample_index1,],j,lm))
+  Rnew2<-sapply(1:ncol(X),function(j) permR2TriangleBoostHD(data[sample_index2,],j,lm))
+
   Diff1=R2orig1-Rnew1
   Diff2=R2orig2-Rnew2
   
@@ -51,6 +59,9 @@ ApplyTriangleRFTrain<-function(X, y, q,myseed, amountTrain=0.333,amountTest=1-am
   beta2=sign(Diff2)*sqrt(abs(Diff2))*sd(y)/sd_X2
   
   mirror<-sign(beta1*beta2)*(abs(beta1))
+  hist(mirror[-signal_index])
+  hist(mirror[signal_index])
+  sort(signal_index)
   selected_index<-SelectFeatures(mirror,abs(mirror),0.1)
   
   ### number of selected variables j=1
@@ -97,6 +108,9 @@ ApplyTriangleRFTrain<-function(X, y, q,myseed, amountTrain=0.333,amountTest=1-am
     MDS_fdp <- 0
     MDS_power <- 0
   }
+  #print(paste0('First R squared: ', round(R2orig1,3)))
+  #print(paste0('Second R squared: ', round(R2orig2,3)))
+  # print(paste0('DS_fdp = ', DS_fdp, ' DS_power = ', DS_power, ' MDS_fdp = ', MDS_fdp, ' MDS_power = ', MDS_power))
   return(list(DS_fdp = DS_fdp, DS_power = DS_power, MDS_fdp = MDS_fdp, MDS_power = MDS_power))
 }
 

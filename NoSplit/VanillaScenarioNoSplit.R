@@ -84,7 +84,11 @@ names(Results)
 
 names(Results)=c('Method','SignalStrength', 'FDR','Power')
 
+<<<<<<< Updated upstream
 write.xlsx(Results,file='VanillaResults2split.xlsx')
+=======
+write.xlsx(Results,file='VanillaResultsNoSplitt.xlsx')
+>>>>>>> Stashed changes
 
 
 #Results=read.xlsx('VanillaResults.xlsx')
