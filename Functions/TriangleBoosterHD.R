@@ -9,7 +9,7 @@ permR2TriangleBoostHD<-function(data,j,model){
   return(rsquared)
 }
 
-ApplyTriangleBoostHD<-function(X, y, q,myseed=1,mybooster='gblinear',num_split=1,signal_index=signal_index,mylambda=1,myeta= 0.01){
+ApplyTriangleBoostHD<-function(X, y, q,myseed=1,num_split=1,signal_index=signal_index,mylambda=0,myeta= 0.01){
   set.seed(myseed)
   amountTrain=0.333
   amountTest=1-amountTrain

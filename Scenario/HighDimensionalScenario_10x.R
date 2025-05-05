@@ -7,7 +7,7 @@ mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
-source(paste0(mywd,'/Functions/TriangleBoosterHD.R'))
+source(paste0(mywd,'/Functions/TriangleLassoHD.R'))
 
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
@@ -32,8 +32,9 @@ library(hdi)
 num_split <- 10
 n <-1500
 p <- 2000
-p0 <- 50
+p0 <- 25
 q <- 0.1
+
 #set.seed(124)(123) i=5
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
@@ -49,13 +50,9 @@ Compare_SignalStrength <- function(i, s) {
   y <- scale(X %*% beta_star + rnorm(n))
   
   # run your custom methods
-  g1 <- ApplyTriangleBoostHD( X = X, y = y, q = q, num_split = num_split,mybooster='gblinear',
-                                 signal_index = signal_index, myseed = 1)
-  # g2 <- ApplyTriangleGBMTrain(   X = X, y = y, q = q, num_split = num_split,
-  #                                signal_index = signal_index, myseed = 1)
-  # g3 <- ApplyTriangleRangerTrain(X = X, y = y, q = q, num_split = num_split,
-  #                               signal_index = signal_index, myseed = 1)
-  
+  g1 <- ApplyTriangleLassoHD(X = X, y = y, q = q, num_split = num_split,
+                             signal_index = signal_index, myseed = 1)     
+
   # FDR methods
   DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
   knockoff_result<- knockoff(    X = X, y = y, q = q)
@@ -75,35 +72,25 @@ Compare_SignalStrength <- function(i, s) {
     ResultsDataFrame,
     data.frame(Method = "Boost DS",                Delta = i, FDP = g1$DS_fdp,    Power = g1$DS_power),
     data.frame(Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power),
-    #data.frame(Method = "GBM DS",                  Delta = i, FDP = g2$DS_fdp,    Power = g2$DS_power),
-    #data.frame(Method = "GBM MS",                  Delta = i, FDP = g2$MDS_fdp,   Power = g2$MDS_power),
-    #data.frame(Method = "Ranger DS",               Delta = i, FDP = g3$DS_fdp,    Power = g3$DS_power),
-    #data.frame(Method = "Ranger MS",               Delta = i, FDP = g3$MDS_fdp,   Power = g3$MDS_power),
-    #data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
-    #data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
-    #data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
-    #data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
+    data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
+    data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
+    data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
+    data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
   )
   
   return(ResultsDataFrame)
 }
 
+##check how long one iteration takes 
+system.time({
+  Compare_SignalStrength(7,7)
+  # Replace this block with the code you want to time
+  Sys.sleep(1)  # This just waits for 1 second
+})
 
-Compare_SignalStrength(1,5)
-#######run the code#############
-#Results=data.frame()
-#for(s in 1:25){
-#  for(i in seq(from=5,to=13,by=1)){
-#  Results=rbind(Results,Compare_SignalStrength(i,s))
-#  print(s)
-#  }
-#  print(Results)
-#  }
+
 
 library(parallel)
-
-mywd <- 'C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
-setwd(mywd)
 
 # Source helper and method files
 
@@ -124,7 +111,7 @@ lapply(pkgs, library, character.only = TRUE)
 
 # === PARAMETER GRID ===
 param_grid <- expand.grid(
-  s = 26:50,
+  s = 1:50,
   i = seq(from = 7, to = 13, by = 1)
 )
 
@@ -146,7 +133,7 @@ clusterEvalQ(cl, {
          library, character.only = TRUE)
 })
 registerDoParallel(cl)
-
+5991.06
 # === RUN IN PARALLEL AND WRITE OUT ===
 results_list <- foreach(
   k = seq_len(nrow(param_grid)),
@@ -172,10 +159,9 @@ stopCluster(cl)
 warnings()
 # combine all and save full dataset
 Results <- results_list
-write.csv(Results, file = "NonlinearScenario_10x_seed26_50.csv", row.names = FALSE)
+write.csv(Results, file = "HighDimensionalScenario_10x_seed1_50.csv", row.names = FALSE)
 
 
-# === Add 25 additional simulations ===
 
 ##########visualise the results###########
 library(ggplot2)
@@ -235,3 +221,6 @@ PlotPermute=ggarrange(
   common.legend = TRUE, legend = "right"
 )
 PlotPermute
+
+
+
