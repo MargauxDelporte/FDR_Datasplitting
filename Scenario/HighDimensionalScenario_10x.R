@@ -29,7 +29,7 @@ library(mvtnorm)
 library(hdi)
 
 ### algorithmic settings
-num_split <- 10
+num_split <- 2
 n <-1500
 p <- 2000
 p0 <- 25
@@ -46,7 +46,7 @@ Compare_SignalStrength <- function(i, s) {
   # simulate data
   X <- mvrnorm(n, mu = rep(0, p), Sigma = diag(p))
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*100
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))
   y <- scale(X %*% beta_star + rnorm(n))
   
   # run your custom methods
