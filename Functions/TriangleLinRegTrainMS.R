@@ -46,8 +46,8 @@ ApplyTriangleLinRegTrain<-function(X, y, q,amountTrain=0.333,amountTest=1-amount
   sd_X2 <- apply(X[sample_index2, ], 2, sd)
   
   
-  beta1=sign(Diff1)*sqrt(abs(Diff1))*sd(y)/sd_X1
-  beta2=sign(Diff2)*sqrt(abs(Diff2))*sd(y)/sd_X2
+  beta1=sign(Diff1)*sqrt(abs(Diff1))*sd(y[sample_index1])/sd_X1
+  beta2=sign(Diff2)*sqrt(abs(Diff2))*sd(y[sample_index2])/sd_X2
   
   mirror<-sign(beta1*beta2)*(abs(beta1))
   selected_index<-SelectFeatures(mirror,abs(mirror),0.1)
