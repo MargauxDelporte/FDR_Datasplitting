@@ -2,7 +2,7 @@
 rm(list = ls())
 
 #mywd='C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
-mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 
 setwd(mywd)
 
@@ -29,7 +29,7 @@ library(mvtnorm)
 library(hdi)
 
 ### algorithmic settings
-num_split <- 10
+num_split <- 1
 n <-1500
 p <- 2000
 p0 <- 50
