@@ -1,6 +1,6 @@
 #j=1
 #model=lm
-permR2TriangleBoostHD<-function(data,j,model){
+permR2TriangleBoostTrain<-function(data,j,model){
   dataPerm<-data[,-1]
   dataPerm[,j]<-sample(data[,j+1],replace=FALSE)
   names(dataPerm)=paste0('X',1:p)
@@ -9,10 +9,21 @@ permR2TriangleBoostHD<-function(data,j,model){
   return(rsquared)
 }
 
-ApplyTriangleBoostHD<-function(X, y, q,myseed=1,num_split=1,signal_index=signal_index,mylambda=0,myeta= 0.01){
+ApplyTriangleBoostTrain<-function(X, y, q,myseed=1,mybooster='gbtree',num_split=1,signal_index=signal_index,mylambda=1,myeta= 0.01){
   set.seed(myseed)
   amountTrain=0.333
   amountTest=1-amountTrain
+  param <- list(
+    objective = "reg:squarederror",
+    eta       = 0.05,
+    max_depth = 4,
+    subsample = 0.8,
+    colsample_bytree = 0.8,
+    lambda    = 1,
+    alpha     = 1
+  )
+  
+  
   data<-data.frame(cbind(y,X))
   n <- dim(X)[1]; p <- dim(X)[2]
   inclusion_rate <- matrix(0, nrow = num_split, ncol = p)
@@ -29,7 +40,7 @@ ApplyTriangleBoostHD<-function(X, y, q,myseed=1,num_split=1,signal_index=signal_
   Xtrain=X[train_index,]
   names(Xtrain)=paste0('X',1:p)
 
-  lm<-xgboost(data = data.matrix(Xtrain), label =y[train_index],nrounds=500,lambda=0,eta= 0.05,alpha=0.1,booster='gblinear')#),params=param,booster=mybooster,nrounds=500,verbose=F)
+  lm<-xgboost(data = data.matrix(Xtrain), label =y[train_index],params=param,booster=mybooster,nrounds=500,verbose=F)
   
   remaining_index<-c(setdiff(c(1:n),train_index))
   sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)
@@ -45,8 +56,8 @@ ApplyTriangleBoostHD<-function(X, y, q,myseed=1,num_split=1,signal_index=signal_
   R2orig1<-1-sum((y[sample_index1]-predictLM1)^2)/sum((y[sample_index1]-mean(y[sample_index1]))^2)
   R2orig2<-1-sum((y[sample_index2]-predictLM2)^2)/sum((y[sample_index2]-mean(y[sample_index2]))^2)
   
-  Rnew1<-sapply(1:ncol(X),function(j) permR2TriangleBoostHD(data[sample_index1,],j,lm))
-  Rnew2<-sapply(1:ncol(X),function(j) permR2TriangleBoostHD(data[sample_index2,],j,lm))
+  Rnew1<-sapply(1:ncol(X),function(j) permR2TriangleBoostTrain(data[sample_index1,],j,lm))
+  Rnew2<-sapply(1:ncol(X),function(j) permR2TriangleBoostTrain(data[sample_index2,],j,lm))
 
   Diff1=R2orig1-Rnew1
   Diff2=R2orig2-Rnew2
@@ -60,8 +71,6 @@ ApplyTriangleBoostHD<-function(X, y, q,myseed=1,num_split=1,signal_index=signal_
   
   mirror<-sign(beta1*beta2)*(abs(beta1))
   hist(mirror[-signal_index])
-  hist(mirror[signal_index])
-  sort(signal_index)
   selected_index<-SelectFeatures(mirror,abs(mirror),0.1)
   
   ### number of selected variables j=1

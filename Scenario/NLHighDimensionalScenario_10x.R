@@ -2,12 +2,12 @@
 rm(list = ls())
 
 #mywd='C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
-mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
 
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
-source(paste0(mywd,'/Functions/TriangleBoosterHD.R'))
+source(paste0(mywd,'/Functions/TriangleBoosterHD2.R'))
 
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
@@ -18,10 +18,7 @@ source(paste0(mywd,'/Functions Dai/fdp_power.R'))
 
 #devtools::install_github("Jeremy690/DSfdr/DSfdr",force = TRUE)
 library(xgboost)
-library(gbm)
-library(ranger)
 library(MASS)
-library(neuralnet)
 
 library(glmnet)
 library(knockoff)
@@ -32,13 +29,14 @@ library(hdi)
 num_split <- 1
 n <-1500
 p <- 2000
-p0 <- 50
+p0 <- 25
 q <- 0.1
+
 #set.seed(124)(123) i=5
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 #######set up the method for the comparison############# i=10
-Compare_SignalStrength <- function(i, s) {
+Compare_SignalStrength <- function(i, s,myeta = 0.05,mymax_depth = 1,mylambda = 0.5,myalpha = 0.5) {
   set.seed(s)
   delta <- i
   
@@ -46,20 +44,17 @@ Compare_SignalStrength <- function(i, s) {
   X <- mvrnorm(n, mu = rep(0, p), Sigma = diag(p))
   beta_star <- numeric(p)
   beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*100
-  y <- scale(X %*% beta_star + rnorm(n))
+  y <- scale(X^2 %*% beta_star + rnorm(n))
   
   # run your custom methods
-  g1 <- ApplyTriangleBoostHD( X = X, y = y, q = q, num_split = num_split,mybooster='gblinear',
-                                 signal_index = signal_index, myseed = 1)
-  # g2 <- ApplyTriangleGBMTrain(   X = X, y = y, q = q, num_split = num_split,
-  #                                signal_index = signal_index, myseed = 1)
-  # g3 <- ApplyTriangleRangerTrain(X = X, y = y, q = q, num_split = num_split,
-  #                               signal_index = signal_index, myseed = 1)
-  
+  g1 <- ApplyTriangleBoostHD2(X = X, y = y, q = q, num_split = num_split,
+                             signal_index = signal_index, myseed = 1,
+                             myeta = myeta,mymax_depth = mymax_depth,mylambda = mylambda,myalpha = myalpha)     
+
   # FDR methods
-  DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
-  knockoff_result<- knockoff(    X = X, y = y, q = q)
-  BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
+  # DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
+  # knockoff_result<- knockoff(    X = X, y = y, q = q)
+  # BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
   
   # init empty results df
   ResultsDataFrame <- data.frame(
@@ -74,13 +69,9 @@ Compare_SignalStrength <- function(i, s) {
   ResultsDataFrame <- rbind(
     ResultsDataFrame,
     data.frame(Method = "Boost DS",                Delta = i, FDP = g1$DS_fdp,    Power = g1$DS_power),
-    data.frame(Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power),
-    #data.frame(Method = "GBM DS",                  Delta = i, FDP = g2$DS_fdp,    Power = g2$DS_power),
-    #data.frame(Method = "GBM MS",                  Delta = i, FDP = g2$MDS_fdp,   Power = g2$MDS_power),
-    #data.frame(Method = "Ranger DS",               Delta = i, FDP = g3$DS_fdp,    Power = g3$DS_power),
-    #data.frame(Method = "Ranger MS",               Delta = i, FDP = g3$MDS_fdp,   Power = g3$MDS_power),
+    data.frame(Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power)#,
     #data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
-    #data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
+    # data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
     #data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
     #data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
   )
@@ -89,21 +80,10 @@ Compare_SignalStrength <- function(i, s) {
 }
 
 
-Compare_SignalStrength(1,5)
-#######run the code#############
-#Results=data.frame()
-#for(s in 1:25){
-#  for(i in seq(from=5,to=13,by=1)){
-#  Results=rbind(Results,Compare_SignalStrength(i,s))
-#  print(s)
-#  }
-#  print(Results)
-#  }
+Compare_SignalStrength(13,13,myeta=0.2,mymax_depth = 5,mylambda = 0.05,myalpha=0.05)
+
 
 library(parallel)
-
-mywd <- 'C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
-setwd(mywd)
 
 # Source helper and method files
 
@@ -124,7 +104,7 @@ lapply(pkgs, library, character.only = TRUE)
 
 # === PARAMETER GRID ===
 param_grid <- expand.grid(
-  s = 26:50,
+  s = 1:50,
   i = seq(from = 7, to = 13, by = 1)
 )
 
@@ -172,10 +152,9 @@ stopCluster(cl)
 warnings()
 # combine all and save full dataset
 Results <- results_list
-write.csv(Results, file = "NonlinearScenario_10x_seed26_50.csv", row.names = FALSE)
+write.csv(Results, file = "HighDimensionalScenario_10x_seed1_50.csv", row.names = FALSE)
 
 
-# === Add 25 additional simulations ===
 
 ##########visualise the results###########
 library(ggplot2)
