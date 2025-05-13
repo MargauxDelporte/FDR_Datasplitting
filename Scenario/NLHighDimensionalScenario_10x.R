@@ -1,4 +1,4 @@
-### High dimension linear model
+### High dimensional non-linear case
 rm(list = ls())
 
 #mywd='C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
@@ -79,13 +79,11 @@ Compare_SignalStrength <- function(i, s,myeta = 0.05,mymax_depth = 1,mylambda = 
   return(ResultsDataFrame)
 }
 
-
+# Try a single example
 Compare_SignalStrength(13,13,myeta=0.2,mymax_depth = 5,mylambda = 0.05,myalpha=0.05)
 
-
+# Parallel running of the simulations
 library(parallel)
-
-# Source helper and method files
 
 source(file.path(mywd, 'Functions', 'TriangleBoosterTrainMS.R'))
 source(file.path(mywd, 'Functions', 'HelperFunctions.R'))
