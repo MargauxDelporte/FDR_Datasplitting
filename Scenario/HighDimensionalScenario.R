@@ -98,13 +98,13 @@ lapply(pkgs, library, character.only = TRUE)
 
 # === PARAMETER GRID ===
 param_grid <- expand.grid(
-  s = 7:25,
+  s = c(1:6,26:50),
   i = seq(from = 7, to = 13, by = 1)
 )
 param_grid
 
 # === SET UP PARALLEL BACKEND ===
-cl <- makeCluster(5)#detectCores() - 4)
+cl <- makeCluster(15)#detectCores() - 4)
 # export working dir so workers can source
 clusterExport(cl, 'mywd')
 # have each worker source & load libraries
@@ -132,9 +132,12 @@ results_list <- foreach(
   i_val <- param_grid$i[k]
   
   chunk <- Compare_SignalStrength(i = i_val, s = s_val)
-  # compute chunk of results
+  # write out this chunk immediately
   fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
-  write.csv(chunk, file = fname, row.names = FALSE)
+  write.csv(chunk, file = paste0(mywd,"/Temp/",fname), row.names = FALSE)
+  
+  # return for final binding
+  chunk
 }
 
 
@@ -146,7 +149,7 @@ Results <- results_list
 
 
 param_grid <- expand.grid(
-  s = 1:50,
+  s = c(1:6,
   i = seq(from = 7, to = 13, by = 1)
 )
 k=1
@@ -212,4 +215,10 @@ PlotPermute=ggarrange(
   PowerPlot, FDRPlot,
   common.legend = TRUE, legend = "right"
 )
-PlotPermute
+
+ggsave("HDScenario.png",
+       plot   = PlotPermute,
+       width  = 8,
+       height = 8/18*8,
+       units  = "in",
+       dpi    = 100)

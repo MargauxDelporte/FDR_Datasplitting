@@ -39,11 +39,17 @@ ApplyTriangleLinRegTrain<-function(X, y, q,amountTrain=0.333,amountTest=1-amount
   Rnew1<-sapply(1:ncol(X),function(j) permR2TriangleLinRegTrain(data[sample_index1,],j,lm))
   Rnew2<-sapply(1:ncol(X),function(j) permR2TriangleLinRegTrain(data[sample_index2,],j,lm))
   
-  beta1=R2orig1-Rnew1
-  beta2=R2orig2-Rnew2
+  Diff1=R2orig1-Rnew1
+  Diff2=R2orig2-Rnew2
   
-
-  mirror<-sign(beta1*beta2)*(abs(beta1)+abs(beta1))
+  sd_X1 <- apply(X[sample_index1, ], 2, sd)
+  sd_X2 <- apply(X[sample_index2, ], 2, sd)
+  
+  
+  beta1=sign(Diff1)*sqrt(abs(Diff1))*sd(y[sample_index1])/sd_X1
+  beta2=sign(Diff2)*sqrt(abs(Diff2))*sd(y[sample_index2])/sd_X2
+  
+  mirror<-sign(beta1*beta2)*(abs(beta1))
   selected_index<-SelectFeatures(mirror,abs(mirror),0.1)
   
   ### number of selected variables j=1

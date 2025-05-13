@@ -1,8 +1,9 @@
 ### High dimension linear model
 rm(list = ls())
 
-mywd='C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 #mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
+#C:\Users\mde4023\Downloads\FDR_Datasplitting
 
 setwd(mywd)
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
@@ -70,7 +71,7 @@ Compare_SignalStrength=function(i,s){
   return(ResultsDataFrame)}
 
 library(parallel)
-mywd <- 'C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 setwd(mywd)
 
 # Source helper and method files
@@ -96,7 +97,7 @@ param_grid <- expand.grid(
 )
 
 # === SET UP PARALLEL BACKEND ===
-cl <- makeCluster(detectCores() - 4)
+cl <- makeCluster(5)
 # export working dir so workers can source
 clusterExport(cl, 'mywd')
 # have each worker source & load libraries
@@ -128,12 +129,11 @@ results_list <- foreach(
   
   # write out this chunk immediately
   fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
-  write.csv(chunk, file = fname, row.names = FALSE)
+  write.csv(chunk, file = paste0(mywd,"/Temp/",fname), row.names = FALSE)
   
   # return for final binding
   chunk
 }
-
 # === CLEANUP AND FINAL SAVE ===
 stopCluster(cl)
 warnings()
@@ -145,8 +145,7 @@ names(Results)=c('Method','SignalStrength', 'FDR','Power')
 head(Results)
 library(openxlsx)
 library(readr)
-write.xlsx(Results,file='C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting/Results/VanillaScenarioLMTriangle.xlsx')
-#Results <- read_csv("C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting/Results/VanillaScenarioLinear.csv")
+write.xlsx(Results,file=paste0(mywd,"/Results/VanillaScenarioLinear.xlsx"))
 
 names(Results)=c('Method','SignalStrength', 'FDR','Power')
 
@@ -191,7 +190,7 @@ PowerPlot <- ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_Power),
 FDRPlot=ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_FDR ), color = Method)) +
   geom_point(size = 3) +
   geom_line()+
-  labs(x = "Signal", y = "FDP")+
+  labs(x = "Signal", y = "FDR")+
   scale_x_continuous(breaks=seq(from=3,to=13,by=1))+
   geom_hline(yintercept=0.1)+
   scale_color_manual(values = colors)
@@ -201,24 +200,10 @@ PlotPermute=ggarrange(
 )
 PlotPermute
 
-
-PowerPlot <- ggplot(Results2[1:66,], aes(x = Signal_noisy, y = as.numeric(Power), color = Method)) +
-  geom_point(size = 3) +
-  geom_line()+
-  labs(x = "Signal", y = "Power") +
-  scale_x_continuous(breaks = seq(from = 3, to = 13, by = 1)) +
-  geom_hline(yintercept = 0.8) +
-  scale_color_manual(values = colors)
-FDRPlot=ggplot(Results2[1:66,], aes(x = Signal_noisy, y = as.numeric(FDR ), color = Method)) +
-  geom_point(size = 3) +
-  geom_line()+
-  labs(x = "Signal", y = "FDP")+
-  scale_x_continuous(breaks=seq(from=3,to=13,by=1))+
-  geom_hline(yintercept=0.1)+
-  scale_color_manual(values = colors)
-PlotPermute=ggarrange(
-  PowerPlot, FDRPlot,
-  common.legend = TRUE, legend = "right"
-)
-PlotPermute
-
+8/18*8
+ggsave("VanillaScenario.png",
+       plot   = PlotPermute,
+       width  = 8,
+       height = 8/18*8,
+       units  = "in",
+       dpi    = 100)

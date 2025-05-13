@@ -1,0 +1,7 @@
+"seed","Method","Delta","FDP","Power"
+13,"Boost DS",8,0.0434782608695652,0.88
+13,"Boost MS",8,0,0.92
+13,"DataSplitting",8,0.0740740740740741,1
+13,"MultipleDataSplitting",8,0,0.92
+13,"Knockoff",8,0.04,0.96
+13,"Benjamini–Hochberg (BH)",8,0,0.96
