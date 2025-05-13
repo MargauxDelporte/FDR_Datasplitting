@@ -1,19 +1,22 @@
-#j=1
-#model=lm
-permR2TriangleBoostHD2<-function(data,j,model){
+predR2TriangleLinRegTrain<-function(data,j,model){
   dataPerm<-data[,-1]
-  dataPerm[,j]<-sample(data[,j+1],replace=FALSE)
-  names(dataPerm)=paste0('X',1:p)
-  predictLM<-predict(model,newdata=data.matrix(dataPerm))
+  # extract the “target” column and the other predictors j=1
+  y_j <- dataPerm[[j]]             # original data[, j+1]
+  x_df <- dataPerm[ , - j, drop=FALSE]  # all columns except j+1
+  
+  # fit a simple regression of that column on the rest
+  model_p <- lm(y_j ~ ., data = x_df)
+  
+  # replace the j-th column of dataPred with the fitted values
+  dataPerm[[ j ]] <- predict(model_p, newdata = x_df)
+  # fit the old model on the predicted features (used to be permuted features)
+  predictLM<-predict(model,newdata=dataPerm)
   rsquared=1-sum((data$y-predictLM)^2)/sum((data$y-mean(data$y))^2)
   return(rsquared)
 }
 
-ApplyTriangleBoostHD2<-function(X, y, q,myseed=1,myeta = 0.05,mymax_depth = 1,mylambda = 0.5,myalpha = 0.5, num_split=1,signal_index=signal_index){
+ApplyTriangleLinRegPred<-function(X, y, q,amountTrain=0.333,amountTest=1-amountTrain,myseed,num_split=1,signal_index=signal_index){
   set.seed(myseed)
-  amountTrain=0.333
-  amountTest=1-amountTrain
-  data<-data.frame(cbind(y,X))
   n <- dim(X)[1]; p <- dim(X)[2]
   inclusion_rate <- matrix(0, nrow = num_split, ncol = p)
   fdp <- rep(0, num_split)
@@ -26,51 +29,34 @@ ApplyTriangleBoostHD2<-function(X, y, q,myseed=1,myeta = 0.05,mymax_depth = 1,my
   colnames(dataTrain)<-c('y',paste0('X',1:p))
   colnames(data)<-c('y',paste0('X',1:p))
   
-  Xtrain=X[train_index,]
-  names(Xtrain)=paste0('X',1:p)
-
-  lm <- xgboost(
-    data = data.matrix(Xtrain),
-    label =y[train_index],
-    booster = "gbtree",
-    objective = "reg:squarederror",
-    nrounds = 500,
-    eta = myeta,
-    max_depth = mymax_depth,
-    lambda = mylambda,
-    alpha = myalpha,
-   # subsample = 0.7,
-  #  colsample_bytree = 0.7,
-    verbose = 0
-  )
-
-  remaining_index<-c(setdiff(c(1:n),train_index))
+  lm<-lm(y~ ., data = dataTrain)
+  remaining_percent=1-amountTrain
+  overlap=max(c(0,amountTest-remaining_percent))
+  remaining_index<-c(setdiff(c(1:n),train_index),sample(train_index,size=overlap*n))
   sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)
   sample_index2 <- setdiff(remaining_index, sample_index1)
-
-  predict_TRAIN<-predict(lm,newdata=as.matrix(X[train_index,]))
-  R2orig_TRAIN<-1-sum((y[train_index]-predict_TRAIN)^2)/sum((y[train_index]-mean(y[train_index]))^2)
-  R2orig_TRAIN
   
-  predictLM1<-predict(lm,newdata=as.matrix(X[sample_index1,]))
-  predictLM2<-predict(lm,newdata=as.matrix(X[sample_index2,]))
+
+  predictLM1<-predict(lm,newdata=data.frame(data[sample_index1,]))
+  predictLM2<-predict(lm,newdata=data.frame(data[sample_index2,]))
   
   R2orig1<-1-sum((y[sample_index1]-predictLM1)^2)/sum((y[sample_index1]-mean(y[sample_index1]))^2)
   R2orig2<-1-sum((y[sample_index2]-predictLM2)^2)/sum((y[sample_index2]-mean(y[sample_index2]))^2)
   
-  Rnew1<-sapply(1:ncol(X),function(j) permR2TriangleBoostHD2(data[sample_index1,],j,lm))
-  Rnew2<-sapply(1:ncol(X),function(j) permR2TriangleBoostHD2(data[sample_index2,],j,lm))
-
+  Rnew1<-sapply(1:ncol(X),function(j) predR2TriangleLinRegTrain(data[sample_index1,],j,lm))
+  Rnew2<-sapply(1:ncol(X),function(j) predR2TriangleLinRegTrain(data[sample_index2,],j,lm))
+  
   Diff1=R2orig1-Rnew1
   Diff2=R2orig2-Rnew2
   
-  beta1=Diff1
-  beta2=Diff2
+  sd_X1 <- apply(X[sample_index1, ], 2, sd)
+  sd_X2 <- apply(X[sample_index2, ], 2, sd)
   
-  mirror<-sign(beta1*beta2)*(abs(beta1)+abs(beta2))
-  hist(mirror[-signal_index])
-  hist(mirror[signal_index])
-  sort(signal_index)
+  
+  beta1=sign(Diff1)*sqrt(abs(Diff1))*sd(y[sample_index1])/sd_X1
+  beta2=sign(Diff2)*sqrt(abs(Diff2))*sd(y[sample_index2])/sd_X2
+  
+  mirror<-sign(beta1*beta2)*(abs(beta1))
   selected_index<-SelectFeatures(mirror,abs(mirror),0.1)
   
   ### number of selected variables j=1
@@ -117,9 +103,6 @@ ApplyTriangleBoostHD2<-function(X, y, q,myseed=1,myeta = 0.05,mymax_depth = 1,my
     MDS_fdp <- 0
     MDS_power <- 0
   }
-  print(paste0('First R squared: ', round(R2orig1,3)))
-  print(paste0('Second R squared: ', round(R2orig2,3)))
-  print(paste0('DS_fdp = ', DS_fdp, ' DS_power = ', DS_power, ' MDS_fdp = ', MDS_fdp, ' MDS_power = ', MDS_power))
   return(list(DS_fdp = DS_fdp, DS_power = DS_power, MDS_fdp = MDS_fdp, MDS_power = MDS_power))
 }
 

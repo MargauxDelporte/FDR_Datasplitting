@@ -1,4 +1,4 @@
-### High dimensional non-linear case
+### High dimension linear model
 rm(list = ls())
 
 #mywd='C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
@@ -7,18 +7,21 @@ mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
-source(paste0(mywd,'/Functions/TriangleBoosterHD2.R'))
+source(paste0(mywd,'/Functions/TriangleLinRegPredict.R'))
 
 
-# Functions for the competition
-#source(paste0(mywd,'/Functions Dai/knockoff.R'))
-#source(paste0(mywd,'/Functions Dai/analysis.R'))
-#source(paste0(mywd,'/Functions Dai/MBHq.R'))
-#source(paste0(mywd,'/Functions Dai/DS.R'))
-#source(paste0(mywd,'/Functions Dai/fdp_power.R'))
+source(paste0(mywd,'/Functions Dai/knockoff.R'))
+source(paste0(mywd,'/Functions Dai/analysis.R'))
+source(paste0(mywd,'/Functions Dai/MBHq.R'))
+source(paste0(mywd,'/Functions Dai/DS.R'))
+source(paste0(mywd,'/Functions Dai/fdp_power.R'))
 
+#devtools::install_github("Jeremy690/DSfdr/DSfdr",force = TRUE)
 library(xgboost)
+library(gbm)
+library(ranger)
 library(MASS)
+library(neuralnet)
 
 library(glmnet)
 library(knockoff)
@@ -26,35 +29,41 @@ library(mvtnorm)
 library(hdi)
 
 ### algorithmic settings
-num_split <- 1
+num_split <- 2
 n <-1500
-p <- 2000
+p <- 250
 p0 <- 25
 q <- 0.1
 
 #set.seed(124)(123) i=5
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
-#######set up the method for the comparison############# i=10
-Compare_SignalStrength <- function(i, s,myeta = 0.05,mymax_depth = 1,mylambda = 0.5,myalpha = 0.5) {
+#######set up the method for the comparison############# i=8
+Compare_SignalStrength <- function(i, s) {
   set.seed(s)
-  delta <- i
+  delta <- 10
   
+  rho <- i/10
+  Sigma <- matrix(rho, nrow = p, ncol = p)
+  diag(Sigma) <- 1
+  
+  # Now draw correlated normals
+  X <- mvrnorm(n = n,
+               mu = rep(0, p),
+               Sigma = Sigma)
   # simulate data
-  X <- mvrnorm(n, mu = rep(0, p), Sigma = diag(p))
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*100
-  y <- scale(X^2 %*% beta_star + rnorm(n))
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))
+  y <- scale(X %*% beta_star + rnorm(n))
   
   # run your custom methods
-  g1 <- ApplyTriangleBoostHD2(X = X, y = y, q = q, num_split = num_split,
-                             signal_index = signal_index, myseed = 1,
-                             myeta = myeta,mymax_depth = mymax_depth,mylambda = mylambda,myalpha = myalpha)     
+  g1 <- ApplyTriangleLinRegPred(X = X, y = y, q = q, num_split = num_split,
+                             signal_index = signal_index, myseed = 1)     
 
   # FDR methods
-  # DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
-  # knockoff_result<- knockoff(    X = X, y = y, q = q)
-  # BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
+  DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
+  knockoff_result<- knockoff(    X = X, y = y, q = q)
+  BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
   
   # init empty results df
   ResultsDataFrame <- data.frame(
@@ -69,21 +78,30 @@ Compare_SignalStrength <- function(i, s,myeta = 0.05,mymax_depth = 1,mylambda = 
   ResultsDataFrame <- rbind(
     ResultsDataFrame,
     data.frame(Method = "Boost DS",                Delta = i, FDP = g1$DS_fdp,    Power = g1$DS_power),
-    data.frame(Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power)#,
-    #data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
-    # data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
-    #data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
-    #data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
+    data.frame(Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power),
+    data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
+    data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
+    data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
+    data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
   )
   
   return(ResultsDataFrame)
 }
+Compare_SignalStrength(7,7)
 
-# Try a single example
-Compare_SignalStrength(13,13,myeta=0.2,mymax_depth = 5,mylambda = 0.05,myalpha=0.05)
 
-# Parallel running of the simulations
+##check how long one iteration takes 
+system.time({
+  Compare_SignalStrength(7,7)
+  # Replace this block with the code you want to time
+  Sys.sleep(1)  # This just waits for 1 second
+})
+
+
+
 library(parallel)
+
+# Source helper and method files
 
 source(file.path(mywd, 'Functions', 'TriangleBoosterTrainMS.R'))
 source(file.path(mywd, 'Functions', 'HelperFunctions.R'))
@@ -124,7 +142,7 @@ clusterEvalQ(cl, {
          library, character.only = TRUE)
 })
 registerDoParallel(cl)
-
+5991.06
 # === RUN IN PARALLEL AND WRITE OUT ===
 results_list <- foreach(
   k = seq_len(nrow(param_grid)),
@@ -212,3 +230,6 @@ PlotPermute=ggarrange(
   common.legend = TRUE, legend = "right"
 )
 PlotPermute
+
+
+
