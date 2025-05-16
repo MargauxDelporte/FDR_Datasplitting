@@ -1,15 +1,15 @@
 ### High dimension linear model
 rm(list = ls())
 
-mywd='C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 #mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
 
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 source(paste0(mywd,'/Functions/TriangleBoosterTrainMS.R'))
-source(paste0(mywd,'/Functions/TriangleRangerTrainMS.R'))
-source(paste0(mywd,'/Functions/TriangleGBMTrainMS.R'))
+#source(paste0(mywd,'/Functions/TriangleRangerTrainMS.R'))
+#source(paste0(mywd,'/Functions/TriangleGBMTrainMS.R'))
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
@@ -31,7 +31,7 @@ library(hdi)
 
 ### algorithmic settings
 num_split <- 10
-n <-7500
+n <-3000
 p <- 250
 p0 <- 25
 q <- 0.1
@@ -90,7 +90,6 @@ Compare_SignalStrength <- function(i, s) {
 }
 
 
-Compare_SignalStrength(1,5)
 #######run the code#############
 #Results=data.frame()
 #for(s in 1:25){
@@ -103,7 +102,7 @@ Compare_SignalStrength(1,5)
 
 library(parallel)
 
-mywd <- 'C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 setwd(mywd)
 
 # Source helper and method files
@@ -125,12 +124,12 @@ lapply(pkgs, library, character.only = TRUE)
 
 # === PARAMETER GRID ===
 param_grid <- expand.grid(
-  s = 26:50,
+  s = 1:50,
   i = seq(from = 7, to = 13, by = 1)
 )
-
+350*6
 # === SET UP PARALLEL BACKEND ===
-cl <- makeCluster(detectCores() - 4)
+cl <- makeCluster(20)
 # export working dir so workers can source
 clusterExport(cl, 'mywd')
 # have each worker source & load libraries
@@ -162,7 +161,7 @@ results_list <- foreach(
   
   # write out this chunk immediately
   fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
-  write.csv(chunk, file = fname, row.names = FALSE)
+  write.csv(chunk, file = paste0(mywd,"/Temp/",fname), row.names = FALSE)
   
   # return for final binding
   chunk
@@ -173,7 +172,7 @@ stopCluster(cl)
 warnings()
 # combine all and save full dataset
 Results <- results_list
-write.csv(Results, file = "NonlinearScenario_10x_seed26_50.csv", row.names = FALSE)
+write.csv(Results, file = "ResultsNonlinearScenario.csv", row.names = FALSE)
 
 
 # === Add 25 additional simulations ===
@@ -183,25 +182,18 @@ library(ggplot2)
 library(dplyr)
 library(ggpubr)
 library(readr)
-mywd <- 'C:/Users/mde4023/OneDrive - Weill Cornell Medicine/0 Projects/FDR_Datasplitting/Results'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 mywd <- paste0(mywd,'/Results')
 
-N1 <- read_csv(paste0(mywd,'/NonlinearScenario_10x_seed26_50.csv'))
-names(N1)=c('Method','SignalStrength','FDP','Power')
-N2 <- read_csv(paste0(mywd,'/NonlinearScenario_10x.csv'))
-names(N2)=c('Method','SignalStrength','FDP','Power')
-
-Results=rbind(N1,N2)
-#Results=read.xlsx('VanillaResults.xlsx')
 colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
 Results2=Results
-names(Results2)=c('Method','SignalStrength','FDP','Power')
-Results2$FDP=round(as.numeric(Results2$FDP),3)
+names(Results2)=c('Method','SignalStrength','FDR','Power')
+Results2$FDR=round(as.numeric(Results2$FDR),3)
 Results2$Power=round(as.numeric(Results2$Power),2)
 resultsagg <- Results2 %>%
   group_by(Method, SignalStrength) %>%
   summarize(
-    Avg_FDR = mean(FDP),
+    Avg_FDR = mean(FDR),
     Avg_Power = mean(Power)
   )
 resultsagg$Signal_noisy <- as.numeric(resultsagg$SignalStrength) + runif(nrow(resultsagg), -0.2, 0.2)
@@ -225,9 +217,8 @@ PowerPlot <- ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_Power),
   scale_color_manual(values = colors)+
   coord_cartesian(ylim = c(-0.01, 1)) 
 FDRPlot=ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_FDR ), color = Method)) +
-  geom_point(size = 3) +
-  geom_line()+
-  labs(x = "Signal", y = "FDP")+
+  geom_point(size = 3) +geom_line()+
+  labs(x = "Signal", y = "FDR")+
   scale_x_continuous(breaks=seq(from=5,to=13,by=1))+
   geom_hline(yintercept=0.1)+
   scale_color_manual(values = colors)
@@ -236,3 +227,9 @@ PlotPermute=ggarrange(
   common.legend = TRUE, legend = "right"
 )
 PlotPermute
+ggsave("NLScenario.png",
+       plot   = PlotPermute,
+       width  = 8,
+       height = 8/18*8,
+       units  = "in",
+       dpi    = 100)

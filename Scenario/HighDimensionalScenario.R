@@ -15,7 +15,7 @@ source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
 source(paste0(mywd,'/Functions Dai/MBHq.R'))
 source(paste0(mywd,'/Functions Dai/DS.R'))
-source(paste0(mywd,'/Functions Dai/fdp_power.R'))
+source(paste0(mywd,'/Functions Dai/FDR_power.R'))
 
 #devtools::install_github("Jeremy690/DSfdr/DSfdr",force = TRUE)
 library(glmnet)
@@ -57,7 +57,7 @@ Compare_SignalStrength <- function(i, s) {
   ResultsDataFrame <- data.frame(
     Method = character(),
     Delta  = numeric(),
-    FDP    = numeric(),
+    FDR    = numeric(),
     Power  = numeric(),
     stringsAsFactors = FALSE
   )
@@ -65,12 +65,12 @@ Compare_SignalStrength <- function(i, s) {
   # bind all rows
   ResultsDataFrame <- rbind(
     ResultsDataFrame,
-    data.frame(seed=s, Method = "Boost DS",                Delta = i, FDP = g1$DS_fdp,    Power = g1$DS_power),
-    data.frame(seed=s, Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power),
-    data.frame(seed=s, Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
-    data.frame(seed=s, Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
-    data.frame(seed=s, Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
-    data.frame(seed=s, Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
+    data.frame(seed=s, Method = "Boost DS",                Delta = i, FDR = g1$DS_FDR,    Power = g1$DS_power),
+    data.frame(seed=s, Method = "Boost MS",                Delta = i, FDR = g1$MDS_FDR,   Power = g1$MDS_power),
+    data.frame(seed=s, Method = "DataSplitting",           Delta = i, FDR = DS_result$DS_FDR,  Power = DS_result$DS_power),
+    data.frame(seed=s, Method = "MultipleDataSplitting",   Delta = i, FDR = DS_result$MDS_FDR, Power = DS_result$MDS_power),
+    data.frame(seed=s, Method = "Knockoff",                Delta = i, FDR = knockoff_result$FDR, Power = knockoff_result$power),
+    data.frame(seed=s, Method = "Benjamini–Hochberg (BH)", Delta = i, FDR = BH_result$FDR,     Power = BH_result$power)
   )
   print(ResultsDataFrame)
   return(ResultsDataFrame)
@@ -89,7 +89,7 @@ source(file.path(mywd, 'Functions Dai', 'knockoff.R'))
 source(file.path(mywd, 'Functions Dai', 'analysis.R'))
 source(file.path(mywd, 'Functions Dai', 'MBHq.R'))
 source(file.path(mywd, 'Functions Dai', 'DS.R'))
-source(file.path(mywd, 'Functions Dai', 'fdp_power.R'))
+source(file.path(mywd, 'Functions Dai', 'FDR_power.R'))
 
 # Load required packages
 pkgs <- c('MASS','glmnet','knockoff','mvtnorm','hdi',
@@ -116,7 +116,7 @@ clusterEvalQ(cl, {
   source(file.path(mywd, 'Functions Dai', 'analysis.R'))
   source(file.path(mywd, 'Functions Dai', 'MBHq.R'))
   source(file.path(mywd, 'Functions Dai', 'DS.R'))
-  source(file.path(mywd, 'Functions Dai', 'fdp_power.R'))
+  source(file.path(mywd, 'Functions Dai', 'FDR_power.R'))
   lapply(c('MASS','glmnet','knockoff','mvtnorm','hdi','foreach','doParallel'),
          library, character.only = TRUE)
 })
@@ -147,41 +147,60 @@ warnings()
 # combine all and save full dataset
 Results <- results_list
 
+##########read in the results#############
+data_dir <- file.path(mywd, "Temp")
 
-param_grid <- expand.grid(
-  s = c(1:6,
-  i = seq(from = 7, to = 13, by = 1)
-)
-k=1
-results=c()
-for(k in 1:nrow(param_grid)){
-  # compute chunk of results
-  s_val <- param_grid$s[k]
-  i_val <- param_grid$i[k]
-  fname <- sprintf("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results HD/Results_s%02d_i%02d.csv", s_val, i_val)
-  rf=read.csv(file = fname)
-  results=rbind(results,rf)
+# initialize a list to collect each chunk
+results_list <- vector("list", length = (13-7+1) * 50)
+idx <- 1
+
+for (s in 1:50) {
+  for (i in 7:13) {
+    # build filename and full path
+    fname <- sprintf("Results_s%02d_i%02d.csv", s, i)
+    fpath <- file.path(data_dir, fname)
+    
+    # error out if the file doesn't exist
+    if (!file.exists(fpath)) {
+      stop(sprintf("ERROR: File not found: %s", fpath))
+    }
+    
+    # read it in
+    df <- read.csv(fpath, stringsAsFactors = FALSE)
+    
+    # tag with s and i
+    df$s <- s
+    df$i <- i
+    
+    # store into our list
+    results_list[[idx]] <- df
+    idx <- idx + 1
+  }
 }
-library(openxlsx)
-#write.xlsx(results,'C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/results_HD.xlsx',rowNames=F)
+
+# combine all into one data.frame
+all_results <- do.call(rbind, results_list)
+
+# inspect
+head(all_results)
 
 ##########visualise the results###########
 library(ggplot2)
 library(dplyr)
 library(ggpubr)
 library(readr)
-
-Results=results
+library(openxlsx)
+write.xlsx(all_results,'High_Dimensional_results.xlsx')
 #Results=read.xlsx('VanillaResults.xlsx')
 colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
-Results2=Results
-names(Results2)=c('seed','Method','SignalStrength','FDP','Power')
-Results2$FDP=round(as.numeric(Results2$FDP),3)
+Results2=all_results
+names(Results2)=c('seed','Method','SignalStrength','FDR','Power','s','i')
+Results2$FDR=round(as.numeric(Results2$FDR),3)
 Results2$Power=round(as.numeric(Results2$Power),2)
 resultsagg <- Results2 %>%
   group_by(Method, SignalStrength) %>%
   summarize(
-    Avg_FDR = mean(FDP),
+    Avg_FDR = mean(FDR),
     Avg_Power = mean(Power)
   )
 resultsagg$Signal_noisy <- as.numeric(resultsagg$SignalStrength) + runif(nrow(resultsagg), -0.2, 0.2)
@@ -207,7 +226,7 @@ PowerPlot <- ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_Power),
 FDRPlot=ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_FDR ), color = Method)) +
   geom_point(size = 3) +
   geom_line()+
-  labs(x = "Signal", y = "FDP")+
+  labs(x = "Signal", y = "FDR")+
   scale_x_continuous(breaks=seq(from=5,to=13,by=1))+
   geom_hline(yintercept=0.1)+
   scale_color_manual(values = colors)
