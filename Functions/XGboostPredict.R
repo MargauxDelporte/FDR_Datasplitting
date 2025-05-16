@@ -1,12 +1,22 @@
-predR2TriangleLinRegTrain<-function(data,j,model){
+PredXgboost=function(data,j,model){
   dataPerm<-data[,-1]
   # extract the “target” column and the other predictors j=1
   y_j <- dataPerm[[j]]             # original data[, j+1]
   x_df <- dataPerm[ , - j, drop=FALSE]  # all columns except j+1
   
   # fit a simple regression of that column on the rest
-  model_p <- lm(y_j ~ ., data = x_df)
-  
+  model_p <- xgboost(
+    data = dataPerm[ , - j, drop=FALSE],
+    label =dataPerm[[j]] ,
+    booster = "gblinear",
+    objective = "reg:squarederror",
+    nrounds = 500,
+    eta = 0.05,
+    max_depth = 1,
+    lambda = 1,
+    alpha = 1,
+  )
+
   # replace the j-th column of dataPred with the fitted values
   dataPerm[[ j ]] <- predict(model_p, newdata = x_df)
   # fit the old model on the predicted features (used to be permuted features)
@@ -15,7 +25,7 @@ predR2TriangleLinRegTrain<-function(data,j,model){
   return(rsquared)
 }
 
-ApplyTriangleLinRegPred<-function(X, y, q,amountTrain=0.333,amountTest=1-amountTrain,myseed,num_split=1,signal_index=signal_index){
+ApplyPredXgboost<-function(X, y, q,amountTrain=0.333,amountTest=1-amountTrain,myseed,num_split=1,signal_index=signal_index){
   set.seed(myseed)
   n <- dim(X)[1]; p <- dim(X)[2]
   inclusion_rate <- matrix(0, nrow = num_split, ncol = p)
@@ -43,16 +53,12 @@ ApplyTriangleLinRegPred<-function(X, y, q,amountTrain=0.333,amountTest=1-amountT
   R2orig1<-1-sum((y[sample_index1]-predictLM1)^2)/sum((y[sample_index1]-mean(y[sample_index1]))^2)
   R2orig2<-1-sum((y[sample_index2]-predictLM2)^2)/sum((y[sample_index2]-mean(y[sample_index2]))^2)
   
-  Rnew1<-sapply(1:ncol(X),function(j) predR2TriangleLinRegTrain(data[sample_index1,],j,lm))
-  Rnew2<-sapply(1:ncol(X),function(j) predR2TriangleLinRegTrain(data[sample_index2,],j,lm))
+  Rnew1<-sapply(1:ncol(X),function(j) PredXgboost(data[sample_index1,],j,lm))
+  Rnew2<-sapply(1:ncol(X),function(j) PredXgboost(data[sample_index2,],j,lm))
   
   Diff1=R2orig1-Rnew1
   Diff2=R2orig2-Rnew2
-  
-  sd_X1 <- apply(X[sample_index1, ], 2, sd)
-  sd_X2 <- apply(X[sample_index2, ], 2, sd)
-  
-  
+
   beta1=Diff1
   beta2=Diff2
   

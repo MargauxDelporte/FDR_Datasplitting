@@ -87,7 +87,7 @@ Compare_SignalStrength <- function(i, s) {
   
   return(ResultsDataFrame)
 }
-Compare_SignalStrength(7,7)
+Compare_SignalStrength(9,9)
 
 
 ##check how long one iteration takes 
