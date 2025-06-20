@@ -43,7 +43,7 @@ ApplyTriangleBoostHD2<-function(X, y, q,myseed=1,myeta = 0.05,mymax_depth = 1,my
   #  colsample_bytree = 0.7,
     verbose = 0
   )
-
+  summary(lm)
   remaining_index<-c(setdiff(c(1:n),train_index))
   sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)
   sample_index2 <- setdiff(remaining_index, sample_index1)

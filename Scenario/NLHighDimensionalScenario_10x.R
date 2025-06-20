@@ -7,7 +7,7 @@ mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
-source(paste0(mywd,'/Functions/TriangleBoosterHD2.R'))
+source(paste0(mywd,'/Functions/TriangleBoosterHDNL.R'))
 
 
 # Functions for the competition
