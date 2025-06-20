@@ -9,20 +9,11 @@ permR2TriangleBoostTrain<-function(data,j,model){
   return(rsquared)
 }
 
-ApplyTriangleBoostTrain<-function(X, y, q,myseed=1,mybooster='gbtree',num_split=1,signal_index=signal_index){
+ApplyTriangleBoostTrain<-function(X, y, q,myseed=1,mybooster='gbtree',num_split=1,signal_index=signal_index,param){
   set.seed(myseed)
   amountTrain=0.333
   amountTest=1-amountTrain
-  param <- list(
-    objective = "reg:squarederror",
-    eta       = 0.05,
-    max_depth = 3,
-    subsample = 0.6,
-    colsample_bytree = 0.8,
-    lambda    = 1,
-    alpha     = 0
-  )
-  
+ 
   
   data<-data.frame(cbind(y,X))
   n <- dim(X)[1]; p <- dim(X)[2]

@@ -1,7 +1,23 @@
 library(xgboost)
 
 # --- your fixed settings ------------------------
-set.seed(myseed)
+set.seed(23)
+num_split <- 50
+n <-750
+p <- 250
+p0 <- 20
+q <- 0.1
+delta <- 10
+signal_index <- sample(c(1:p), size = p0, replace = F)
+# simulate data
+n1 <- floor(n/2); n2 <- n - n1
+X1 <- matrix(rnorm(n1*p, mean= 2), n1, p)
+X2 <- matrix(rnorm(n2*p, mean=-2), n2, p)
+X  <- rbind(X1, X2)
+beta_star <- numeric(p)
+beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*10
+y <- scale(X^2 %*% beta_star + rnorm(n))
+
 nrounds    <- 500
 num_split  <- 1
 amountTrain<- 0.333
@@ -30,7 +46,7 @@ calc_r2 <- function(obs, pred) {
 }
 
 # --- grid search over params ----------------------
-for(j in 287:nrow(param_grid)) {
+for(j in 1:nrow(param_grid)) {
   pars   <- as.list(param_grid[j, c("eta","max_depth","subsample",
                                     "colsample_bytree","lambda","alpha",
                                     "booster")])
@@ -74,3 +90,5 @@ best_param <- param_grid[best_row, ]
 print(best_param)
 
 View(param_grid)
+#eta max_depth subsample colsample_bytree lambda alpha booster   mean_R2
+#38 0.05         3       0.8              0.8      0     0  gbtree 0.6156564
