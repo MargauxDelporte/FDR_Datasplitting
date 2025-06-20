@@ -1,0 +1,7 @@
+"V1","V2","V3","V4"
+"LinReg DS","13","0","0.84"
+"LinReg MS","13","0","0.84"
+"DataSplitting","13","0","0.88"
+"MultipleDataSplitting","13","0","0.84"
+"Knockoff","13","0","0.92"
+"BH","13","0","0.88"
