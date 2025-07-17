@@ -7,9 +7,8 @@ mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
-source(paste0(mywd,'/Functions/TriangleBoosterTrainMS.R'))
-source(paste0(mywd,'/Functions/ApplyGBMKnockoff.R'))
-#source(paste0(mywd,'/Functions/TriangleGBMTrainMS.R'))
+source(paste0(mywd,'/Functions/TriangleLassoHD.R'))
+
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
@@ -18,11 +17,8 @@ source(paste0(mywd,'/Functions Dai/DS.R'))
 source(paste0(mywd,'/Functions Dai/fdp_power.R'))
 
 #devtools::install_github("Jeremy690/DSfdr/DSfdr",force = TRUE)
-library(xgboost)
 library(gbm)
-library(ranger)
 library(MASS)
-library(neuralnet)
 
 library(glmnet)
 library(knockoff)
@@ -31,46 +27,33 @@ library(hdi)
 
 ### algorithmic settings
 num_split <- 50
-n <-500
-p <- 100
-p0 <- 10
+n <-400
+p <- 500
+p0 <- 25
 q <- 0.1
-#set.seed(124)(123) i=5
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-
-###choose the parameters
-params =list(
-  objective = "reg:squarederror",
-  eta       = 0.05,
-  max_depth = 3,
-  subsample = 0.8,
-  colsample_bytree = 0.8,
-  lambda    = 0.1,
-  alpha     = 0.1
-)
-
-#######set up the method for the comparison############# i=10 s=10 num_split=1
+#######set up the method for the comparison############# i=7 s=7 num_split=3
 Compare_SignalStrength <- function(i, s) {
   set.seed(s)
   delta <- i
-  signal_index <- sample(c(1:p), size = p0, replace = F)
   # simulate data
   n1 <- floor(n/2); n2 <- n - n1
-  X1 <- matrix(rnorm(n1*p, mean= 1), n1, p)
-  X2 <- matrix(rnorm(n2*p, mean=-1), n2, p)
+  X1 <- matrix(rnorm(n1*p, mean= -0.1), n1, p)
+  X2 <- matrix(rnorm(n2*p, mean= 0.1), n2, p)
   X  <- rbind(X1, X2)
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*10
-  y <- (X^2 %*% beta_star + rnorm(n))
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))
+  y <- (X %*% beta_star + rnorm(n))
   
   # run your custom methods
-  g1 <- ApplyTriangleBoostTrain( X = X, y = y, q = q, num_split = num_split,param=params,
+  g1 <- ApplyTriangleLassoHD( X = X, y = y, q = q, num_split = num_split,
                                  signal_index = signal_index, myseed = 1)
+  print(g1)
   # FDR methods
   DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
-  knockoff_result<- ApplyGBMKnockoff(    X = X, y = y, q = q,param=params)
+  knockoff_result<- knockoff(    X = X, y = y, q = q)
   BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
   
   # init empty results df
@@ -96,7 +79,7 @@ Compare_SignalStrength <- function(i, s) {
   return(ResultsDataFrame)
 }
 
-Compare_SignalStrength(10,8)
+#Compare_SignalStrength(8,8)
 
 #######run the code#############
 #Results=data.frame()
@@ -115,9 +98,8 @@ setwd(mywd)
 
 # Source helper and method files
 
-source(file.path(mywd, 'Functions', 'TriangleBoosterTrainMS.R'))
-source(file.path(mywd, 'Functions', 'HelperFunctions.R'))
-source(file.path(mywd, 'Functions', 'ApplyGBMKnockoff.R'))
+source(paste0(mywd,'/Functions/HelperFunctions.R'))
+source(paste0(mywd,'/Functions/TriangleLassoHD.R'))
 
 # Dai’s routines
 #source(file.path(mywd, 'Functions Dai', 'knockoff.R'))
@@ -127,7 +109,7 @@ source(file.path(mywd, 'Functions Dai', 'DS.R'))
 source(file.path(mywd, 'Functions Dai', 'fdp_power.R'))
 
 # Load required packages
-pkgs <- c('xgboost','gbm','ranger','MASS','glmnet','knockoff','mvtnorm','hdi',
+pkgs <- c('gbm','MASS','glmnet','knockoff','mvtnorm','hdi',
           'foreach','doParallel')
 lapply(pkgs, library, character.only = TRUE)
 
@@ -144,15 +126,14 @@ clusterExport(cl, 'mywd')
 # have each worker source & load libraries
 clusterEvalQ(cl, {
   setwd(mywd)
-  source(file.path(mywd, 'Functions', 'TriangleBoosterTrainMS.R'))
-  source(file.path(mywd, 'Functions', 'ApplyGBMKnockoff.R'))
+  source(file.path(mywd, 'Functions', 'TriangleLassoHD.R'))
   source(file.path(mywd, 'Functions', 'HelperFunctions.R'))
   source(file.path(mywd, 'Functions Dai', 'knockoff.R'))
   source(file.path(mywd, 'Functions Dai', 'analysis.R'))
   source(file.path(mywd, 'Functions Dai', 'MBHq.R'))
   source(file.path(mywd, 'Functions Dai', 'DS.R'))
   source(file.path(mywd, 'Functions Dai', 'fdp_power.R'))
-  lapply(c('xgboost','gbm','ranger','MASS','glmnet','knockoff','mvtnorm','hdi'),
+  lapply(c('gbm','MASS','glmnet','knockoff','mvtnorm','hdi'),
          library, character.only = TRUE)
 })
 registerDoParallel(cl)
@@ -182,26 +163,9 @@ stopCluster(cl)
 warnings()
 # combine all and save full dataset
 Results <- results_list
-write.csv(Results, file = "ResultsNonlinearScenario.csv", row.names = FALSE)
+write.csv(Results, file = "ResultsHDScenario.csv", row.names = FALSE)
 
 
-# === Add 25 additional simulations ===
-
-# Path to your folder
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Temp"
-csv_files <- list.files(
-  path       = csv_dir,
-  pattern    = "\\.csv$",
-  full.names = TRUE
-)
-# Get full paths of all .csv files
-# Read each file into a list of data.frames
-data_list <- lapply(csv_files, read.csv, stringsAsFactors = FALSE)
-library(dplyr)
-all_data <- bind_rows(data_list, .id = "source_file")
-
-library(readr)
-ResultsNonlinearScenario <- read_csv("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsNonlinearScenario.csv")
 
 ##########visualise the results###########
 library(ggplot2)
