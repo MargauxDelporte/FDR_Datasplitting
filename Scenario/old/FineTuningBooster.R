@@ -1,22 +1,22 @@
 library(xgboost)
 
 # --- your fixed settings ------------------------
-set.seed(23)
+set.seed(456)
 num_split <- 50
-n <-750
-p <- 250
-p0 <- 20
+n <-500
+p <- 100
+p0 <- 10
 q <- 0.1
-delta <- 10
 signal_index <- sample(c(1:p), size = p0, replace = F)
+delta=10
 # simulate data
 n1 <- floor(n/2); n2 <- n - n1
-X1 <- matrix(rnorm(n1*p, mean= 2), n1, p)
-X2 <- matrix(rnorm(n2*p, mean=-2), n2, p)
+X1 <- matrix(rnorm(n1*p, mean= 1), n1, p)
+X2 <- matrix(rnorm(n2*p, mean=-1), n2, p)
 X  <- rbind(X1, X2)
 beta_star <- numeric(p)
 beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*10
-y <- scale(X^2 %*% beta_star + rnorm(n))
+y <- (X^2 %*% beta_star + rnorm(n))
 
 nrounds    <- 500
 num_split  <- 1
@@ -31,8 +31,8 @@ param_grid <- expand.grid(
   max_depth         = c(3, 4, 6),
   subsample         = c(0.6, 0.8, 1.0),
   colsample_bytree  = c(0.6, 0.8, 1.0),
-  lambda            = c(0, 1, 5),
-  alpha             = c(0, 1),
+  lambda            = c(0,0.1, 0.5, 1, 5),
+  alpha             = c(0,0.1, 0.5, 1),
   booster           = "gbtree",
   stringsAsFactors  = FALSE
 )
@@ -91,4 +91,4 @@ print(best_param)
 
 View(param_grid)
 #eta max_depth subsample colsample_bytree lambda alpha booster   mean_R2
-#38 0.05         3       0.8              0.8      0     0  gbtree 0.6156564
+#38 417 0.1         3       0.8              0.6      0   0.1  gbtree 0.7306313

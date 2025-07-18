@@ -43,11 +43,11 @@ signal_index <- sample(c(1:p), size = p0, replace = F)
 ###choose the parameters
 params =list(
   objective = "reg:squarederror",
-  eta       = 0.05,
+  eta       = 0.1,
   max_depth = 3,
   subsample = 0.8,
-  colsample_bytree = 0.8,
-  lambda    = 0.1,
+  colsample_bytree = 0.6,
+  lambda    = 0,
   alpha     = 0.1
 )
 
@@ -55,7 +55,7 @@ params =list(
 Compare_SignalStrength <- function(i, s) {
   set.seed(s)
   delta <- i
-  signal_index <- sample(c(1:p), size = p0, replace = F)
+  # signal_index <- sample(c(1:p), size = p0, replace = F)
   # simulate data
   n1 <- floor(n/2); n2 <- n - n1
   X1 <- matrix(rnorm(n1*p, mean= 1), n1, p)

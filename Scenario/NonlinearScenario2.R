@@ -47,8 +47,8 @@ params =list(
   max_depth = 3,
   subsample = 0.8,
   colsample_bytree = 0.8,
-  lambda    = 0.1,
-  alpha     = 0.1
+  lambda    = 0.15,
+  alpha     = 0.15
 )
 
 #######set up the method for the comparison############# i=10 s=10 num_split=1
@@ -127,7 +127,7 @@ source(file.path(mywd, 'Functions Dai', 'DS.R'))
 source(file.path(mywd, 'Functions Dai', 'fdp_power.R'))
 
 # Load required packages
-pkgs <- c('xgboost','gbm','ranger','MASS','glmnet','knockoff','mvtnorm','hdi',
+pkgs <- c('xgboost','gbm','MASS','glmnet','knockoff','mvtnorm','hdi',
           'foreach','doParallel')
 lapply(pkgs, library, character.only = TRUE)
 
@@ -152,7 +152,7 @@ clusterEvalQ(cl, {
   source(file.path(mywd, 'Functions Dai', 'MBHq.R'))
   source(file.path(mywd, 'Functions Dai', 'DS.R'))
   source(file.path(mywd, 'Functions Dai', 'fdp_power.R'))
-  lapply(c('xgboost','gbm','ranger','MASS','glmnet','knockoff','mvtnorm','hdi'),
+  lapply(c('xgboost','gbm','MASS','glmnet','knockoff','mvtnorm','hdi'),
          library, character.only = TRUE)
 })
 registerDoParallel(cl)
@@ -171,7 +171,7 @@ results_list <- foreach(
   
   # write out this chunk immediately
   fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
-  write.csv(chunk, file = paste0(mywd,"/Temp/",fname), row.names = FALSE)
+  write.csv(chunk, file = paste0(mywd,"/Temp2/",fname), row.names = FALSE)
   
   # return for final binding
   chunk
@@ -182,13 +182,13 @@ stopCluster(cl)
 warnings()
 # combine all and save full dataset
 Results <- results_list
-write.csv(Results, file = "ResultsNonlinearScenario.csv", row.names = FALSE)
+write.csv(Results, file = "ResultsNonlinearScenario2.csv", row.names = FALSE)
 
 
 # === Add 25 additional simulations ===
 
 # Path to your folder
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Temp"
+csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Temp2"
 csv_files <- list.files(
   path       = csv_dir,
   pattern    = "\\.csv$",
@@ -201,10 +201,8 @@ library(dplyr)
 all_data <- bind_rows(data_list, .id = "source_file")
 
 library(readr)
-library(readxl)
-ResultsNonlinearScenario <- read_csv("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/VanillaScenarioLinear.CSV")
-##VanillaScenarioLinear <- read_excel("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/VanillaScenarioLinear.xlsx")
-##Results2<-VanillaScenarioLinear
+ResultsNonlinearScenario <- read_csv("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsNonlinearScenario.csv")
+
 ##########visualise the results###########
 library(ggplot2)
 library(dplyr)
@@ -230,10 +228,10 @@ resultsagg <- resultsagg %>%
   mutate(Method  = case_when(
     Method == "BH" ~ "Benjamini–Hochberg",
     Method == "DataSplitting" ~ "Dai (single split)",
-    Method == "MultipleDataSplitting" ~ "Dai (50 splits)",
+    Method == "MultipleDataSplitting" ~ "Dai (10 splits)",
     Method == "Knockoff" ~ "Knockoff",
     Method == "Boost DS" ~ "Delporte (single split)",
-    Method == "Boost MS" ~ "Delporte (50 splits)",
+    Method == "Boost MS" ~ "Delporte (10 splits)",
     TRUE ~ Method  # default if none match
   ))
 PowerPlot <- ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_Power), color = Method)) +
