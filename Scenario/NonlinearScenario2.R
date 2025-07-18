@@ -201,7 +201,8 @@ library(dplyr)
 all_data <- bind_rows(data_list, .id = "source_file")
 
 library(readr)
-ResultsNonlinearScenario <- read_csv("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsNonlinearScenario.csv")
+write.csv(all_data, file = "ResultsNonlinearScenario2.csv", row.names = FALSE)
+ResultsNonlinearScenario <- read_csv("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsNonlinearScenario2.csv")
 
 ##########visualise the results###########
 library(ggplot2)
@@ -212,8 +213,8 @@ mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 mywd <- paste0(mywd,'/Results')
 
 colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
-Results2=ResultsNonlinearScenario
-names(Results2)=c('Method','SignalStrength','FDR','Power')
+Results2=all_data
+names(Results2)=c('i','Method','SignalStrength','FDR','Power')
 Results2$FDR=round(as.numeric(Results2$FDR),3)
 Results2$Power=round(as.numeric(Results2$Power),2)
 resultsagg <- Results2 %>%
