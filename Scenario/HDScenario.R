@@ -116,7 +116,7 @@ lapply(pkgs, library, character.only = TRUE)
 # === PARAMETER GRID ===
 param_grid <- expand.grid(
   s = 1:50,
-  i = seq(from = 7, to = 13, by = 1)
+  i = seq(from = 12, to = 13, by = 1)
 )
 
 # === SET UP PARALLEL BACKEND ===
@@ -165,8 +165,27 @@ warnings()
 Results <- results_list
 write.csv(Results, file = "ResultsHDScenario.csv", row.names = FALSE)
 
-
-
+##########Intermediate check###########
+# Path to your folder
+csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Temp"
+csv_files <- list.files(
+  path       = csv_dir,
+  pattern    = "\\.csv$",
+  full.names = TRUE
+)
+# Get full paths of all .csv files
+# Read each file into a list of data.frames
+data_list <- lapply(csv_files, read.csv, stringsAsFactors = FALSE)
+library(dplyr)
+all_data <- bind_rows(data_list, .id = "source_file")
+View(all_data)
+nrow(subset(all_data,all_data$Method=='Boost DS'&all_data$Delta==13))
+nrow(subset(all_data,all_data$Method=='Boost DS'&all_data$Delta==12))
+nrow(subset(all_data,all_data$Method=='Boost DS'&all_data$Delta==11))
+nrow(subset(all_data,all_data$Method=='Boost DS'&all_data$Delta==10))
+nrow(subset(all_data,all_data$Method=='Boost DS'&all_data$Delta==9))
+nrow(subset(all_data,all_data$Method=='Boost DS'&all_data$Delta==8))
+nrow(subset(all_data,all_data$Method=='Boost DS'&all_data$Delta==7))
 ##########visualise the results###########
 library(ggplot2)
 library(dplyr)
@@ -176,8 +195,8 @@ mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 mywd <- paste0(mywd,'/Results')
 
 colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
-Results2=ResultsNonlinearScenario
-names(Results2)=c('Method','SignalStrength','FDR','Power')
+Results2=all_data
+names(Results2)=c('i','Method','SignalStrength','FDR','Power')
 Results2$FDR=round(as.numeric(Results2$FDR),3)
 Results2$Power=round(as.numeric(Results2$Power),2)
 resultsagg <- Results2 %>%
@@ -192,10 +211,10 @@ resultsagg <- resultsagg %>%
   mutate(Method  = case_when(
     Method == "BH" ~ "Benjamini–Hochberg",
     Method == "DataSplitting" ~ "Dai (single split)",
-    Method == "MultipleDataSplitting" ~ "Dai (10 splits)",
+    Method == "MultipleDataSplitting" ~ "Dai (50 splits)",
     Method == "Knockoff" ~ "Knockoff",
     Method == "Boost DS" ~ "Delporte (single split)",
-    Method == "Boost MS" ~ "Delporte (10 splits)",
+    Method == "Boost MS" ~ "Delporte (50 splits)",
     TRUE ~ Method  # default if none match
   ))
 PowerPlot <- ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_Power), color = Method)) +

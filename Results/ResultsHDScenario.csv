@@ -1,0 +1,601 @@
+"Method","Delta","FDP","Power"
+"Boost DS",12,0.233333333333333,0.92
+"Boost MS",12,0,0.92
+"DataSplitting",12,0.111111111111111,0.96
+"MultipleDataSplitting",12,0,0.96
+"Knockoff",12,0.166666666666667,1
+"Benjamini–Hochberg (BH)",12,0,0.96
+"Boost DS",12,0.0434782608695652,0.88
+"Boost MS",12,0,0.96
+"DataSplitting",12,0.2,0.96
+"MultipleDataSplitting",12,0.04,0.96
+"Knockoff",12,0.0740740740740741,1
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.2,0.8
+"Boost MS",12,0.0476190476190476,0.8
+"DataSplitting",12,0.115384615384615,0.92
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0.0869565217391304,0.84
+"Benjamini–Hochberg (BH)",12,0,0.84
+"Boost DS",12,0.142857142857143,0.72
+"Boost MS",12,0,0.8
+"DataSplitting",12,0.0454545454545455,0.84
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0.0833333333333333,0.88
+"Benjamini–Hochberg (BH)",12,0,0.84
+"Boost DS",12,0.173913043478261,0.76
+"Boost MS",12,0,0.8
+"DataSplitting",12,0.16,0.84
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0.12,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0.230769230769231,0.8
+"Boost MS",12,0,0.88
+"DataSplitting",12,0.0869565217391304,0.84
+"MultipleDataSplitting",12,0,0.92
+"Knockoff",12,0.04,0.96
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0,0.88
+"Boost MS",12,0,0.88
+"DataSplitting",12,0.04,0.96
+"MultipleDataSplitting",12,0,0.92
+"Knockoff",12,0,1
+"Benjamini–Hochberg (BH)",12,0,0.96
+"Boost DS",12,0,0.72
+"Boost MS",12,0,0.8
+"DataSplitting",12,0.0454545454545455,0.84
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0.0454545454545455,0.84
+"Benjamini–Hochberg (BH)",12,0,0.84
+"Boost DS",12,0.166666666666667,0.4
+"Boost MS",12,0,0.72
+"DataSplitting",12,0,0.84
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0.0869565217391304,0.84
+"Benjamini–Hochberg (BH)",12,0,0.8
+"Boost DS",12,0.192307692307692,0.84
+"Boost MS",12,0,0.88
+"DataSplitting",12,0.111111111111111,0.96
+"MultipleDataSplitting",12,0.04,0.96
+"Knockoff",12,0.0769230769230769,0.96
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.0526315789473684,0.72
+"Boost MS",12,0,0.8
+"DataSplitting",12,0.08,0.92
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0,0.68
+"Boost MS",12,0,0.76
+"DataSplitting",12,0.0434782608695652,0.88
+"MultipleDataSplitting",12,0,0.92
+"Knockoff",12,0.04,0.96
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0,0.8
+"Boost MS",12,0,0.84
+"DataSplitting",12,0.233333333333333,0.92
+"MultipleDataSplitting",12,0.0416666666666667,0.92
+"Knockoff",12,0.206896551724138,0.92
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.0454545454545455,0.84
+"Boost MS",12,0,0.88
+"DataSplitting",12,0.0416666666666667,0.92
+"MultipleDataSplitting",12,0,0.92
+"Knockoff",12,0,0.92
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.214285714285714,0.88
+"Boost MS",12,0,0.8
+"DataSplitting",12,0.0833333333333333,0.88
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0.04,0.96
+"Boost MS",12,0.0384615384615385,1
+"DataSplitting",12,0,1
+"MultipleDataSplitting",12,0,1
+"Knockoff",12,0.166666666666667,1
+"Benjamini–Hochberg (BH)",12,0,1
+"Boost DS",12,0,0.88
+"Boost MS",12,0,0.96
+"DataSplitting",12,0.2,0.96
+"MultipleDataSplitting",12,0,0.92
+"Knockoff",12,0.04,0.96
+"Benjamini–Hochberg (BH)",12,0,0.96
+"Boost DS",12,0.0476190476190476,0.8
+"Boost MS",12,0,0.88
+"DataSplitting",12,0,0.96
+"MultipleDataSplitting",12,0,0.92
+"Knockoff",12,0.111111111111111,0.96
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.05,0.76
+"Boost MS",12,0,0.8
+"DataSplitting",12,0.08,0.92
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0.0476190476190476,0.8
+"Boost MS",12,0,0.92
+"DataSplitting",12,0.2,0.96
+"MultipleDataSplitting",12,0,0.96
+"Knockoff",12,0.25,0.96
+"Benjamini–Hochberg (BH)",12,0,0.96
+"Boost DS",12,0,0.88
+"Boost MS",12,0,0.84
+"DataSplitting",12,0.148148148148148,0.92
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0.08,0.92
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.136363636363636,0.76
+"Boost MS",12,0,0.8
+"DataSplitting",12,0,0.84
+"MultipleDataSplitting",12,0,0.8
+"Knockoff",12,0.16,0.84
+"Benjamini–Hochberg (BH)",12,0,0.84
+"Boost DS",12,0,0.64
+"Boost MS",12,0,0.72
+"DataSplitting",12,0.0434782608695652,0.88
+"MultipleDataSplitting",12,0.08,0.92
+"Knockoff",12,0.115384615384615,0.92
+"Benjamini–Hochberg (BH)",12,0,0.84
+"Boost DS",12,0.290322580645161,0.88
+"Boost MS",12,0,0.88
+"DataSplitting",12,0,0.88
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0.0555555555555556,0.68
+"Boost MS",12,0,0.76
+"DataSplitting",12,0.0869565217391304,0.84
+"MultipleDataSplitting",12,0.0869565217391304,0.84
+"Knockoff",12,0.178571428571429,0.92
+"Benjamini–Hochberg (BH)",12,0,0.76
+"Boost DS",12,0,0.72
+"Boost MS",12,0.05,0.76
+"DataSplitting",12,0.142857142857143,0.96
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0.0416666666666667,0.92
+"Benjamini–Hochberg (BH)",12,0,0.76
+"Boost DS",12,0.173913043478261,0.76
+"Boost MS",12,0,0.84
+"DataSplitting",12,0.0434782608695652,0.88
+"MultipleDataSplitting",12,0.0434782608695652,0.88
+"Knockoff",12,0,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0,0.64
+"Boost MS",12,0,0.64
+"DataSplitting",12,0.142857142857143,0.72
+"MultipleDataSplitting",12,0.0526315789473684,0.72
+"Knockoff",12,0.0952380952380952,0.76
+"Benjamini–Hochberg (BH)",12,0,0.76
+"Boost DS",12,0,0.68
+"Boost MS",12,0,0.84
+"DataSplitting",12,0.0833333333333333,0.88
+"MultipleDataSplitting",12,0.12,0.88
+"Knockoff",12,0.290322580645161,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0,0.72
+"Boost MS",12,0.130434782608696,0.8
+"DataSplitting",12,0.0909090909090909,0.8
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0,0.92
+"Benjamini–Hochberg (BH)",12,0,0.84
+"Boost DS",12,0.0869565217391304,0.84
+"Boost MS",12,0,0.84
+"DataSplitting",12,0.153846153846154,0.88
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0.0833333333333333,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0,0.6
+"Boost MS",12,0,0.68
+"DataSplitting",12,0.142857142857143,0.72
+"MultipleDataSplitting",12,0.0454545454545455,0.84
+"Knockoff",12,0.153846153846154,0.88
+"Benjamini–Hochberg (BH)",12,0,0.76
+"Boost DS",12,0,0.6
+"Boost MS",12,0,0.76
+"DataSplitting",12,0,0.92
+"MultipleDataSplitting",12,0,0.92
+"Knockoff",12,0.0769230769230769,0.96
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.0909090909090909,0.8
+"Boost MS",12,0,0.88
+"DataSplitting",12,0.0434782608695652,0.88
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0.0434782608695652,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0.125,0.84
+"Boost MS",12,0,0.84
+"DataSplitting",12,0,0.96
+"MultipleDataSplitting",12,0,0.96
+"Knockoff",12,0,1
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0,0.64
+"Boost MS",12,0,0.72
+"DataSplitting",12,0.16,0.84
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0.04,0.96
+"Benjamini–Hochberg (BH)",12,0,0.8
+"Boost DS",12,0.148148148148148,0.92
+"Boost MS",12,0,0.88
+"DataSplitting",12,0.148148148148148,0.92
+"MultipleDataSplitting",12,0.0769230769230769,0.96
+"Knockoff",12,0.111111111111111,0.96
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.130434782608696,0.8
+"Boost MS",12,0,0.96
+"DataSplitting",12,0,0.96
+"MultipleDataSplitting",12,0,0.96
+"Knockoff",12,0.272727272727273,0.96
+"Benjamini–Hochberg (BH)",12,0,0.96
+"Boost DS",12,0,0.72
+"Boost MS",12,0,0.72
+"DataSplitting",12,0.0909090909090909,0.8
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0,0.84
+"Benjamini–Hochberg (BH)",12,0,0.76
+"Boost DS",12,0.0909090909090909,0.8
+"Boost MS",12,0,0.72
+"DataSplitting",12,0.2,0.8
+"MultipleDataSplitting",12,0.115384615384615,0.92
+"Knockoff",12,0.233333333333333,0.92
+"Benjamini–Hochberg (BH)",12,0,0.8
+"Boost DS",12,0.185185185185185,0.88
+"Boost MS",12,0,0.88
+"DataSplitting",12,0.08,0.92
+"MultipleDataSplitting",12,0,0.92
+"Knockoff",12,0.08,0.92
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.2,0.8
+"Boost MS",12,0,0.84
+"DataSplitting",12,0.0833333333333333,0.88
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0.214285714285714,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0.0476190476190476,0.8
+"Boost MS",12,0,0.8
+"DataSplitting",12,0.0434782608695652,0.88
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0.0434782608695652,0.88
+"Benjamini–Hochberg (BH)",12,0,0.84
+"Boost DS",12,0,0.72
+"Boost MS",12,0,0.72
+"DataSplitting",12,0.192307692307692,0.84
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0.192307692307692,0.84
+"Benjamini–Hochberg (BH)",12,0,0.8
+"Boost DS",12,0.19047619047619,0.68
+"Boost MS",12,0,0.76
+"DataSplitting",12,0,0.76
+"MultipleDataSplitting",12,0,0.84
+"Knockoff",12,0,0.8
+"Benjamini–Hochberg (BH)",12,0,0.8
+"Boost DS",12,0.1,0.72
+"Boost MS",12,0,0.88
+"DataSplitting",12,0.0416666666666667,0.92
+"MultipleDataSplitting",12,0.04,0.96
+"Knockoff",12,0.111111111111111,0.96
+"Benjamini–Hochberg (BH)",12,0,0.92
+"Boost DS",12,0.05,0.76
+"Boost MS",12,0,0.84
+"DataSplitting",12,0.0434782608695652,0.88
+"MultipleDataSplitting",12,0,0.88
+"Knockoff",12,0.0833333333333333,0.88
+"Benjamini–Hochberg (BH)",12,0,0.88
+"Boost DS",12,0.0526315789473684,0.72
+"Boost MS",12,0,0.72
+"DataSplitting",12,0.16,0.84
+"MultipleDataSplitting",12,0.0476190476190476,0.8
+"Knockoff",12,0.0869565217391304,0.84
+"Benjamini–Hochberg (BH)",12,0,0.8
+"Boost DS",12,0.0952380952380952,0.76
+"Boost MS",12,0,0.96
+"DataSplitting",12,0.0740740740740741,1
+"MultipleDataSplitting",12,0,1
+"Knockoff",12,0.0384615384615385,1
+"Benjamini–Hochberg (BH)",12,0,1
+"Boost DS",12,0.185185185185185,0.88
+"Boost MS",12,0,0.92
+"DataSplitting",12,0.04,0.96
+"MultipleDataSplitting",12,0,0.96
+"Knockoff",12,0.04,0.96
+"Benjamini–Hochberg (BH)",12,0,0.96
+"Boost DS",13,0.233333333333333,0.92
+"Boost MS",13,0,0.92
+"DataSplitting",13,0.111111111111111,0.96
+"MultipleDataSplitting",13,0,0.96
+"Knockoff",13,0.166666666666667,1
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0.0416666666666667,0.92
+"Boost MS",13,0,0.96
+"DataSplitting",13,0.04,0.96
+"MultipleDataSplitting",13,0,0.96
+"Knockoff",13,0.0740740740740741,1
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0.2,0.8
+"Boost MS",13,0,0.8
+"DataSplitting",13,0.178571428571429,0.92
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0.0833333333333333,0.88
+"Benjamini–Hochberg (BH)",13,0,0.84
+"Boost DS",13,0.181818181818182,0.72
+"Boost MS",13,0,0.8
+"DataSplitting",13,0.0454545454545455,0.84
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0.0833333333333333,0.88
+"Benjamini–Hochberg (BH)",13,0,0.84
+"Boost DS",13,0.173913043478261,0.76
+"Boost MS",13,0,0.8
+"DataSplitting",13,0.12,0.88
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0.12,0.88
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0.230769230769231,0.8
+"Boost MS",13,0,0.88
+"DataSplitting",13,0.0434782608695652,0.88
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0.04,0.96
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0,0.88
+"Boost MS",13,0,0.88
+"DataSplitting",13,0,0.96
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0,1
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0,0.76
+"Boost MS",13,0,0.8
+"DataSplitting",13,0,0.84
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0.0454545454545455,0.84
+"Benjamini–Hochberg (BH)",13,0,0.84
+"Boost DS",13,0.0909090909090909,0.4
+"Boost MS",13,0,0.76
+"DataSplitting",13,0,0.84
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0.0833333333333333,0.88
+"Benjamini–Hochberg (BH)",13,0,0.84
+"Boost DS",13,0.192307692307692,0.84
+"Boost MS",13,0,0.92
+"DataSplitting",13,0.111111111111111,0.96
+"MultipleDataSplitting",13,0.04,0.96
+"Knockoff",13,0.0769230769230769,0.96
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0.0476190476190476,0.8
+"Boost MS",13,0,0.8
+"DataSplitting",13,0.233333333333333,0.92
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0,0.88
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0,0.68
+"Boost MS",13,0,0.8
+"DataSplitting",13,0.04,0.96
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0.04,0.96
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0,0.8
+"Boost MS",13,0,0.88
+"DataSplitting",13,0.148148148148148,0.92
+"MultipleDataSplitting",13,0.0416666666666667,0.92
+"Knockoff",13,0.206896551724138,0.92
+"Benjamini–Hochberg (BH)",13,0,0.92
+"Boost DS",13,0.0434782608695652,0.88
+"Boost MS",13,0,0.88
+"DataSplitting",13,0.115384615384615,0.92
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0,0.92
+"Benjamini–Hochberg (BH)",13,0,0.92
+"Boost DS",13,0.185185185185185,0.88
+"Boost MS",13,0,0.84
+"DataSplitting",13,0.0833333333333333,0.88
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0,0.88
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0.04,0.96
+"Boost MS",13,0,0.96
+"DataSplitting",13,0.0384615384615385,1
+"MultipleDataSplitting",13,0,1
+"Knockoff",13,0.166666666666667,1
+"Benjamini–Hochberg (BH)",13,0,1
+"Boost DS",13,0,0.88
+"Boost MS",13,0.04,0.96
+"DataSplitting",13,0.2,0.96
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0.04,0.96
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0.0909090909090909,0.8
+"Boost MS",13,0,0.88
+"DataSplitting",13,0,0.96
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0.111111111111111,0.96
+"Benjamini–Hochberg (BH)",13,0,0.92
+"Boost DS",13,0.0476190476190476,0.8
+"Boost MS",13,0,0.8
+"DataSplitting",13,0.08,0.92
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0,0.92
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0.0476190476190476,0.8
+"Boost MS",13,0,0.92
+"DataSplitting",13,0.2,0.96
+"MultipleDataSplitting",13,0,0.96
+"Knockoff",13,0.25,0.96
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0,0.88
+"Boost MS",13,0,0.84
+"DataSplitting",13,0.148148148148148,0.92
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0.08,0.92
+"Benjamini–Hochberg (BH)",13,0,0.92
+"Boost DS",13,0.130434782608696,0.8
+"Boost MS",13,0,0.8
+"DataSplitting",13,0,0.84
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0.16,0.84
+"Benjamini–Hochberg (BH)",13,0,0.84
+"Boost DS",13,0.05,0.76
+"Boost MS",13,0,0.72
+"DataSplitting",13,0.08,0.92
+"MultipleDataSplitting",13,0.0769230769230769,0.96
+"Knockoff",13,0.115384615384615,0.92
+"Benjamini–Hochberg (BH)",13,0,0.92
+"Boost DS",13,0.290322580645161,0.88
+"Boost MS",13,0,0.88
+"DataSplitting",13,0,0.88
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0,0.88
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0.1,0.72
+"Boost MS",13,0,0.76
+"DataSplitting",13,0.148148148148148,0.92
+"MultipleDataSplitting",13,0.0833333333333333,0.88
+"Knockoff",13,0.178571428571429,0.92
+"Benjamini–Hochberg (BH)",13,0,0.8
+"Boost DS",13,0,0.72
+"Boost MS",13,0.0952380952380952,0.76
+"DataSplitting",13,0.08,0.92
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0.0416666666666667,0.92
+"Benjamini–Hochberg (BH)",13,0,0.84
+"Boost DS",13,0.173913043478261,0.76
+"Boost MS",13,0,0.84
+"DataSplitting",13,0.0833333333333333,0.88
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0,0.92
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0,0.64
+"Boost MS",13,0,0.64
+"DataSplitting",13,0.142857142857143,0.72
+"MultipleDataSplitting",13,0.1,0.72
+"Knockoff",13,0.0952380952380952,0.76
+"Benjamini–Hochberg (BH)",13,0,0.76
+"Boost DS",13,0,0.72
+"Boost MS",13,0,0.84
+"DataSplitting",13,0.0833333333333333,0.88
+"MultipleDataSplitting",13,0.0833333333333333,0.88
+"Knockoff",13,0.3125,0.88
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0,0.72
+"Boost MS",13,0.0454545454545455,0.84
+"DataSplitting",13,0.0476190476190476,0.8
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0,0.92
+"Benjamini–Hochberg (BH)",13,0,0.84
+"Boost DS",13,0.0869565217391304,0.84
+"Boost MS",13,0.0454545454545455,0.84
+"DataSplitting",13,0.153846153846154,0.88
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0.0833333333333333,0.88
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0,0.6
+"Boost MS",13,0,0.68
+"DataSplitting",13,0.25,0.72
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0.153846153846154,0.88
+"Benjamini–Hochberg (BH)",13,0,0.76
+"Boost DS",13,0,0.6
+"Boost MS",13,0,0.8
+"DataSplitting",13,0,0.96
+"MultipleDataSplitting",13,0,0.92
+"Knockoff",13,0.0769230769230769,0.96
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0.0434782608695652,0.88
+"Boost MS",13,0,0.88
+"DataSplitting",13,0,0.88
+"MultipleDataSplitting",13,0.0416666666666667,0.92
+"Knockoff",13,0.0416666666666667,0.92
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0.125,0.84
+"Boost MS",13,0,0.88
+"DataSplitting",13,0,1
+"MultipleDataSplitting",13,0,0.96
+"Knockoff",13,0,1
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0,0.64
+"Boost MS",13,0,0.76
+"DataSplitting",13,0.0869565217391304,0.84
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0.04,0.96
+"Benjamini–Hochberg (BH)",13,0,0.84
+"Boost DS",13,0.148148148148148,0.92
+"Boost MS",13,0,0.92
+"DataSplitting",13,0.148148148148148,0.92
+"MultipleDataSplitting",13,0.04,0.96
+"Knockoff",13,0.111111111111111,0.96
+"Benjamini–Hochberg (BH)",13,0,0.92
+"Boost DS",13,0.125,0.84
+"Boost MS",13,0,0.96
+"DataSplitting",13,0,0.96
+"MultipleDataSplitting",13,0,0.96
+"Knockoff",13,0.294117647058824,0.96
+"Benjamini–Hochberg (BH)",13,0,0.96
+"Boost DS",13,0,0.72
+"Boost MS",13,0,0.72
+"DataSplitting",13,0.0909090909090909,0.8
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0,0.88
+"Benjamini–Hochberg (BH)",13,0,0.8
+"Boost DS",13,0.0833333333333333,0.88
+"Boost MS",13,0,0.76
+"DataSplitting",13,0.222222222222222,0.84
+"MultipleDataSplitting",13,0.178571428571429,0.92
+"Knockoff",13,0.12,0.88
+"Benjamini–Hochberg (BH)",13,0,0.8
+"Boost DS",13,0.153846153846154,0.88
+"Boost MS",13,0,0.88
+"DataSplitting",13,0.0416666666666667,0.92
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0.08,0.92
+"Benjamini–Hochberg (BH)",13,0,0.92
+"Boost DS",13,0.2,0.8
+"Boost MS",13,0,0.88
+"DataSplitting",13,0.0833333333333333,0.88
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0.233333333333333,0.92
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0.0476190476190476,0.8
+"Boost MS",13,0,0.8
+"DataSplitting",13,0.0434782608695652,0.88
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0.0434782608695652,0.88
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0,0.72
+"Boost MS",13,0,0.76
+"DataSplitting",13,0.222222222222222,0.84
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0.16,0.84
+"Benjamini–Hochberg (BH)",13,0,0.84
+"Boost DS",13,0.19047619047619,0.68
+"Boost MS",13,0,0.72
+"DataSplitting",13,0,0.8
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0,0.8
+"Benjamini–Hochberg (BH)",13,0,0.8
+"Boost DS",13,0.1,0.72
+"Boost MS",13,0.0434782608695652,0.88
+"DataSplitting",13,0.0416666666666667,0.92
+"MultipleDataSplitting",13,0.04,0.96
+"Knockoff",13,0.111111111111111,0.96
+"Benjamini–Hochberg (BH)",13,0,0.92
+"Boost DS",13,0.05,0.76
+"Boost MS",13,0,0.84
+"DataSplitting",13,0.0833333333333333,0.88
+"MultipleDataSplitting",13,0,0.88
+"Knockoff",13,0.0833333333333333,0.88
+"Benjamini–Hochberg (BH)",13,0,0.88
+"Boost DS",13,0.0555555555555556,0.68
+"Boost MS",13,0,0.76
+"DataSplitting",13,0.16,0.84
+"MultipleDataSplitting",13,0,0.84
+"Knockoff",13,0.0869565217391304,0.84
+"Benjamini–Hochberg (BH)",13,0,0.8
+"Boost DS",13,0,0.84
+"Boost MS",13,0,1
+"DataSplitting",13,0.0740740740740741,1
+"MultipleDataSplitting",13,0,1
+"Knockoff",13,0.0384615384615385,1
+"Benjamini–Hochberg (BH)",13,0,1
+"Boost DS",13,0.178571428571429,0.92
+"Boost MS",13,0,0.92
+"DataSplitting",13,0.0769230769230769,0.96
+"MultipleDataSplitting",13,0,0.96
+"Knockoff",13,0.04,0.96
+"Benjamini–Hochberg (BH)",13,0,0.96
