@@ -20,9 +20,7 @@ source(paste0(mywd,'/Functions Dai/fdp_power.R'))
 #devtools::install_github("Jeremy690/DSfdr/DSfdr",force = TRUE)
 library(xgboost)
 library(gbm)
-library(ranger)
 library(MASS)
-library(neuralnet)
 
 library(glmnet)
 library(knockoff)
@@ -31,8 +29,8 @@ library(hdi)
 
 ### algorithmic settings
 num_split <- 50
-n <-500
-p <- 100
+n <-400
+p <- 500
 p0 <- 10
 q <- 0.1
 #set.seed(124)(123) i=5
@@ -43,13 +41,16 @@ signal_index <- sample(c(1:p), size = p0, replace = F)
 ###choose the parameters
 params =list(
   objective = "reg:squarederror",
-  eta       = 0.1,
-  max_depth = 3,
+  eta       = 0.05,
+  max_depth = 4,
   subsample = 0.8,
-  colsample_bytree = 0.6,
-  lambda    = 0,
-  alpha     = 0.1
+  colsample_bytree = 1,
+  lambda    = 0.5,
+  alpha     = 0
 )
+
+#     eta max_depth subsample colsample_bytree lambda alpha booster  mean_R2
+#402 0.05         4       0.8                1    0.5     0  gbtree 0.335471
 
 #######set up the method for the comparison############# i=10 s=10 num_split=1
 Compare_SignalStrength <- function(i, s) {
