@@ -8,7 +8,7 @@ setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 source(paste0(mywd,'/Functions/TriangleLassoHD.R'))
-
+#source(paste0(mywd,'/Functions/TriangleElasticNetHD.R'))
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
@@ -17,9 +17,7 @@ source(paste0(mywd,'/Functions Dai/DS.R'))
 source(paste0(mywd,'/Functions Dai/fdp_power.R'))
 
 #devtools::install_github("Jeremy690/DSfdr/DSfdr",force = TRUE)
-library(gbm)
 library(MASS)
-
 library(glmnet)
 library(knockoff)
 library(mvtnorm)
@@ -34,14 +32,14 @@ q <- 0.1
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-#######set up the method for the comparison############# i=7 s=7 num_split=3
+#######set up the method for the comparison############# i=7 s=17 num_split=3
 Compare_SignalStrength <- function(i, s) {
   set.seed(s)
   delta <- i
   # simulate data
   n1 <- floor(n/2); n2 <- n - n1
-  X1 <- matrix(rnorm(n1*p, mean= -0.1), n1, p)
-  X2 <- matrix(rnorm(n2*p, mean= 0.1), n2, p)
+  X1 <- matrix(rnorm(n1*p, mean= -0.2), n1, p)
+  X2 <- matrix(rnorm(n2*p, mean= 0.2), n2, p)
   X  <- rbind(X1, X2)
   beta_star <- numeric(p)
   beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))
@@ -152,7 +150,7 @@ results_list <- foreach(
   
   # write out this chunk immediately
   fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
-  write.csv(chunk, file = paste0(mywd,"/Temp/",fname), row.names = FALSE)
+  write.csv(chunk, file = paste0(mywd,"/Temp2/",fname), row.names = FALSE)
   
   # return for final binding
   chunk
@@ -176,7 +174,7 @@ mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 mywd <- paste0(mywd,'/Results')
 
 colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
-Results2=ResultsNonlinearScenario
+Results2=Results
 names(Results2)=c('Method','SignalStrength','FDR','Power')
 Results2$FDR=round(as.numeric(Results2$FDR),3)
 Results2$Power=round(as.numeric(Results2$Power),2)
@@ -217,7 +215,7 @@ PlotPermute=ggarrange(
   common.legend = TRUE, legend = "right"
 )
 PlotPermute
-ggsave("NLScenario.png",
+ggsave("HDScenario_final.png",
        plot   = PlotPermute,
        width  = 8,
        height = 8/18*8,
