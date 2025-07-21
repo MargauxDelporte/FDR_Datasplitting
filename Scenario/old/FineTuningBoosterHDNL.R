@@ -26,17 +26,27 @@ amountTrain<- 0.333
 data <- data.frame(y = y, X)
 
 # --- define a grid of candidate params -----------
+#param_grid <- expand.grid(
+#  eta               = c(0.01, 0.05, 0.1,0.3),
+#  max_depth         = c(4,5,6,8),
+#  subsample         = c(0.6, 0.8, 1.0),
+#  colsample_bytree  = c(0.6, 0.8, 1.0),
+# lambda            = c(0,0.1, 0.5, 1, 5),
+#  alpha             = c(0,0.1, 0.5, 1,1.5),
+##  booster           = "gbtree",
+#  stringsAsFactors  = FALSE
+#)
 param_grid <- expand.grid(
-  eta               = c(0.01, 0.05, 0.1,0.3),
-  max_depth         = c(4,5,6,8),
-  subsample         = c(0.6, 0.8, 1.0),
-  colsample_bytree  = c(0.6, 0.8, 1.0),
-  lambda            = c(0,0.1, 0.5, 1, 5),
-  alpha             = c(0,0.1, 0.5, 1,1.5),
-  booster           = "gbtree",
+  eta               = c(0.005, 0.01, 0.05, 0.1),
+  max_depth         = c(6, 8, 10, 12, 15),
+  min_child_weight  = c(1, 5, 10),
+  gamma             = c(0, 0.1, 1, 5),
+  subsample         = c(0.4, 0.6, 0.8, 1),
+  colsample_bytree  = c(0.4, 0.6, 0.8, 1),
+  lambda            = c(0, 0.1, 1),
+  alpha             = c(0, 0.1, 1),
   stringsAsFactors  = FALSE
 )
-
 # prepare storage
 param_grid$mean_R2 <- NA_real_
 
@@ -45,11 +55,11 @@ calc_r2 <- function(obs, pred) {
   1 - sum((obs - pred)^2) / sum((obs - mean(obs))^2)
 }
 
-# --- grid search over params ----------------------
+# --- grid search over params ---------------------- j=1
 for(j in 1:nrow(param_grid)) {
-  pars   <- as.list(param_grid[j, c("eta","max_depth","subsample",
-                                    "colsample_bytree","lambda","alpha",
-                                    "booster")])
+  pars   <- as.list(param_grid[j, c("eta","max_depth",'min_child_weight','gamma',
+                                    "subsample",
+                                    "colsample_bytree","lambda","alpha")])
   R2_vals <- numeric(num_split)
   
   for(iter in seq_len(num_split)) {
@@ -68,10 +78,13 @@ for(j in 1:nrow(param_grid)) {
     
     # fit model
     bst <- xgb.train(
-      params   = pars,
-      data     = dtrain,
-      nrounds  = nrounds,
-      verbose  = 0
+      params              = pars,
+      data                = dtrain,
+      nrounds             = 2000,                # high upper bound
+      early_stopping_rounds = 50,                # stops if no improvement
+      watchlist           = list(train = dtrain, eval = dtest),
+      metric              = "rmse",              
+      verbose             = 0
     )
     
     # predict & compute R2
@@ -84,6 +97,24 @@ for(j in 1:nrow(param_grid)) {
   print(j)
 }
 
+cl <- makeCluster(20)
+results_list <- foreach(
+  k = seq_len(nrow(param_grid)),
+  .packages = pkgs,
+  .combine  = rbind
+) %dopar% {
+  s_val <- param_grid$s[k]
+
+  # compute chunk of results
+  chunk <- param_grid(i = i_val, s = s_val)
+  
+  # write out this chunk immediately
+  fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
+  write.csv(chunk, file = paste0(mywd,"/Temp/",fname), row.names = FALSE)
+  
+  # return for final binding
+  chunk
+}
 # --- pick best -------------------------------
 best_row   <- which.max(param_grid$mean_R2)
 best_param <- param_grid[best_row, ]
