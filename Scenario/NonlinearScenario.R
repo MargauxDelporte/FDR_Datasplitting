@@ -97,7 +97,7 @@ Compare_SignalStrength <- function(i, s) {
 }
 
 Compare_SignalStrength(10,8)
-
+Compare_SignalStrength(7,7)
 #######run the code#############
 #Results=data.frame()
 #for(s in 1:25){
