@@ -41,12 +41,13 @@ y_mu <- mean(y_train)
 y_sd <- sd(y_train)
 stopifnot(is.finite(y_sd), y_sd > 0)
 yt <- (y_train - y_mu) / y_sd
-
+y_t<- scale(y_test)
 # -- fit + predict on test in one call -------------------------------------
 set.seed(42)
-fit_min <- SoftBart(x.train = X_train[, 1: min(200, ncol(X_train)), drop=FALSE],
-                y.train = yt, ntree=50, nskip=500, ndpost=200, verbose=TRUE)
-
+library(SoftBart)
+fitted_softbart <- softbart(X = X_train[,signal_index], Y = yt,
+                            X_test = X_test[,signal_index])
+R2(fitted_softbart$y_hat_test_mean, y_t)
 
 # --- BART tuning ---------------------------------------------------------
 fit <- dbarts::bart(
