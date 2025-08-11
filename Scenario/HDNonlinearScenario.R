@@ -28,10 +28,10 @@ library(mvtnorm)
 library(hdi)
 
 ### algorithmic settings
-num_split <- 50
+num_split <-5# 50
 n <-400
 p <- 500
-p0 <- 10
+p0 <- 25
 q <- 0.1
 #set.seed(124)(123) i=5
 set.seed(456)
@@ -39,16 +39,40 @@ signal_index <- sample(c(1:p), size = p0, replace = F)
 
 
 ###choose the parameters
-params =list(
-  objective = "reg:squarederror",
-  eta       = 0.05,
-  max_depth = 4,
-  subsample = 0.8,
+###params <- list(
+###  eta               = 0.05,
+###  max_depth         = 6,
+###  gamma             = 5,
+###  min_child_weight = 4,  
+###  colsample_bytree = 1, 
+###  subsample        = 0.8,
+###  lambda            = 1,
+###  alpha             = 5
+###)
+###params <- list(
+###  eta              = 0.01,
+###  max_depth        = 2,
+###  gamma            = 3,
+###  min_child_weight = 10,
+###  colsample_bytree = 0.8,
+###  subsample        = 0.8,
+###  lambda           = 5,
+###  alpha            = 10,
+###  tree_method      = "exact"
+###)
+params <- list(
+  eta              = 0.01,
+  max_depth        = 3,
+  min_child_weight = 10,
+  gamma            = 2,
   colsample_bytree = 1,
-  lambda    = 0.5,
-  alpha     = 0
+  subsample        = 1,
+  lambda           = 10,   # L2
+  alpha            = 5,   # L1 (sparsity)
+  tree_method      = "exact",
+  objective        = "reg:squarederror",
+  eval_metric      = "rmse"
 )
-
 #     eta max_depth subsample colsample_bytree lambda alpha booster  mean_R2
 #402 0.05         4       0.8                1    0.5     0  gbtree 0.335471
 
@@ -63,7 +87,7 @@ Compare_SignalStrength <- function(i, s) {
   X2 <- matrix(rnorm(n2*p, mean=-1), n2, p)
   X  <- rbind(X1, X2)
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*10
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*1000
   y <- (X^2 %*% beta_star + rnorm(n))
   
   # run your custom methods
@@ -97,7 +121,7 @@ Compare_SignalStrength <- function(i, s) {
   return(ResultsDataFrame)
 }
 
-#Compare_SignalStrength(10,8)
+Compare_SignalStrength(10,8)
 
 #######run the code#############
 #Results=data.frame()
