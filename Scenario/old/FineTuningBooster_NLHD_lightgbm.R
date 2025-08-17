@@ -5,8 +5,8 @@ library(foreach)
 
 # --- your fixed settings ------------------------
 set.seed(456)
-n        <- 400
-p        <- 500
+n        <- 200
+p        <- 240
 p0       <- 25
 delta    <- 10
 n1       <- floor(n/2); n2 <- n - n1

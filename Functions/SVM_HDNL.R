@@ -1,6 +1,6 @@
 #j=1
 #model=lm
-permR2GAM<-function(data,j,model){
+permR2SVM<-function(data,j,model){
   dataPerm<-data[,-1]
   dataPerm[,j]<-sample(data[,j+1],replace=FALSE)
   names(dataPerm)=paste0('X',1:p)
@@ -8,8 +8,8 @@ permR2GAM<-function(data,j,model){
   rsquared=1-sum((data$y-predictLM)^2)/sum((data$y-mean(data$y))^2)
   return(rsquared)
 }
-#num_split=1
-ApplyTriangleBoostTrain<-function(X, y, q,myseed=1,mybooster='gbtree',num_split=1,signal_index=signal_index){
+
+ApplySVM<-function(X, y, q,myseed=1,myparms,num_split=1,signal_index=signal_index){
   set.seed(myseed)
   amountTrain=0.333
   amountTest=1-amountTrain
@@ -28,17 +28,11 @@ ApplyTriangleBoostTrain<-function(X, y, q,myseed=1,mybooster='gbtree',num_split=
     
     Xtrain=dataTrain[,-1]
     ytrain=y[train_index]
-    names(Xtrain)=paste0('X',1:p)
-    svr_final <- svm(x = rbind(Xtrain),
-                     y = c(ytrain),
-                     type   = "eps-regression",
-                     kernel = "polynomial",
-                     degree = 2,
-                     gamma  = best_svr$gamma,
-                     coef0  = best_svr$coef0,
-                     cost   = best_svr$cost,
-                     epsilon= best_svr$epsilon,
-                     scale  = TRUE)
+    fit=krr_model <- ksvm(
+      x = as.matrix(Xtrain),
+      y = ytrain,
+      kernel = polydot(degree = myparms$degree, scale = myparms$scale, offset = myparms$offset), lambda = myparms$lambda
+    )
     
     remaining_index<-c(setdiff(c(1:n),train_index))
     sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)
@@ -56,22 +50,19 @@ ApplyTriangleBoostTrain<-function(X, y, q,myseed=1,mybooster='gbtree',num_split=
     R2orig1<-1-sum((y[sample_index1]-predictLM1)^2)/sum((y[sample_index1]-mean(y[sample_index1]))^2)
     R2orig2<-1-sum((y[sample_index2]-predictLM2)^2)/sum((y[sample_index2]-mean(y[sample_index2]))^2)
     
-    Rnew1<-sapply(1:ncol(X),function(j) permR2GAM(data[sample_index1,],j,fit))
-    Rnew2<-sapply(1:ncol(X),function(j) permR2GAM(data[sample_index2,],j,fit))
+    Rnew1<-sapply(1:ncol(X),function(j) permR2SVM(data[sample_index1,],j,fit))
+    Rnew2<-sapply(1:ncol(X),function(j) permR2SVM(data[sample_index2,],j,fit))
     
     Diff1=R2orig1-Rnew1
     Diff2=R2orig2-Rnew2
-    
-    sd_X1 <- apply(X[sample_index1, ], 2, sd)
-    sd_X2 <- apply(X[sample_index2, ], 2, sd)
-    
     
     beta1=Diff1
     beta2=Diff2
     
     mirror<-sign(beta1*beta2)*(abs(beta1)+abs(beta2))
     hist(mirror[-signal_index])
-    selected_index<-SelectFeatures(mirror,abs(mirror),0.1)
+    hist(mirror[signal_index])
+    selected_index<-SelectFeatures(mirror,abs(mirror),q)
     
     ### number of selected variables j=1
     if(length(selected_index)!=0){
