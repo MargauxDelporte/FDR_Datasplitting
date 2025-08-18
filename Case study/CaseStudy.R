@@ -33,17 +33,27 @@ tab <- table(sampleMetadata$disease)
 tab_filtered <- tab[tab > 200] 
 tab_filtered
 table(sampleMetadata$disease)
-Study <-
-  filter(sampleMetadata, age >= 18) |>
-  filter(!is.na(hscrp)) |>
-  filter(body_site == "stool") |>
-  select(where(~ !all(is.na(.x)))) |>
-  returnSamples("relative_abundance", rownames = "short")
 
-altExps(Study) <-
-  splitByRanks(Study)
+#high-sensitivity CRP
+Study <- sampleMetadata |>
+  filter(age >= 18,
+         !is.na(hscrp),
+         body_site == "stool") |>
+  select(where(~ !all(is.na(.x))))
 
-Study |>
+# Step 2: Attach microbiome abundances
+# (make sure "study_name" and "sample_id" are still present)
+Study_with_microbiome <- returnSamples(
+  Study,
+  dataType = "relative_abundance",
+  rownames = "short"
+)
+# Step 3: Optionally split abundances into taxonomic ranks
+altExps(Study_with_microbiome) <- splitByRanks(Study_with_microbiome)
+colData(Study_with_microbiome)
+assay(Study_with_microbiome)
+names(Study)
+View(Study)
   estimateDiversity(assay.type = "relative_abundance", index = "shannon") |>
   plotColData(x = "alcohol", y = "shannon", colour_by = "alcohol", shape_by = "alcohol") +
   labs(x = "Alcohol", y = "Alpha Diversity (H')") +
