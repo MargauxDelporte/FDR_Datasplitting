@@ -28,37 +28,34 @@ if (!requireNamespace("curatedMetagenomicData", quietly = TRUE))
 # Load the packages to confirm installation
 library(mia)
 library(curatedMetagenomicData)
-
-alcoholStudy <-
+names(sampleMetadata)
+tab <- table(sampleMetadata$disease)
+tab_filtered <- tab[tab > 200] 
+tab_filtered
+table(sampleMetadata$disease)
+Study <-
   filter(sampleMetadata, age >= 18) |>
-  filter(!is.na(alcohol)) |>
+  filter(!is.na(hscrp)) |>
   filter(body_site == "stool") |>
   select(where(~ !all(is.na(.x)))) |>
   returnSamples("relative_abundance", rownames = "short")
 
-colData(alcoholStudy) <-
-  colData(alcoholStudy) |>
-  as.data.frame() |>
-  mutate(alcohol = str_replace_all(alcohol, "no", "No")) |>
-  mutate(alcohol = str_replace_all(alcohol, "yes", "Yes")) |>
-  DataFrame()
+altExps(Study) <-
+  splitByRanks(Study)
 
-altExps(alcoholStudy) <-
-  splitByRanks(alcoholStudy)
-
-alcoholStudy |>
+Study |>
   estimateDiversity(assay.type = "relative_abundance", index = "shannon") |>
   plotColData(x = "alcohol", y = "shannon", colour_by = "alcohol", shape_by = "alcohol") +
   labs(x = "Alcohol", y = "Alpha Diversity (H')") +
   guides(colour = guide_legend(title = "Alcohol"), shape = guide_legend(title = "Alcohol")) +
   theme(legend.position = "none")
-alcoholStudy |>
+Study |>
   runMDS(FUN = vegdist, method = "bray", exprs_values = "relative_abundance", altexp = "genus", name = "BrayCurtis") |>
   plotReducedDim("BrayCurtis", colour_by = "alcohol", shape_by = "alcohol") +
   labs(x = "PCo 1", y = "PCo 2") +
   guides(colour = guide_legend(title = "Alcohol"), shape = guide_legend(title = "Alcohol")) +
   theme(legend.position = c(0.90, 0.85))
-alcoholStudy |>
+Study |>
   runUMAP(exprs_values = "relative_abundance", altexp = "genus", name = "UMAP") |>
   plotReducedDim("UMAP", colour_by = "alcohol", shape_by = "alcohol") +
   labs(x = "UMAP 1", y = "UMAP 2") +
