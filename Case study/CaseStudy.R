@@ -28,37 +28,44 @@ if (!requireNamespace("curatedMetagenomicData", quietly = TRUE))
 # Load the packages to confirm installation
 library(mia)
 library(curatedMetagenomicData)
+names(sampleMetadata)
+tab <- table(sampleMetadata$disease)
+tab_filtered <- tab[tab > 200] 
+tab_filtered
+table(sampleMetadata$disease)
 
-alcoholStudy <-
-  filter(sampleMetadata, age >= 18) |>
-  filter(!is.na(alcohol)) |>
-  filter(body_site == "stool") |>
-  select(where(~ !all(is.na(.x)))) |>
-  returnSamples("relative_abundance", rownames = "short")
+#high-sensitivity CRP
+Study <- sampleMetadata |>
+  filter(age >= 18,
+         !is.na(hscrp),
+         body_site == "stool") |>
+  select(where(~ !all(is.na(.x))))
 
-colData(alcoholStudy) <-
-  colData(alcoholStudy) |>
-  as.data.frame() |>
-  mutate(alcohol = str_replace_all(alcohol, "no", "No")) |>
-  mutate(alcohol = str_replace_all(alcohol, "yes", "Yes")) |>
-  DataFrame()
-
-altExps(alcoholStudy) <-
-  splitByRanks(alcoholStudy)
-
-alcoholStudy |>
+# Step 2: Attach microbiome abundances
+# (make sure "study_name" and "sample_id" are still present)
+Study_with_microbiome <- returnSamples(
+  Study,
+  dataType = "relative_abundance",
+  rownames = "short"
+)
+# Step 3: Optionally split abundances into taxonomic ranks
+altExps(Study_with_microbiome) <- splitByRanks(Study_with_microbiome)
+colData(Study_with_microbiome)
+assay(Study_with_microbiome)
+names(Study)
+View(Study)
   estimateDiversity(assay.type = "relative_abundance", index = "shannon") |>
   plotColData(x = "alcohol", y = "shannon", colour_by = "alcohol", shape_by = "alcohol") +
   labs(x = "Alcohol", y = "Alpha Diversity (H')") +
   guides(colour = guide_legend(title = "Alcohol"), shape = guide_legend(title = "Alcohol")) +
   theme(legend.position = "none")
-alcoholStudy |>
+Study |>
   runMDS(FUN = vegdist, method = "bray", exprs_values = "relative_abundance", altexp = "genus", name = "BrayCurtis") |>
   plotReducedDim("BrayCurtis", colour_by = "alcohol", shape_by = "alcohol") +
   labs(x = "PCo 1", y = "PCo 2") +
   guides(colour = guide_legend(title = "Alcohol"), shape = guide_legend(title = "Alcohol")) +
   theme(legend.position = c(0.90, 0.85))
-alcoholStudy |>
+Study |>
   runUMAP(exprs_values = "relative_abundance", altexp = "genus", name = "UMAP") |>
   plotReducedDim("UMAP", colour_by = "alcohol", shape_by = "alcohol") +
   labs(x = "UMAP 1", y = "UMAP 2") +
