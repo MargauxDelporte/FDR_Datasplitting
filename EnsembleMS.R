@@ -4,6 +4,9 @@ library(xgboost)
 library(kernlab)
 library(earth)
 library(caretEnsemble)
+library(doParallel)
+
+
 #setwd("~/Desktop/temp") j=1 model=lm
 
 permR2EnsembleTrain<-function(data,j,model){
@@ -14,66 +17,46 @@ permR2EnsembleTrain<-function(data,j,model){
   return(rsquared)
 }
 
-myEnsemble=function(){
-  rf_fit <- ranger(
-    formula = as.formula(paste("y ~", paste(predictors, collapse = "+"))),
-    data = df_train2,
-    num.trees = 800,
-    mtry = max(1, floor(sqrt(p))),
-    min.node.size = 5,
-    splitrule = "variance",
-    sample.fraction = 0.632,
-    seed = 456
-  )
-  
-  ## 2b) ExtraTrees (Extremely Randomized Trees)
-  et_fit <- ranger(
-    formula = as.formula(paste("y ~", paste(predictors, collapse = "+"))),
-    data = df_train2,
-    num.trees = 800,
-    mtry = max(1, floor(p/3)),
-    min.node.size = 5,
-    splitrule = "extratrees",
-    sample.fraction = 1.0,   # often used with ExtraTrees
-    seed = 456
-  )
-  
-  ## 2c) XGBoost (gbtree)
-  # XGBoost needs a numeric matrix:
-  x_train2 <- as.matrix(df_train2[, predictors, drop = FALSE])
-  y_train2 <- df_train2$y
-  x_val    <- as.matrix(df_val[, predictors, drop = FALSE])
-  y_val    <- df_val$y
-  x_test   <- as.matrix(df_test[, predictors, drop = FALSE])
-  y_test   <- df_test$y
-  
-  dtrain2 <- xgb.DMatrix(x_train2, label = y_train2)
-  dval    <- xgb.DMatrix(x_val,    label = y_val)
-  dtest   <- xgb.DMatrix(x_test,   label = y_test)
-  
-  xgb_params <- list(
-    booster = "gbtree",
-    objective = "reg:squarederror",
-    eval_metric = "rmse",
-    eta = 0.05,
-    max_depth = 6,
-    min_child_weight = 1,
-    subsample = 0.8,
-    colsample_bytree = 0.8
-  )
-  
-  # Early-stopping using only TRAIN2->VAL (to avoid touching TEST)
-  watch <- list(train = dtrain2, val = dval)
-  xgb_fit <- xgb.train(
-    params = xgb_params,
-    data = dtrain2,
-    nrounds = 5000,
-    watchlist = watch,
-    early_stopping_rounds = 100,
-    verbose = 0
-  )
-  
-}
+## 3) Tight, smart tune grids (instead of big tuneLength sweeps)
+
+# ranger: fast, strong baseline
+grid_rf <- expand.grid(
+  mtry       = pmax(1, round(c(0.05, 0.15, 0.3) * (ncol(dataTrain) - 1))),
+  splitrule  = "gini",
+  min.node.size = c(1, 5, 10)
+)
+
+# xgbTree: keep nrounds modest; subsample/colsample speed up a lot
+grid_xgb <- expand.grid(
+  nrounds = c(100, 200),
+  max_depth = c(3, 5),
+  eta = c(0.05, 0.1),
+  gamma = 0,
+  colsample_bytree = c(0.6, 0.8),
+  min_child_weight = c(1, 3),
+  subsample = c(0.7, 0.9)
+)
+# also make sure XGBoost uses threads
+set.seed(1)
+xgb.set.config(verbosity = 0) # optional
+# caret passes threads via env var; also set:
+Sys.setenv(OMP_NUM_THREADS = cores)
+
+# SVM: small grid; cache size helps; scale beforehand
+grid_svm <- expand.grid(
+  C     = c(0.5, 1, 2),
+  sigma = c(0.01, 0.05, 0.1)
+)
+
+# KNN: keep k small set; gets slow with big p, so consider dropping if p is large
+grid_knn <- data.frame(k = c(3, 5, 9, 15))
+
+# MARS: limit basis functions (nk) to speed up
+grid_mars <- expand.grid(
+  degree = c(1, 2),
+  nprune = c(10, 20, 35)
+)
+
 ApplyEnsembleTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.5,amountTest=1-amountTrain,myseed,mybooster='gblinear',num_split=50,signal_index=signal_index){
   set.seed(myseed)
   data<-data.frame(cbind(y,X))
@@ -83,7 +66,7 @@ ApplyEnsembleTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.5,amountTes
   power <- rep(0, num_split)
   num_select <- rep(0, num_split)
   data<-data.frame(cbind(y,X))
-  for(iter in 1:num_split){
+  #for(iter in 1:num_split){  }
   train_index<-sample(x = c(1:n), size = amountTrain * n, replace = F)
   dataTrain<-data[train_index,]
   colnames(dataTrain)<-c('y',paste0('X',1:p))
@@ -102,16 +85,28 @@ ApplyEnsembleTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.5,amountTes
   # 3. Specify a suite of nonlinear learners
   # ----------------------------
   model_list <- list(
-    rf   = caretModelSpec(method = "ranger", tuneLength = 5,
-                          trControl = ctrl, importance = "impurity"),
-    xgb  = caretModelSpec(method = "xgbTree", tuneLength = 8,
-                          trControl = ctrl),
-    svm  = caretModelSpec(method = "svmRadial", tuneLength = 5,
-                          trControl = ctrl),
-    knn  = caretModelSpec(method = "knn", tuneLength = 10,
-                          trControl = ctrl),
-    mars = caretModelSpec(method = "earth", tuneLength = 5,
-                          trControl = ctrl)
+    rf   = caretModelSpec(
+      method = "ranger",
+      tuneGrid = grid_rf,
+      trControl = ctrl,
+      importance = "none",         # turn off to save time
+      num.trees = 500,             # 500 is often enough; 1000+ slows down
+      respect.unordered.factors = "order",
+      num.threads = cores
+    ),
+    xgb  = caretModelSpec(
+      method = "xgbTree",
+      tuneGrid = grid_xgb,
+      trControl = ctrl,
+      verbose = FALSE              # quiet logs
+    ),
+    mars = caretModelSpec(
+      method = "earth",
+      tuneGrid = grid_mars,
+      trControl = ctrl,
+      pmethod = "none",            # no internal CV in earth (faster)
+      nk = 25                      # cap basis funcs
+    )
   )
   
   # ----------------------------
@@ -139,66 +134,24 @@ ApplyEnsembleTrain<-function(X, y, q,best_nrounds=1000,amountTrain=0.5,amountTes
   # ----------------------------
   lm <- stack_model
   
-  remaining_percent=1-amountTrain
-  overlap=max(c(0,amountTest-remaining_percent))
-  remaining_index<-c(setdiff(c(1:n),train_index),sample(train_index,size=overlap*n))
+  remaining_index<-c(setdiff(c(1:n),train_index))
   sample_index1 <- sample(x = remaining_index, size = amountTest/2 * n, replace = F)
   sample_index2 <- setdiff(remaining_index, sample_index1)
 
-  predictLM1<-predict(lm,newdata=as.matrix(X[sample_index1,]))
+  predict_TRAIN<-predict(lm,newx=as.matrix(X[train_index,]))
+  R2orig_TRAIN<-1-sum((y[train_index]-predict_TRAIN)^2)/sum((y[train_index]-mean(y[train_index]))^2)
+  R2orig_TRAIN
+  
+  predictLM1<-predict(lm,newx=as.matrix(X[sample_index1,]))
+  predictLM2<-predict(lm,newx=as.matrix(X[sample_index2,]))
+  
   R2orig1<-1-sum((y[sample_index1]-predictLM1)^2)/sum((y[sample_index1]-mean(y[sample_index1]))^2)
-  predictLM2<-predict(lm,newdata=as.matrix(X[sample_index2,]))
   R2orig2<-1-sum((y[sample_index2]-predictLM2)^2)/sum((y[sample_index2]-mean(y[sample_index2]))^2)
-  beta1<-sapply(1:ncol(X),function(j) permR2BoostTrain(data[sample_index1,],j,lm))-R2orig1
-  beta2<-sapply(1:ncol(X),function(j) permR2BoostTrain(data[sample_index2,],j,lm))-R2orig2
-  mirror<-sign(beta1*beta2)*(abs(beta1)+abs(beta2))
-  selected_index<-SelectFeatures(mirror,abs(mirror),0.1)
   
-  ### number of selected variables
-  if(length(selected_index)!=0){
-    num_select[iter] <- length(selected_index)
-    inclusion_rate[iter, selected_index] <- 1/num_select[iter]
-    
-    ### calculate fdp and power
-    result <- CalculateFDP_Power(selected_index, signal_index)
-    fdp[iter] <- result$fdp
-    power[iter] <- result$power
-  }
-  }
-  
-  ### single data-splitting (DS) result
-  DS_fdp <- fdp[1]
-  DS_power <- power[1]
-  
-  ### multiple data-splitting (MDS) result
-  inclusion_rate <- apply(inclusion_rate, 2, mean)
-  
-  ### rank the features by the empirical inclusion rate
-  feature_rank <- order(inclusion_rate)
-  feature_rank <- setdiff(feature_rank, which(inclusion_rate == 0))
-  if(length(feature_rank)!=0){
-    null_feature <- numeric()
-    
-    ### backtracking 
-    for(feature_index in 1:length(feature_rank)){
-      if(sum(inclusion_rate[feature_rank[1:feature_index]]) > q){
-        break
-      }else{
-        null_feature <- c(null_feature, feature_rank[feature_index])
-      }
-    }
-    selected_index <- setdiff(feature_rank, null_feature)
-    
-    ### calculate fdp and power
-    result <- CalculateFDP_Power(selected_index, signal_index)
-    MDS_fdp <- result$fdp
-    MDS_power <- result$power
-  }
-  else{
-    MDS_fdp <- 0
-    MDS_power <- 0
-  }
-  return(list(DS_fdp = DS_fdp, DS_power = DS_power, MDS_fdp = MDS_fdp, MDS_power = MDS_power))
+  result=c(R2orig_TRAIN,R2orig1,R2orig2)
+  result
+
+  return(result)
 }
 
 
