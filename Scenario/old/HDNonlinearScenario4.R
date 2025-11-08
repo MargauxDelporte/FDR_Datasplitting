@@ -1,7 +1,7 @@
 ### High dimension linear model
 rm(list = ls())
 
-mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
+mywd='C:/Users/marga/Downloads/FDR_Datasplitting'
 #mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
 
 setwd(mywd)
@@ -9,7 +9,7 @@ setwd(mywd)
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 source(paste0(mywd,'/Functions/TriangleBoosterTrainMS2.R'))
 source(paste0(mywd,'/Functions/ApplyGBMKnockoff.R'))
-#source(paste0(mywd,'/Functions/TriangleGBMTrainMS.R'))
+source(paste0(mywd,'/Functions/Mars.R'))
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
@@ -27,17 +27,17 @@ library(mvtnorm)
 library(hdi)
 
 ### algorithmic settings
-num_split <-10
-n <-800
-p <-200
-p0 <- 20
+num_split <-5
+n <-500
+p <-100
+p0 <- 10
 q <- 0.1
 beta <- 1
 #set.seed(124)(123) i=5
 set.seed(123)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-#######set up the method for the comparison############# i=10 s=10 num_split=1
+#######set up the method for the comparison############# i=10 s=205 num_split=1
 Compare_SignalStrength <- function(i, s) {
   set.seed(s)
   delta <- i/10
@@ -49,15 +49,15 @@ Compare_SignalStrength <- function(i, s) {
   X2 <- matrix(rnorm(n2*p, mean=-0.5), n2, p)
   X  <- rbind(X1, X2)
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*1000
-  y <- (X %*% beta_star + rnorm(n))
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))
+  y <- (X^2 %*% beta_star + rnorm(n))
   # run your custom methods
   g1 <- ApplyMarsTrain( X = X, y = y, q = q, num_split = num_split,
                                  signal_index = signal_index, myseed = 1)
   # FDR methods
-  DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
-  knockoff_result<- ApplyGBMKnockoff(    X = X, y = y, q = q,param=params)
-  BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
+  #DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
+  #knockoff_result<- ApplyGBMKnockoff(    X = X, y = y, q = q,param=params)
+  # BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
   
   # init empty results df
   ResultsDataFrame <- data.frame(
@@ -72,12 +72,12 @@ Compare_SignalStrength <- function(i, s) {
   ResultsDataFrame <- rbind(
     ResultsDataFrame,
     data.frame(Method = "Boost DS",                Delta = i, FDP = g1$DS_fdp,    Power = g1$DS_power),
-    data.frame(Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power),
-    data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
-    data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
-    data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
-    data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
-  )
+    data.frame(Method = "Boost MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power)
+    # data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
+    # data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
+    # data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
+    # data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
+     )
   
   return(ResultsDataFrame)
 }
@@ -124,7 +124,7 @@ param_grid <- expand.grid(
 )
 
 # === SET UP PARALLEL BACKEND ===
-cl <- makeCluster(20)
+cl <- makeCluster(25)
 # export working dir so workers can source
 clusterExport(cl, 'mywd')
 # have each worker source & load libraries
@@ -168,7 +168,7 @@ stopCluster(cl)
 warnings()
 # combine all and save full dataset
 Results <- results_list
-write.csv(Results, file = "ResultsNonlinearScenario3.csv", row.names = FALSE)
+write.csv(Results, file = "ResultsNonlinearScenario4.csv", row.names = FALSE)
 
 
 # === Add 25 additional simulations ===
