@@ -1,9 +1,9 @@
 ### High dimension linear model
 rm(list = ls())
 
-#mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 #mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
-mywd='C:/Users/marga/Downloads/FDR_Datasplitting'
+#mywd='C:/Users/marga/Downloads/FDR_Datasplitting'
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
@@ -92,7 +92,7 @@ Compare_SignalStrength <- function(i, s) {
 # build grid
 param_grid <- expand.grid(
   s = 1:100,
-  i = 7:13
+  i = 8:13
 )
 
 # make sure output dir exists
