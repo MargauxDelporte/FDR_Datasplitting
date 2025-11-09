@@ -92,15 +92,15 @@ Compare_SignalStrength <- function(i, s,other=T) {
   }
   return(ResultsDataFrame)
 }
-Compare_SignalStrength(15,15,F)
+#Compare_SignalStrength(15,15,F)
 # build grid
 param_grid <- expand.grid(
-  s = 88:100,
-  i = 7
+  s = 1:50,
+  i = 7:13
 )
 
 # make sure output dir exists
-out_dir <- file.path(mywd, "Temp")
+out_dir <- file.path(mywd, "Temp2")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # iterate over ROWS, not columns
@@ -129,7 +129,7 @@ for (k in seq_len(nrow(param_grid))) {
 # === Add 25 additional simulations ===
 
 # Path to your folder
-csv_dir <- "C:/Users/marga/Downloads/FDR_Datasplitting/Temp"
+csv_dir <- "C:/Users/marga/Downloads/FDR_Datasplitting/Temp2"
 csv_files <- list.files(
   path       = csv_dir,
   pattern    = "\\.csv$",
