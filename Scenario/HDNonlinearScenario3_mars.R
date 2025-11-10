@@ -9,7 +9,7 @@ setwd(mywd)
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 source(paste0(mywd,'/Functions/TriangleBoosterTrainMS.R'))
 source(paste0(mywd,'/Functions/ApplyGBMKnockoff.R'))
-source(paste0(mywd,'/Functions/MarsParallel.R'))
+source(paste0(mywd,'/Functions/MarsParallelHD.R'))
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
@@ -29,7 +29,7 @@ library(mvtnorm)
 library(hdi)
 
 ## algorithmic settings
-num_split <- 50
+num_split <- 5#0
 n <-400
 p <- 500
 p0 <- 25
