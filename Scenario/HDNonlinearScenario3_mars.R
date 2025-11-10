@@ -29,7 +29,7 @@ library(mvtnorm)
 library(hdi)
 
 ## algorithmic settings
-num_split <- 5#0
+num_split <- 50
 n <-400
 p <- 500
 p0 <- 25
@@ -100,7 +100,7 @@ param_grid <- expand.grid(
 )
 
 # make sure output dir exists
-out_dir <- file.path(mywd, "Temp2")
+out_dir <- file.path(mywd, "Temp")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # iterate over ROWS, not columns
