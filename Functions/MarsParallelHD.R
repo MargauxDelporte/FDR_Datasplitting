@@ -58,11 +58,14 @@ ApplyMarsTrain_parallel <- function(X, y, q, myseed, num_split = 50,
                          y ~ .,
                          data    = dataTrain,
                          degree  = 2,
-                         nk      = 50,
+                         nk      = 30,
                          pmethod = "cv",
                          nfold   = 5,
                          ncross  = 3,
-                         trace   = 0
+                         trace   = 0,
+                         fast.k=5,
+                         fast.beta=1,
+                         minspan=-3
                        )
                        lm <- mars_poly
                        
