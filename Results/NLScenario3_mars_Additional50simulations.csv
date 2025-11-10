@@ -1,0 +1,2101 @@
+"source_file","Method","Delta","FDP","Power"
+"1","Mars DS",7,0,1
+"1","Mars MS",7,0,1
+"1","DataSplitting",7,0,0
+"1","MultipleDataSplitting",7,0,0
+"1","Knockoff",7,1,0
+"1","Benjamini–Hochberg (BH)",7,0,0
+"2","Mars DS",8,0,1
+"2","Mars MS",8,0,1
+"2","DataSplitting",8,0,0
+"2","MultipleDataSplitting",8,0,0
+"2","Knockoff",8,1,0
+"2","Benjamini–Hochberg (BH)",8,0,0
+"3","Mars DS",9,0,1
+"3","Mars MS",9,0,1
+"3","DataSplitting",9,0,0
+"3","MultipleDataSplitting",9,0,0
+"3","Knockoff",9,1,0
+"3","Benjamini–Hochberg (BH)",9,0,0
+"4","Mars DS",10,0.166666666666667,1
+"4","Mars MS",10,0,1
+"4","DataSplitting",10,0,0
+"4","MultipleDataSplitting",10,0,0
+"4","Knockoff",10,1,0
+"4","Benjamini–Hochberg (BH)",10,0,0
+"5","Mars DS",11,0.166666666666667,1
+"5","Mars MS",11,0,1
+"5","DataSplitting",11,0,0
+"5","MultipleDataSplitting",11,0,0
+"5","Knockoff",11,1,0
+"5","Benjamini–Hochberg (BH)",11,0,0
+"6","Mars DS",12,0.166666666666667,1
+"6","Mars MS",12,0,1
+"6","DataSplitting",12,0,0
+"6","MultipleDataSplitting",12,0,0
+"6","Knockoff",12,1,0
+"6","Benjamini–Hochberg (BH)",12,0,0
+"7","Mars DS",13,0,1
+"7","Mars MS",13,0,1
+"7","DataSplitting",13,0,0
+"7","MultipleDataSplitting",13,0,0
+"7","Knockoff",13,1,0
+"7","Benjamini–Hochberg (BH)",13,0,0
+"8","Mars DS",7,0,0
+"8","Mars MS",7,0,0
+"8","DataSplitting",7,0,0
+"8","MultipleDataSplitting",7,0,0
+"8","Knockoff",7,0.9,0.2
+"8","Benjamini–Hochberg (BH)",7,0,0
+"9","Mars DS",8,0,0
+"9","Mars MS",8,0,0
+"9","DataSplitting",8,0,0
+"9","MultipleDataSplitting",8,0,0
+"9","Knockoff",8,0.9,0.2
+"9","Benjamini–Hochberg (BH)",8,0,0
+"10","Mars DS",9,0,0
+"10","Mars MS",9,0,0.2
+"10","DataSplitting",9,0,0
+"10","MultipleDataSplitting",9,0,0
+"10","Knockoff",9,0.9,0.1
+"10","Benjamini–Hochberg (BH)",9,0,0
+"11","Mars DS",10,0,0
+"11","Mars MS",10,0,0
+"11","DataSplitting",10,0,0
+"11","MultipleDataSplitting",10,0,0
+"11","Knockoff",10,0.9,0.2
+"11","Benjamini–Hochberg (BH)",10,0,0
+"12","Mars DS",11,0,0
+"12","Mars MS",11,0,0.3
+"12","DataSplitting",11,0,0
+"12","MultipleDataSplitting",11,0,0
+"12","Knockoff",11,0.9,0.2
+"12","Benjamini–Hochberg (BH)",11,0,0
+"13","Mars DS",12,0,0
+"13","Mars MS",12,0,0.2
+"13","DataSplitting",12,0,0
+"13","MultipleDataSplitting",12,0,0
+"13","Knockoff",12,0.9,0.1
+"13","Benjamini–Hochberg (BH)",12,0,0
+"14","Mars DS",13,0,0
+"14","Mars MS",13,0,0.5
+"14","DataSplitting",13,0,0
+"14","MultipleDataSplitting",13,0,0
+"14","Knockoff",13,0.9,0.1
+"14","Benjamini–Hochberg (BH)",13,0,0
+"15","Mars DS",7,0.1,0.9
+"15","Mars MS",7,0,0.7
+"15","DataSplitting",7,0,0
+"15","MultipleDataSplitting",7,0,0
+"15","Knockoff",7,0,0
+"15","Benjamini–Hochberg (BH)",7,0,0
+"16","Mars DS",8,0.1,0.9
+"16","Mars MS",8,0,0.7
+"16","DataSplitting",8,0,0
+"16","MultipleDataSplitting",8,0,0
+"16","Knockoff",8,0,0
+"16","Benjamini–Hochberg (BH)",8,0,0
+"17","Mars DS",9,0.1,0.9
+"17","Mars MS",9,0,0.7
+"17","DataSplitting",9,0,0
+"17","MultipleDataSplitting",9,0,0
+"17","Knockoff",9,0,0
+"17","Benjamini–Hochberg (BH)",9,0,0
+"18","Mars DS",10,0.1,0.9
+"18","Mars MS",10,0,0.5
+"18","DataSplitting",10,0,0
+"18","MultipleDataSplitting",10,0,0
+"18","Knockoff",10,0,0
+"18","Benjamini–Hochberg (BH)",10,0,0
+"19","Mars DS",11,0.1,0.9
+"19","Mars MS",11,0,0.7
+"19","DataSplitting",11,0,0
+"19","MultipleDataSplitting",11,0,0
+"19","Knockoff",11,0,0
+"19","Benjamini–Hochberg (BH)",11,0,0
+"20","Mars DS",12,0,0
+"20","Mars MS",12,0,0.5
+"20","DataSplitting",12,0,0
+"20","MultipleDataSplitting",12,0,0
+"20","Knockoff",12,0,0
+"20","Benjamini–Hochberg (BH)",12,0,0
+"21","Mars DS",13,0,0
+"21","Mars MS",13,0,0.6
+"21","DataSplitting",13,0,0
+"21","MultipleDataSplitting",13,0,0
+"21","Knockoff",13,0,0
+"21","Benjamini–Hochberg (BH)",13,0,0
+"22","Mars DS",7,0,0
+"22","Mars MS",7,0,0
+"22","DataSplitting",7,0,0
+"22","MultipleDataSplitting",7,0,0
+"22","Knockoff",7,0,0
+"22","Benjamini–Hochberg (BH)",7,0,0
+"23","Mars DS",8,0,0
+"23","Mars MS",8,0,0
+"23","DataSplitting",8,0,0
+"23","MultipleDataSplitting",8,0,0
+"23","Knockoff",8,0,0
+"23","Benjamini–Hochberg (BH)",8,0,0
+"24","Mars DS",9,0,0
+"24","Mars MS",9,0,0.3
+"24","DataSplitting",9,0,0
+"24","MultipleDataSplitting",9,0,0
+"24","Knockoff",9,0,0
+"24","Benjamini–Hochberg (BH)",9,0,0
+"25","Mars DS",10,0,0
+"25","Mars MS",10,0,0.2
+"25","DataSplitting",10,0,0
+"25","MultipleDataSplitting",10,0,0
+"25","Knockoff",10,0,0
+"25","Benjamini–Hochberg (BH)",10,0,0
+"26","Mars DS",11,0,0
+"26","Mars MS",11,0,0
+"26","DataSplitting",11,0,0
+"26","MultipleDataSplitting",11,0,0
+"26","Knockoff",11,0,0
+"26","Benjamini–Hochberg (BH)",11,0,0
+"27","Mars DS",12,0,0
+"27","Mars MS",12,0,0
+"27","DataSplitting",12,0,0
+"27","MultipleDataSplitting",12,0,0
+"27","Knockoff",12,0,0
+"27","Benjamini–Hochberg (BH)",12,0,0
+"28","Mars DS",13,0,0
+"28","Mars MS",13,0,0
+"28","DataSplitting",13,0,0
+"28","MultipleDataSplitting",13,0,0
+"28","Knockoff",13,0,0
+"28","Benjamini–Hochberg (BH)",13,0,0
+"29","Mars DS",7,0,0
+"29","Mars MS",7,0,0.7
+"29","DataSplitting",7,0,0
+"29","MultipleDataSplitting",7,0,0
+"29","Knockoff",7,0,0
+"29","Benjamini–Hochberg (BH)",7,0,0
+"30","Mars DS",8,0,0
+"30","Mars MS",8,0,0.6
+"30","DataSplitting",8,0,0
+"30","MultipleDataSplitting",8,0,0
+"30","Knockoff",8,0,0
+"30","Benjamini–Hochberg (BH)",8,0,0
+"31","Mars DS",9,0,0
+"31","Mars MS",9,0,0.7
+"31","DataSplitting",9,0,0
+"31","MultipleDataSplitting",9,0,0
+"31","Knockoff",9,0,0
+"31","Benjamini–Hochberg (BH)",9,0,0
+"32","Mars DS",10,0,0
+"32","Mars MS",10,0,0.6
+"32","DataSplitting",10,0,0
+"32","MultipleDataSplitting",10,0,0
+"32","Knockoff",10,0,0
+"32","Benjamini–Hochberg (BH)",10,0,0
+"33","Mars DS",11,0,0
+"33","Mars MS",11,0,0.6
+"33","DataSplitting",11,0,0
+"33","MultipleDataSplitting",11,0,0
+"33","Knockoff",11,0,0
+"33","Benjamini–Hochberg (BH)",11,0,0
+"34","Mars DS",12,0,0
+"34","Mars MS",12,0,0.7
+"34","DataSplitting",12,0,0
+"34","MultipleDataSplitting",12,0,0
+"34","Knockoff",12,0,0
+"34","Benjamini–Hochberg (BH)",12,0,0
+"35","Mars DS",13,0,0
+"35","Mars MS",13,0,0.6
+"35","DataSplitting",13,0,0
+"35","MultipleDataSplitting",13,0,0
+"35","Knockoff",13,0,0
+"35","Benjamini–Hochberg (BH)",13,0,0
+"36","Mars DS",7,0.166666666666667,1
+"36","Mars MS",7,0,1
+"36","DataSplitting",7,0,0
+"36","MultipleDataSplitting",7,0,0
+"36","Knockoff",7,0.928571428571429,0.1
+"36","Benjamini–Hochberg (BH)",7,0,0
+"37","Mars DS",8,0.0909090909090909,1
+"37","Mars MS",8,0,1
+"37","DataSplitting",8,0,0
+"37","MultipleDataSplitting",8,0,0
+"37","Knockoff",8,0.923076923076923,0.1
+"37","Benjamini–Hochberg (BH)",8,0,0
+"38","Mars DS",9,0.0909090909090909,1
+"38","Mars MS",9,0,1
+"38","DataSplitting",9,0,0
+"38","MultipleDataSplitting",9,0,0
+"38","Knockoff",9,0.928571428571429,0.1
+"38","Benjamini–Hochberg (BH)",9,0,0
+"39","Mars DS",10,0.0909090909090909,1
+"39","Mars MS",10,0,0.9
+"39","DataSplitting",10,0,0
+"39","MultipleDataSplitting",10,0,0
+"39","Knockoff",10,0.928571428571429,0.1
+"39","Benjamini–Hochberg (BH)",10,0,0
+"40","Mars DS",11,0.0909090909090909,1
+"40","Mars MS",11,0,1
+"40","DataSplitting",11,0,0
+"40","MultipleDataSplitting",11,0,0
+"40","Knockoff",11,0.928571428571429,0.1
+"40","Benjamini–Hochberg (BH)",11,0,0
+"41","Mars DS",12,0.0909090909090909,1
+"41","Mars MS",12,0,1
+"41","DataSplitting",12,0,0
+"41","MultipleDataSplitting",12,0,0
+"41","Knockoff",12,0.928571428571429,0.1
+"41","Benjamini–Hochberg (BH)",12,0,0
+"42","Mars DS",13,0.0909090909090909,1
+"42","Mars MS",13,0,1
+"42","DataSplitting",13,0,0
+"42","MultipleDataSplitting",13,0,0
+"42","Knockoff",13,0.923076923076923,0.1
+"42","Benjamini–Hochberg (BH)",13,0,0
+"43","Mars DS",7,0.166666666666667,1
+"43","Mars MS",7,0,1
+"43","DataSplitting",7,0,0
+"43","MultipleDataSplitting",7,0,0
+"43","Knockoff",7,0,0
+"43","Benjamini–Hochberg (BH)",7,0,0
+"44","Mars DS",8,0.0909090909090909,1
+"44","Mars MS",8,0,1
+"44","DataSplitting",8,0,0
+"44","MultipleDataSplitting",8,0,0
+"44","Knockoff",8,0,0
+"44","Benjamini–Hochberg (BH)",8,0,0
+"45","Mars DS",9,0.166666666666667,1
+"45","Mars MS",9,0,1
+"45","DataSplitting",9,0,0
+"45","MultipleDataSplitting",9,0,0
+"45","Knockoff",9,0,0
+"45","Benjamini–Hochberg (BH)",9,0,0
+"46","Mars DS",10,0.0909090909090909,1
+"46","Mars MS",10,0,1
+"46","DataSplitting",10,0,0
+"46","MultipleDataSplitting",10,0,0
+"46","Knockoff",10,0,0
+"46","Benjamini–Hochberg (BH)",10,0,0
+"47","Mars DS",11,0.166666666666667,1
+"47","Mars MS",11,0,1
+"47","DataSplitting",11,0,0
+"47","MultipleDataSplitting",11,0,0
+"47","Knockoff",11,0,0
+"47","Benjamini–Hochberg (BH)",11,0,0
+"48","Mars DS",12,0.166666666666667,1
+"48","Mars MS",12,0,1
+"48","DataSplitting",12,0,0
+"48","MultipleDataSplitting",12,0,0
+"48","Knockoff",12,0,0
+"48","Benjamini–Hochberg (BH)",12,0,0
+"49","Mars DS",13,0.166666666666667,1
+"49","Mars MS",13,0,1
+"49","DataSplitting",13,0,0
+"49","MultipleDataSplitting",13,0,0
+"49","Knockoff",13,0,0
+"49","Benjamini–Hochberg (BH)",13,0,0
+"50","Mars DS",7,0,0
+"50","Mars MS",7,0,0.8
+"50","DataSplitting",7,0,0
+"50","MultipleDataSplitting",7,0,0
+"50","Knockoff",7,0,0
+"50","Benjamini–Hochberg (BH)",7,0,0
+"51","Mars DS",8,0,0
+"51","Mars MS",8,0,0.8
+"51","DataSplitting",8,0,0
+"51","MultipleDataSplitting",8,0,0
+"51","Knockoff",8,0,0
+"51","Benjamini–Hochberg (BH)",8,0,0
+"52","Mars DS",9,0,0
+"52","Mars MS",9,0,0.8
+"52","DataSplitting",9,0,0
+"52","MultipleDataSplitting",9,0,0
+"52","Knockoff",9,0,0
+"52","Benjamini–Hochberg (BH)",9,0,0
+"53","Mars DS",10,0,0
+"53","Mars MS",10,0,0.8
+"53","DataSplitting",10,0,0
+"53","MultipleDataSplitting",10,0,0
+"53","Knockoff",10,0,0
+"53","Benjamini–Hochberg (BH)",10,0,0
+"54","Mars DS",11,0,0
+"54","Mars MS",11,0,0.8
+"54","DataSplitting",11,0,0
+"54","MultipleDataSplitting",11,0,0
+"54","Knockoff",11,0,0
+"54","Benjamini–Hochberg (BH)",11,0,0
+"55","Mars DS",12,0,0
+"55","Mars MS",12,0,0.7
+"55","DataSplitting",12,0,0
+"55","MultipleDataSplitting",12,0,0
+"55","Knockoff",12,0,0
+"55","Benjamini–Hochberg (BH)",12,0,0
+"56","Mars DS",13,0,0
+"56","Mars MS",13,0,0.8
+"56","DataSplitting",13,0,0
+"56","MultipleDataSplitting",13,0,0
+"56","Knockoff",13,0,0
+"56","Benjamini–Hochberg (BH)",13,0,0
+"57","Mars DS",7,0.230769230769231,1
+"57","Mars MS",7,0,1
+"57","DataSplitting",7,0,0
+"57","MultipleDataSplitting",7,0,0
+"57","Knockoff",7,0,0
+"57","Benjamini–Hochberg (BH)",7,0,0
+"58","Mars DS",8,0.230769230769231,1
+"58","Mars MS",8,0,1
+"58","DataSplitting",8,0,0
+"58","MultipleDataSplitting",8,0,0
+"58","Knockoff",8,0,0
+"58","Benjamini–Hochberg (BH)",8,0,0
+"59","Mars DS",9,0.0909090909090909,1
+"59","Mars MS",9,0,1
+"59","DataSplitting",9,0,0
+"59","MultipleDataSplitting",9,0,0
+"59","Knockoff",9,0,0
+"59","Benjamini–Hochberg (BH)",9,0,0
+"60","Mars DS",10,0.166666666666667,1
+"60","Mars MS",10,0,1
+"60","DataSplitting",10,0,0
+"60","MultipleDataSplitting",10,0,0
+"60","Knockoff",10,0,0
+"60","Benjamini–Hochberg (BH)",10,0,0
+"61","Mars DS",11,0,1
+"61","Mars MS",11,0,1
+"61","DataSplitting",11,0,0
+"61","MultipleDataSplitting",11,0,0
+"61","Knockoff",11,0,0
+"61","Benjamini–Hochberg (BH)",11,0,0
+"62","Mars DS",12,0.166666666666667,1
+"62","Mars MS",12,0,1
+"62","DataSplitting",12,0,0
+"62","MultipleDataSplitting",12,0,0
+"62","Knockoff",12,1,0
+"62","Benjamini–Hochberg (BH)",12,0,0
+"63","Mars DS",13,0,1
+"63","Mars MS",13,0,1
+"63","DataSplitting",13,0,0
+"63","MultipleDataSplitting",13,0,0
+"63","Knockoff",13,0,0
+"63","Benjamini–Hochberg (BH)",13,0,0
+"64","Mars DS",7,0,1
+"64","Mars MS",7,0,0.9
+"64","DataSplitting",7,0,0
+"64","MultipleDataSplitting",7,0,0
+"64","Knockoff",7,0,0
+"64","Benjamini–Hochberg (BH)",7,0,0
+"65","Mars DS",8,0,1
+"65","Mars MS",8,0,1
+"65","DataSplitting",8,0,0
+"65","MultipleDataSplitting",8,0,0
+"65","Knockoff",8,0,0
+"65","Benjamini–Hochberg (BH)",8,0,0
+"66","Mars DS",9,0,1
+"66","Mars MS",9,0,1
+"66","DataSplitting",9,0,0
+"66","MultipleDataSplitting",9,0,0
+"66","Knockoff",9,0,0
+"66","Benjamini–Hochberg (BH)",9,0,0
+"67","Mars DS",10,0,1
+"67","Mars MS",10,0,1
+"67","DataSplitting",10,0,0
+"67","MultipleDataSplitting",10,0,0
+"67","Knockoff",10,0,0
+"67","Benjamini–Hochberg (BH)",10,0,0
+"68","Mars DS",11,0,1
+"68","Mars MS",11,0,1
+"68","DataSplitting",11,0,0
+"68","MultipleDataSplitting",11,0,0
+"68","Knockoff",11,0,0
+"68","Benjamini–Hochberg (BH)",11,0,0
+"69","Mars DS",12,0,1
+"69","Mars MS",12,0,1
+"69","DataSplitting",12,0,0
+"69","MultipleDataSplitting",12,0,0
+"69","Knockoff",12,0,0
+"69","Benjamini–Hochberg (BH)",12,0,0
+"70","Mars DS",13,0,1
+"70","Mars MS",13,0,1
+"70","DataSplitting",13,0,0
+"70","MultipleDataSplitting",13,0,0
+"70","Knockoff",13,0,0
+"70","Benjamini–Hochberg (BH)",13,0,0
+"71","Mars DS",7,0,1
+"71","Mars MS",7,0,1
+"71","DataSplitting",7,0,0
+"71","MultipleDataSplitting",7,0,0
+"71","Knockoff",7,0.833333333333333,0.2
+"71","Benjamini–Hochberg (BH)",7,0,0
+"72","Mars DS",8,0,1
+"72","Mars MS",8,0,1
+"72","DataSplitting",8,0,0
+"72","MultipleDataSplitting",8,0,0
+"72","Knockoff",8,0,0
+"72","Benjamini–Hochberg (BH)",8,0,0
+"73","Mars DS",9,0,1
+"73","Mars MS",9,0,1
+"73","DataSplitting",9,0,0
+"73","MultipleDataSplitting",9,0,0
+"73","Knockoff",9,0,0
+"73","Benjamini–Hochberg (BH)",9,0,0
+"74","Mars DS",10,0,1
+"74","Mars MS",10,0,1
+"74","DataSplitting",10,0,0
+"74","MultipleDataSplitting",10,0,0
+"74","Knockoff",10,0,0
+"74","Benjamini–Hochberg (BH)",10,0,0
+"75","Mars DS",11,0,1
+"75","Mars MS",11,0,1
+"75","DataSplitting",11,0,0
+"75","MultipleDataSplitting",11,0,0
+"75","Knockoff",11,0,0
+"75","Benjamini–Hochberg (BH)",11,0,0
+"76","Mars DS",12,0,1
+"76","Mars MS",12,0,1
+"76","DataSplitting",12,0,0
+"76","MultipleDataSplitting",12,0,0
+"76","Knockoff",12,0,0
+"76","Benjamini–Hochberg (BH)",12,0,0
+"77","Mars DS",13,0,1
+"77","Mars MS",13,0,1
+"77","DataSplitting",13,0,0
+"77","MultipleDataSplitting",13,0,0
+"77","Knockoff",13,0,0
+"77","Benjamini–Hochberg (BH)",13,0,0
+"78","Mars DS",7,0,0
+"78","Mars MS",7,0,0.8
+"78","DataSplitting",7,0,0
+"78","MultipleDataSplitting",7,0,0
+"78","Knockoff",7,0,0
+"78","Benjamini–Hochberg (BH)",7,0,0
+"79","Mars DS",8,0,0
+"79","Mars MS",8,0,0.7
+"79","DataSplitting",8,0,0
+"79","MultipleDataSplitting",8,0,0
+"79","Knockoff",8,0,0
+"79","Benjamini–Hochberg (BH)",8,0,0
+"80","Mars DS",9,0,0
+"80","Mars MS",9,0,0.7
+"80","DataSplitting",9,0,0
+"80","MultipleDataSplitting",9,0,0
+"80","Knockoff",9,0,0
+"80","Benjamini–Hochberg (BH)",9,0,0
+"81","Mars DS",10,0,0
+"81","Mars MS",10,0,0.7
+"81","DataSplitting",10,0,0
+"81","MultipleDataSplitting",10,0,0
+"81","Knockoff",10,0,0
+"81","Benjamini–Hochberg (BH)",10,0,0
+"82","Mars DS",11,0,0
+"82","Mars MS",11,0,0.8
+"82","DataSplitting",11,0,0
+"82","MultipleDataSplitting",11,0,0
+"82","Knockoff",11,0,0
+"82","Benjamini–Hochberg (BH)",11,0,0
+"83","Mars DS",12,0,0
+"83","Mars MS",12,0,0.8
+"83","DataSplitting",12,0,0
+"83","MultipleDataSplitting",12,0,0
+"83","Knockoff",12,0,0
+"83","Benjamini–Hochberg (BH)",12,0,0
+"84","Mars DS",13,0,0
+"84","Mars MS",13,0,0.8
+"84","DataSplitting",13,0,0
+"84","MultipleDataSplitting",13,0,0
+"84","Knockoff",13,0,0
+"84","Benjamini–Hochberg (BH)",13,0,0
+"85","Mars DS",7,0,1
+"85","Mars MS",7,0,0.9
+"85","DataSplitting",7,0,0
+"85","MultipleDataSplitting",7,0,0
+"85","Knockoff",7,0,0
+"85","Benjamini–Hochberg (BH)",7,0,0
+"86","Mars DS",8,0,1
+"86","Mars MS",8,0,0.9
+"86","DataSplitting",8,0,0
+"86","MultipleDataSplitting",8,0,0
+"86","Knockoff",8,0,0
+"86","Benjamini–Hochberg (BH)",8,0,0
+"87","Mars DS",9,0,1
+"87","Mars MS",9,0,0.9
+"87","DataSplitting",9,0,0
+"87","MultipleDataSplitting",9,0,0
+"87","Knockoff",9,0,0
+"87","Benjamini–Hochberg (BH)",9,0,0
+"88","Mars DS",10,0,1
+"88","Mars MS",10,0,1
+"88","DataSplitting",10,0,0
+"88","MultipleDataSplitting",10,0,0
+"88","Knockoff",10,0,0
+"88","Benjamini–Hochberg (BH)",10,0,0
+"89","Mars DS",11,0,1
+"89","Mars MS",11,0,1
+"89","DataSplitting",11,0,0
+"89","MultipleDataSplitting",11,0,0
+"89","Knockoff",11,0,0
+"89","Benjamini–Hochberg (BH)",11,0,0
+"90","Mars DS",12,0,1
+"90","Mars MS",12,0,1
+"90","DataSplitting",12,0,0
+"90","MultipleDataSplitting",12,0,0
+"90","Knockoff",12,0,0
+"90","Benjamini–Hochberg (BH)",12,0,0
+"91","Mars DS",13,0,1
+"91","Mars MS",13,0,1
+"91","DataSplitting",13,0,0
+"91","MultipleDataSplitting",13,0,0
+"91","Knockoff",13,0,0
+"91","Benjamini–Hochberg (BH)",13,0,0
+"92","Mars DS",7,0,0
+"92","Mars MS",7,0,0.9
+"92","DataSplitting",7,0,0
+"92","MultipleDataSplitting",7,0,0
+"92","Knockoff",7,0,0
+"92","Benjamini–Hochberg (BH)",7,0,0
+"93","Mars DS",8,0.25,0.9
+"93","Mars MS",8,0,0.9
+"93","DataSplitting",8,0,0
+"93","MultipleDataSplitting",8,0,0
+"93","Knockoff",8,0,0
+"93","Benjamini–Hochberg (BH)",8,0,0
+"94","Mars DS",9,0,0
+"94","Mars MS",9,0,0.8
+"94","DataSplitting",9,0,0
+"94","MultipleDataSplitting",9,0,0
+"94","Knockoff",9,0,0
+"94","Benjamini–Hochberg (BH)",9,0,0
+"95","Mars DS",10,0,0
+"95","Mars MS",10,0,0.8
+"95","DataSplitting",10,0,0
+"95","MultipleDataSplitting",10,0,0
+"95","Knockoff",10,0,0
+"95","Benjamini–Hochberg (BH)",10,0,0
+"96","Mars DS",11,0,0
+"96","Mars MS",11,0,0.8
+"96","DataSplitting",11,0,0
+"96","MultipleDataSplitting",11,0,0
+"96","Knockoff",11,0,0
+"96","Benjamini–Hochberg (BH)",11,0,0
+"97","Mars DS",12,0,0
+"97","Mars MS",12,0,0.8
+"97","DataSplitting",12,0,0
+"97","MultipleDataSplitting",12,0,0
+"97","Knockoff",12,0,0
+"97","Benjamini–Hochberg (BH)",12,0,0
+"98","Mars DS",13,0,0
+"98","Mars MS",13,0,0.8
+"98","DataSplitting",13,0,0
+"98","MultipleDataSplitting",13,0,0
+"98","Knockoff",13,0,0
+"98","Benjamini–Hochberg (BH)",13,0,0
+"99","Mars DS",7,0.166666666666667,1
+"99","Mars MS",7,0,1
+"99","DataSplitting",7,0,0
+"99","MultipleDataSplitting",7,0,0
+"99","Knockoff",7,0,0
+"99","Benjamini–Hochberg (BH)",7,0,0
+"100","Mars DS",8,0,1
+"100","Mars MS",8,0,1
+"100","DataSplitting",8,0,0
+"100","MultipleDataSplitting",8,0,0
+"100","Knockoff",8,0,0
+"100","Benjamini–Hochberg (BH)",8,0,0
+"101","Mars DS",9,0.0909090909090909,1
+"101","Mars MS",9,0,1
+"101","DataSplitting",9,0,0
+"101","MultipleDataSplitting",9,0,0
+"101","Knockoff",9,0,0
+"101","Benjamini–Hochberg (BH)",9,0,0
+"102","Mars DS",10,0.0909090909090909,1
+"102","Mars MS",10,0,1
+"102","DataSplitting",10,0,0
+"102","MultipleDataSplitting",10,0,0
+"102","Knockoff",10,0,0
+"102","Benjamini–Hochberg (BH)",10,0,0
+"103","Mars DS",11,0.230769230769231,1
+"103","Mars MS",11,0,1
+"103","DataSplitting",11,0,0
+"103","MultipleDataSplitting",11,0,0
+"103","Knockoff",11,0,0
+"103","Benjamini–Hochberg (BH)",11,0,0
+"104","Mars DS",12,0.375,1
+"104","Mars MS",12,0,1
+"104","DataSplitting",12,0,0
+"104","MultipleDataSplitting",12,0,0
+"104","Knockoff",12,0,0
+"104","Benjamini–Hochberg (BH)",12,0,0
+"105","Mars DS",13,0.375,1
+"105","Mars MS",13,0,1
+"105","DataSplitting",13,0,0
+"105","MultipleDataSplitting",13,0,0
+"105","Knockoff",13,0,0
+"105","Benjamini–Hochberg (BH)",13,0,0
+"106","Mars DS",7,0,0
+"106","Mars MS",7,0,0
+"106","DataSplitting",7,0,0
+"106","MultipleDataSplitting",7,0,0
+"106","Knockoff",7,0,0
+"106","Benjamini–Hochberg (BH)",7,0,0
+"107","Mars DS",8,0,0
+"107","Mars MS",8,0,0
+"107","DataSplitting",8,0,0
+"107","MultipleDataSplitting",8,0,0
+"107","Knockoff",8,0,0
+"107","Benjamini–Hochberg (BH)",8,0,0
+"108","Mars DS",9,0,0
+"108","Mars MS",9,0,0
+"108","DataSplitting",9,0,0
+"108","MultipleDataSplitting",9,0,0
+"108","Knockoff",9,1,0
+"108","Benjamini–Hochberg (BH)",9,0,0
+"109","Mars DS",10,0,0
+"109","Mars MS",10,0,0
+"109","DataSplitting",10,0,0
+"109","MultipleDataSplitting",10,0,0
+"109","Knockoff",10,0,0
+"109","Benjamini–Hochberg (BH)",10,0,0
+"110","Mars DS",11,0,0
+"110","Mars MS",11,0,0
+"110","DataSplitting",11,0,0
+"110","MultipleDataSplitting",11,0,0
+"110","Knockoff",11,1,0
+"110","Benjamini–Hochberg (BH)",11,0,0
+"111","Mars DS",12,0,0
+"111","Mars MS",12,0,0
+"111","DataSplitting",12,0,0
+"111","MultipleDataSplitting",12,0,0
+"111","Knockoff",12,0,0
+"111","Benjamini–Hochberg (BH)",12,0,0
+"112","Mars DS",13,0,0
+"112","Mars MS",13,0,0
+"112","DataSplitting",13,0,0
+"112","MultipleDataSplitting",13,0,0
+"112","Knockoff",13,1,0
+"112","Benjamini–Hochberg (BH)",13,0,0
+"113","Mars DS",7,0,0
+"113","Mars MS",7,0,0.8
+"113","DataSplitting",7,0,0
+"113","MultipleDataSplitting",7,0,0
+"113","Knockoff",7,0,0
+"113","Benjamini–Hochberg (BH)",7,0,0
+"114","Mars DS",8,0,0
+"114","Mars MS",8,0,0.8
+"114","DataSplitting",8,0,0
+"114","MultipleDataSplitting",8,0,0
+"114","Knockoff",8,0,0
+"114","Benjamini–Hochberg (BH)",8,0,0
+"115","Mars DS",9,0,0
+"115","Mars MS",9,0,0.8
+"115","DataSplitting",9,0,0
+"115","MultipleDataSplitting",9,0,0
+"115","Knockoff",9,0,0
+"115","Benjamini–Hochberg (BH)",9,0,0
+"116","Mars DS",10,0,0
+"116","Mars MS",10,0,0.8
+"116","DataSplitting",10,0,0
+"116","MultipleDataSplitting",10,0,0
+"116","Knockoff",10,0,0
+"116","Benjamini–Hochberg (BH)",10,0,0
+"117","Mars DS",11,0,0
+"117","Mars MS",11,0,0.8
+"117","DataSplitting",11,0,0
+"117","MultipleDataSplitting",11,0,0
+"117","Knockoff",11,0,0
+"117","Benjamini–Hochberg (BH)",11,0,0
+"118","Mars DS",12,0,0
+"118","Mars MS",12,0,0.8
+"118","DataSplitting",12,0,0
+"118","MultipleDataSplitting",12,0,0
+"118","Knockoff",12,0,0
+"118","Benjamini–Hochberg (BH)",12,0,0
+"119","Mars DS",13,0.1,0.9
+"119","Mars MS",13,0,0.8
+"119","DataSplitting",13,0,0
+"119","MultipleDataSplitting",13,0,0
+"119","Knockoff",13,0,0
+"119","Benjamini–Hochberg (BH)",13,0,0
+"120","Mars DS",7,0,0
+"120","Mars MS",7,0,0.3
+"120","DataSplitting",7,0,0
+"120","MultipleDataSplitting",7,0,0
+"120","Knockoff",7,0.91304347826087,0.2
+"120","Benjamini–Hochberg (BH)",7,0,0
+"121","Mars DS",8,0,0
+"121","Mars MS",8,0,0
+"121","DataSplitting",8,0,0
+"121","MultipleDataSplitting",8,0,0
+"121","Knockoff",8,0.91304347826087,0.2
+"121","Benjamini–Hochberg (BH)",8,0,0
+"122","Mars DS",9,0,0
+"122","Mars MS",9,0,0
+"122","DataSplitting",9,0,0
+"122","MultipleDataSplitting",9,0,0
+"122","Knockoff",9,0.909090909090909,0.2
+"122","Benjamini–Hochberg (BH)",9,0,0
+"123","Mars DS",10,0,0
+"123","Mars MS",10,0,0.4
+"123","DataSplitting",10,0,0
+"123","MultipleDataSplitting",10,0,0
+"123","Knockoff",10,0.91304347826087,0.2
+"123","Benjamini–Hochberg (BH)",10,0,0
+"124","Mars DS",11,0,0
+"124","Mars MS",11,0,0.3
+"124","DataSplitting",11,0,0
+"124","MultipleDataSplitting",11,0,0
+"124","Knockoff",11,0.909090909090909,0.2
+"124","Benjamini–Hochberg (BH)",11,0,0
+"125","Mars DS",12,0,0
+"125","Mars MS",12,0,0.2
+"125","DataSplitting",12,0,0
+"125","MultipleDataSplitting",12,0,0
+"125","Knockoff",12,0.904761904761905,0.2
+"125","Benjamini–Hochberg (BH)",12,0,0
+"126","Mars DS",13,0.181818181818182,0.9
+"126","Mars MS",13,0,0.6
+"126","DataSplitting",13,0,0
+"126","MultipleDataSplitting",13,0,0
+"126","Knockoff",13,0.91304347826087,0.2
+"126","Benjamini–Hochberg (BH)",13,0,0
+"127","Mars DS",7,0,0
+"127","Mars MS",7,0,0.9
+"127","DataSplitting",7,0,0
+"127","MultipleDataSplitting",7,0,0
+"127","Knockoff",7,1,0
+"127","Benjamini–Hochberg (BH)",7,0,0
+"128","Mars DS",8,0,0
+"128","Mars MS",8,0,0.8
+"128","DataSplitting",8,0,0
+"128","MultipleDataSplitting",8,0,0
+"128","Knockoff",8,1,0
+"128","Benjamini–Hochberg (BH)",8,0,0
+"129","Mars DS",9,0,0
+"129","Mars MS",9,0,0.9
+"129","DataSplitting",9,0,0
+"129","MultipleDataSplitting",9,0,0
+"129","Knockoff",9,1,0
+"129","Benjamini–Hochberg (BH)",9,0,0
+"130","Mars DS",10,0,0
+"130","Mars MS",10,0,0.9
+"130","DataSplitting",10,0,0
+"130","MultipleDataSplitting",10,0,0
+"130","Knockoff",10,1,0
+"130","Benjamini–Hochberg (BH)",10,0,0
+"131","Mars DS",11,0,0
+"131","Mars MS",11,0,0.9
+"131","DataSplitting",11,0,0
+"131","MultipleDataSplitting",11,0,0
+"131","Knockoff",11,1,0
+"131","Benjamini–Hochberg (BH)",11,0,0
+"132","Mars DS",12,0,0
+"132","Mars MS",12,0,0.8
+"132","DataSplitting",12,0,0
+"132","MultipleDataSplitting",12,0,0
+"132","Knockoff",12,0,0
+"132","Benjamini–Hochberg (BH)",12,0,0
+"133","Mars DS",13,0,0
+"133","Mars MS",13,0,0.9
+"133","DataSplitting",13,0,0
+"133","MultipleDataSplitting",13,0,0
+"133","Knockoff",13,0,0
+"133","Benjamini–Hochberg (BH)",13,0,0
+"134","Mars DS",7,0,0
+"134","Mars MS",7,0,0
+"134","DataSplitting",7,0,0
+"134","MultipleDataSplitting",7,0,0
+"134","Knockoff",7,0,0
+"134","Benjamini–Hochberg (BH)",7,0,0
+"135","Mars DS",8,0,0
+"135","Mars MS",8,0,0
+"135","DataSplitting",8,0,0
+"135","MultipleDataSplitting",8,0,0
+"135","Knockoff",8,0,0
+"135","Benjamini–Hochberg (BH)",8,0,0
+"136","Mars DS",9,0,0
+"136","Mars MS",9,0,0
+"136","DataSplitting",9,0,0
+"136","MultipleDataSplitting",9,0,0
+"136","Knockoff",9,0,0
+"136","Benjamini–Hochberg (BH)",9,0,0
+"137","Mars DS",10,0,0
+"137","Mars MS",10,0,0
+"137","DataSplitting",10,0,0
+"137","MultipleDataSplitting",10,0,0
+"137","Knockoff",10,0,0
+"137","Benjamini–Hochberg (BH)",10,0,0
+"138","Mars DS",11,0,0
+"138","Mars MS",11,0,0
+"138","DataSplitting",11,0,0
+"138","MultipleDataSplitting",11,0,0
+"138","Knockoff",11,0,0
+"138","Benjamini–Hochberg (BH)",11,0,0
+"139","Mars DS",12,0,0
+"139","Mars MS",12,0,0
+"139","DataSplitting",12,0,0
+"139","MultipleDataSplitting",12,0,0
+"139","Knockoff",12,0,0
+"139","Benjamini–Hochberg (BH)",12,0,0
+"140","Mars DS",13,0,0
+"140","Mars MS",13,0,0
+"140","DataSplitting",13,0,0
+"140","MultipleDataSplitting",13,0,0
+"140","Knockoff",13,0,0
+"140","Benjamini–Hochberg (BH)",13,0,0
+"141","Mars DS",7,0,0
+"141","Mars MS",7,0,0.8
+"141","DataSplitting",7,0,0
+"141","MultipleDataSplitting",7,0,0
+"141","Knockoff",7,1,0
+"141","Benjamini–Hochberg (BH)",7,0,0
+"142","Mars DS",8,0,0
+"142","Mars MS",8,0,0.8
+"142","DataSplitting",8,0,0
+"142","MultipleDataSplitting",8,0,0
+"142","Knockoff",8,0.916666666666667,0.1
+"142","Benjamini–Hochberg (BH)",8,0,0
+"143","Mars DS",9,0,0
+"143","Mars MS",9,0,0.7
+"143","DataSplitting",9,0,0
+"143","MultipleDataSplitting",9,0,0
+"143","Knockoff",9,0,0
+"143","Benjamini–Hochberg (BH)",9,0,0
+"144","Mars DS",10,0,0
+"144","Mars MS",10,0,0.8
+"144","DataSplitting",10,0,0
+"144","MultipleDataSplitting",10,0,0
+"144","Knockoff",10,0,0
+"144","Benjamini–Hochberg (BH)",10,0,0
+"145","Mars DS",11,0,0
+"145","Mars MS",11,0,0.7
+"145","DataSplitting",11,0,0
+"145","MultipleDataSplitting",11,0,0
+"145","Knockoff",11,0,0
+"145","Benjamini–Hochberg (BH)",11,0,0
+"146","Mars DS",12,0,0
+"146","Mars MS",12,0,0.8
+"146","DataSplitting",12,0,0
+"146","MultipleDataSplitting",12,0,0
+"146","Knockoff",12,0,0
+"146","Benjamini–Hochberg (BH)",12,0,0
+"147","Mars DS",13,0,0
+"147","Mars MS",13,0,0.8
+"147","DataSplitting",13,0,0
+"147","MultipleDataSplitting",13,0,0
+"147","Knockoff",13,0,0
+"147","Benjamini–Hochberg (BH)",13,0,0
+"148","Mars DS",7,0,0
+"148","Mars MS",7,0,0.4
+"148","DataSplitting",7,0,0
+"148","MultipleDataSplitting",7,0,0
+"148","Knockoff",7,0,0
+"148","Benjamini–Hochberg (BH)",7,0,0
+"149","Mars DS",8,0,0
+"149","Mars MS",8,0,0.3
+"149","DataSplitting",8,0,0
+"149","MultipleDataSplitting",8,0,0
+"149","Knockoff",8,0,0
+"149","Benjamini–Hochberg (BH)",8,0,0
+"150","Mars DS",9,0,0
+"150","Mars MS",9,0,0.5
+"150","DataSplitting",9,0,0
+"150","MultipleDataSplitting",9,0,0
+"150","Knockoff",9,0,0
+"150","Benjamini–Hochberg (BH)",9,0,0
+"151","Mars DS",10,0,0
+"151","Mars MS",10,0,0.5
+"151","DataSplitting",10,0,0
+"151","MultipleDataSplitting",10,0,0
+"151","Knockoff",10,0,0
+"151","Benjamini–Hochberg (BH)",10,0,0
+"152","Mars DS",11,0,0
+"152","Mars MS",11,0,0.6
+"152","DataSplitting",11,0,0
+"152","MultipleDataSplitting",11,0,0
+"152","Knockoff",11,0,0
+"152","Benjamini–Hochberg (BH)",11,0,0
+"153","Mars DS",12,0,0
+"153","Mars MS",12,0,0.6
+"153","DataSplitting",12,0,0
+"153","MultipleDataSplitting",12,0,0
+"153","Knockoff",12,0,0
+"153","Benjamini–Hochberg (BH)",12,0,0
+"154","Mars DS",13,0,0
+"154","Mars MS",13,0,0.7
+"154","DataSplitting",13,0,0
+"154","MultipleDataSplitting",13,0,0
+"154","Knockoff",13,0,0
+"154","Benjamini–Hochberg (BH)",13,0,0
+"155","Mars DS",7,0,0
+"155","Mars MS",7,0,0.8
+"155","DataSplitting",7,0,0
+"155","MultipleDataSplitting",7,0,0
+"155","Knockoff",7,0,0
+"155","Benjamini–Hochberg (BH)",7,0,0
+"156","Mars DS",8,0,0
+"156","Mars MS",8,0,0.8
+"156","DataSplitting",8,0,0
+"156","MultipleDataSplitting",8,0,0
+"156","Knockoff",8,0,0
+"156","Benjamini–Hochberg (BH)",8,0,0
+"157","Mars DS",9,0,0
+"157","Mars MS",9,0,0.8
+"157","DataSplitting",9,0,0
+"157","MultipleDataSplitting",9,0,0
+"157","Knockoff",9,0,0
+"157","Benjamini–Hochberg (BH)",9,0,0
+"158","Mars DS",10,0,0
+"158","Mars MS",10,0,0.7
+"158","DataSplitting",10,0,0
+"158","MultipleDataSplitting",10,0,0
+"158","Knockoff",10,0,0
+"158","Benjamini–Hochberg (BH)",10,0,0
+"159","Mars DS",11,0,0
+"159","Mars MS",11,0,0.8
+"159","DataSplitting",11,0,0
+"159","MultipleDataSplitting",11,0,0
+"159","Knockoff",11,0,0
+"159","Benjamini–Hochberg (BH)",11,0,0
+"160","Mars DS",12,0,0
+"160","Mars MS",12,0,0.8
+"160","DataSplitting",12,0,0
+"160","MultipleDataSplitting",12,0,0
+"160","Knockoff",12,0,0
+"160","Benjamini–Hochberg (BH)",12,0,0
+"161","Mars DS",13,0,0
+"161","Mars MS",13,0,0.8
+"161","DataSplitting",13,0,0
+"161","MultipleDataSplitting",13,0,0
+"161","Knockoff",13,0,0
+"161","Benjamini–Hochberg (BH)",13,0,0
+"162","Mars DS",7,0.1,0.9
+"162","Mars MS",7,0,0.9
+"162","DataSplitting",7,0,0
+"162","MultipleDataSplitting",7,0,0
+"162","Knockoff",7,0.7,0.3
+"162","Benjamini–Hochberg (BH)",7,0,0
+"163","Mars DS",8,0.1,0.9
+"163","Mars MS",8,0,0.9
+"163","DataSplitting",8,0,0
+"163","MultipleDataSplitting",8,0,0
+"163","Knockoff",8,0.727272727272727,0.3
+"163","Benjamini–Hochberg (BH)",8,0,0
+"164","Mars DS",9,0.1,0.9
+"164","Mars MS",9,0,0.9
+"164","DataSplitting",9,0,0
+"164","MultipleDataSplitting",9,0,0
+"164","Knockoff",9,0.75,0.3
+"164","Benjamini–Hochberg (BH)",9,0,0
+"165","Mars DS",10,0.1,0.9
+"165","Mars MS",10,0,0.9
+"165","DataSplitting",10,0,0
+"165","MultipleDataSplitting",10,0,0
+"165","Knockoff",10,0.75,0.3
+"165","Benjamini–Hochberg (BH)",10,0,0
+"166","Mars DS",11,0.1,0.9
+"166","Mars MS",11,0,0.9
+"166","DataSplitting",11,0,0
+"166","MultipleDataSplitting",11,0,0
+"166","Knockoff",11,0.8,0.2
+"166","Benjamini–Hochberg (BH)",11,0,0
+"167","Mars DS",12,0.1,0.9
+"167","Mars MS",12,0,0.9
+"167","DataSplitting",12,0,0
+"167","MultipleDataSplitting",12,0,0
+"167","Knockoff",12,0.727272727272727,0.3
+"167","Benjamini–Hochberg (BH)",12,0,0
+"168","Mars DS",13,0.1,0.9
+"168","Mars MS",13,0,0.9
+"168","DataSplitting",13,0,0
+"168","MultipleDataSplitting",13,0,0
+"168","Knockoff",13,0.75,0.3
+"168","Benjamini–Hochberg (BH)",13,0,0
+"169","Mars DS",7,0,0
+"169","Mars MS",7,0,0.8
+"169","DataSplitting",7,0,0
+"169","MultipleDataSplitting",7,0,0
+"169","Knockoff",7,0.9,0.1
+"169","Benjamini–Hochberg (BH)",7,0,0
+"170","Mars DS",8,0,0
+"170","Mars MS",8,0,0.8
+"170","DataSplitting",8,0,0
+"170","MultipleDataSplitting",8,0,0
+"170","Knockoff",8,0.9,0.1
+"170","Benjamini–Hochberg (BH)",8,0,0
+"171","Mars DS",9,0,0
+"171","Mars MS",9,0,0.9
+"171","DataSplitting",9,0,0
+"171","MultipleDataSplitting",9,0,0
+"171","Knockoff",9,0.9,0.1
+"171","Benjamini–Hochberg (BH)",9,0,0
+"172","Mars DS",10,0,0
+"172","Mars MS",10,0,0.8
+"172","DataSplitting",10,0,0
+"172","MultipleDataSplitting",10,0,0
+"172","Knockoff",10,0.9,0.1
+"172","Benjamini–Hochberg (BH)",10,0,0
+"173","Mars DS",11,0.1,0.9
+"173","Mars MS",11,0,0.8
+"173","DataSplitting",11,0,0
+"173","MultipleDataSplitting",11,0,0
+"173","Knockoff",11,0.9,0.1
+"173","Benjamini–Hochberg (BH)",11,0,0
+"174","Mars DS",12,0.1,0.9
+"174","Mars MS",12,0,0.8
+"174","DataSplitting",12,0,0
+"174","MultipleDataSplitting",12,0,0
+"174","Knockoff",12,0.9,0.1
+"174","Benjamini–Hochberg (BH)",12,0,0
+"175","Mars DS",13,0.1,0.9
+"175","Mars MS",13,0,0.9
+"175","DataSplitting",13,0,0
+"175","MultipleDataSplitting",13,0,0
+"175","Knockoff",13,0.9,0.1
+"175","Benjamini–Hochberg (BH)",13,0,0
+"176","Mars DS",7,0.1,0.9
+"176","Mars MS",7,0,0.7
+"176","DataSplitting",7,0,0
+"176","MultipleDataSplitting",7,0,0
+"176","Knockoff",7,0,0
+"176","Benjamini–Hochberg (BH)",7,0,0
+"177","Mars DS",8,0.1,0.9
+"177","Mars MS",8,0,0.7
+"177","DataSplitting",8,0,0
+"177","MultipleDataSplitting",8,0,0
+"177","Knockoff",8,0,0
+"177","Benjamini–Hochberg (BH)",8,0,0
+"178","Mars DS",9,0.1,0.9
+"178","Mars MS",9,0,0.7
+"178","DataSplitting",9,0,0
+"178","MultipleDataSplitting",9,0,0
+"178","Knockoff",9,0,0
+"178","Benjamini–Hochberg (BH)",9,0,0
+"179","Mars DS",10,0.1,0.9
+"179","Mars MS",10,0,0.7
+"179","DataSplitting",10,0,0
+"179","MultipleDataSplitting",10,0,0
+"179","Knockoff",10,0,0
+"179","Benjamini–Hochberg (BH)",10,0,0
+"180","Mars DS",11,0.1,0.9
+"180","Mars MS",11,0,0.7
+"180","DataSplitting",11,0,0
+"180","MultipleDataSplitting",11,0,0
+"180","Knockoff",11,0,0
+"180","Benjamini–Hochberg (BH)",11,0,0
+"181","Mars DS",12,0.1,0.9
+"181","Mars MS",12,0,0.8
+"181","DataSplitting",12,0,0
+"181","MultipleDataSplitting",12,0,0
+"181","Knockoff",12,0,0
+"181","Benjamini–Hochberg (BH)",12,0,0
+"182","Mars DS",13,0.1,0.9
+"182","Mars MS",13,0,0.7
+"182","DataSplitting",13,0,0
+"182","MultipleDataSplitting",13,0,0
+"182","Knockoff",13,0,0
+"182","Benjamini–Hochberg (BH)",13,0,0
+"183","Mars DS",7,0,0
+"183","Mars MS",7,0,0.8
+"183","DataSplitting",7,0,0
+"183","MultipleDataSplitting",7,0,0
+"183","Knockoff",7,0,0
+"183","Benjamini–Hochberg (BH)",7,0,0
+"184","Mars DS",8,0,0
+"184","Mars MS",8,0,0.8
+"184","DataSplitting",8,0,0
+"184","MultipleDataSplitting",8,0,0
+"184","Knockoff",8,0,0
+"184","Benjamini–Hochberg (BH)",8,0,0
+"185","Mars DS",9,0,0
+"185","Mars MS",9,0,0.8
+"185","DataSplitting",9,0,0
+"185","MultipleDataSplitting",9,0,0
+"185","Knockoff",9,0,0
+"185","Benjamini–Hochberg (BH)",9,0,0
+"186","Mars DS",10,0,0
+"186","Mars MS",10,0,0.8
+"186","DataSplitting",10,0,0
+"186","MultipleDataSplitting",10,0,0
+"186","Knockoff",10,0,0
+"186","Benjamini–Hochberg (BH)",10,0,0
+"187","Mars DS",11,0,0
+"187","Mars MS",11,0,0.8
+"187","DataSplitting",11,0,0
+"187","MultipleDataSplitting",11,0,0
+"187","Knockoff",11,0,0
+"187","Benjamini–Hochberg (BH)",11,0,0
+"188","Mars DS",12,0,0
+"188","Mars MS",12,0,0.8
+"188","DataSplitting",12,0,0
+"188","MultipleDataSplitting",12,0,0
+"188","Knockoff",12,0,0
+"188","Benjamini–Hochberg (BH)",12,0,0
+"189","Mars DS",13,0,0
+"189","Mars MS",13,0,0.8
+"189","DataSplitting",13,0,0
+"189","MultipleDataSplitting",13,0,0
+"189","Knockoff",13,0,0
+"189","Benjamini–Hochberg (BH)",13,0,0
+"190","Mars DS",7,0,0
+"190","Mars MS",7,0,0.5
+"190","DataSplitting",7,0,0
+"190","MultipleDataSplitting",7,0,0
+"190","Knockoff",7,0,0
+"190","Benjamini–Hochberg (BH)",7,0,0
+"191","Mars DS",8,0,0
+"191","Mars MS",8,0,0.2
+"191","DataSplitting",8,0,0
+"191","MultipleDataSplitting",8,0,0
+"191","Knockoff",8,0,0
+"191","Benjamini–Hochberg (BH)",8,0,0
+"192","Mars DS",9,0,0
+"192","Mars MS",9,0,0.6
+"192","DataSplitting",9,0,0
+"192","MultipleDataSplitting",9,0,0
+"192","Knockoff",9,0,0
+"192","Benjamini–Hochberg (BH)",9,0,0
+"193","Mars DS",10,0,0
+"193","Mars MS",10,0,0.5
+"193","DataSplitting",10,0,0
+"193","MultipleDataSplitting",10,0,0
+"193","Knockoff",10,0,0
+"193","Benjamini–Hochberg (BH)",10,0,0
+"194","Mars DS",11,0,0
+"194","Mars MS",11,0,0.3
+"194","DataSplitting",11,0,0
+"194","MultipleDataSplitting",11,0,0
+"194","Knockoff",11,0,0
+"194","Benjamini–Hochberg (BH)",11,0,0
+"195","Mars DS",12,0,0
+"195","Mars MS",12,0,0.5
+"195","DataSplitting",12,0,0
+"195","MultipleDataSplitting",12,0,0
+"195","Knockoff",12,0,0
+"195","Benjamini–Hochberg (BH)",12,0,0
+"196","Mars DS",13,0,0
+"196","Mars MS",13,0,0.4
+"196","DataSplitting",13,0,0
+"196","MultipleDataSplitting",13,0,0
+"196","Knockoff",13,0,0
+"196","Benjamini–Hochberg (BH)",13,0,0
+"197","Mars DS",7,0,1
+"197","Mars MS",7,0,1
+"197","DataSplitting",7,0,0
+"197","MultipleDataSplitting",7,0,0
+"197","Knockoff",7,0.818181818181818,0.2
+"197","Benjamini–Hochberg (BH)",7,0,0
+"198","Mars DS",8,0,1
+"198","Mars MS",8,0,1
+"198","DataSplitting",8,0,0
+"198","MultipleDataSplitting",8,0,0
+"198","Knockoff",8,0.818181818181818,0.2
+"198","Benjamini–Hochberg (BH)",8,0,0
+"199","Mars DS",9,0,1
+"199","Mars MS",9,0,1
+"199","DataSplitting",9,0,0
+"199","MultipleDataSplitting",9,0,0
+"199","Knockoff",9,0.818181818181818,0.2
+"199","Benjamini–Hochberg (BH)",9,0,0
+"200","Mars DS",10,0,1
+"200","Mars MS",10,0,1
+"200","DataSplitting",10,0,0
+"200","MultipleDataSplitting",10,0,0
+"200","Knockoff",10,0.833333333333333,0.2
+"200","Benjamini–Hochberg (BH)",10,0,0
+"201","Mars DS",11,0,1
+"201","Mars MS",11,0,1
+"201","DataSplitting",11,0,0
+"201","MultipleDataSplitting",11,0,0
+"201","Knockoff",11,0.818181818181818,0.2
+"201","Benjamini–Hochberg (BH)",11,0,0
+"202","Mars DS",12,0,1
+"202","Mars MS",12,0,1
+"202","DataSplitting",12,0,0
+"202","MultipleDataSplitting",12,0,0
+"202","Knockoff",12,0.818181818181818,0.2
+"202","Benjamini–Hochberg (BH)",12,0,0
+"203","Mars DS",13,0,1
+"203","Mars MS",13,0,1
+"203","DataSplitting",13,0,0
+"203","MultipleDataSplitting",13,0,0
+"203","Knockoff",13,0.818181818181818,0.2
+"203","Benjamini–Hochberg (BH)",13,0,0
+"204","Mars DS",7,0,0
+"204","Mars MS",7,0,0.7
+"204","DataSplitting",7,0,0
+"204","MultipleDataSplitting",7,0,0
+"204","Knockoff",7,0,0
+"204","Benjamini–Hochberg (BH)",7,0,0
+"205","Mars DS",8,0,0
+"205","Mars MS",8,0,0.7
+"205","DataSplitting",8,0,0
+"205","MultipleDataSplitting",8,0,0
+"205","Knockoff",8,0,0
+"205","Benjamini–Hochberg (BH)",8,0,0
+"206","Mars DS",9,0.181818181818182,0.9
+"206","Mars MS",9,0,0.7
+"206","DataSplitting",9,0,0
+"206","MultipleDataSplitting",9,0,0
+"206","Knockoff",9,0,0
+"206","Benjamini–Hochberg (BH)",9,0,0
+"207","Mars DS",10,0.181818181818182,0.9
+"207","Mars MS",10,0,0.7
+"207","DataSplitting",10,0,0
+"207","MultipleDataSplitting",10,0,0
+"207","Knockoff",10,0,0
+"207","Benjamini–Hochberg (BH)",10,0,0
+"208","Mars DS",11,0.181818181818182,0.9
+"208","Mars MS",11,0,0.7
+"208","DataSplitting",11,0,0
+"208","MultipleDataSplitting",11,0,0
+"208","Knockoff",11,0,0
+"208","Benjamini–Hochberg (BH)",11,0,0
+"209","Mars DS",12,0.181818181818182,0.9
+"209","Mars MS",12,0,0.8
+"209","DataSplitting",12,0,0
+"209","MultipleDataSplitting",12,0,0
+"209","Knockoff",12,0,0
+"209","Benjamini–Hochberg (BH)",12,0,0
+"210","Mars DS",13,0.181818181818182,0.9
+"210","Mars MS",13,0,0.8
+"210","DataSplitting",13,0,0
+"210","MultipleDataSplitting",13,0,0
+"210","Knockoff",13,0,0
+"210","Benjamini–Hochberg (BH)",13,0,0
+"211","Mars DS",7,0,1
+"211","Mars MS",7,0,1
+"211","DataSplitting",7,0,0
+"211","MultipleDataSplitting",7,0,0
+"211","Knockoff",7,0.6875,0.5
+"211","Benjamini–Hochberg (BH)",7,0,0
+"212","Mars DS",8,0.166666666666667,1
+"212","Mars MS",8,0,1
+"212","DataSplitting",8,0,0
+"212","MultipleDataSplitting",8,0,0
+"212","Knockoff",8,0.6875,0.5
+"212","Benjamini–Hochberg (BH)",8,0,0
+"213","Mars DS",9,0.1,0.9
+"213","Mars MS",9,0.0909090909090909,1
+"213","DataSplitting",9,0,0
+"213","MultipleDataSplitting",9,0,0
+"213","Knockoff",9,0.6875,0.5
+"213","Benjamini–Hochberg (BH)",9,0,0
+"214","Mars DS",10,0,1
+"214","Mars MS",10,0,1
+"214","DataSplitting",10,0,0
+"214","MultipleDataSplitting",10,0,0
+"214","Knockoff",10,0.6875,0.5
+"214","Benjamini–Hochberg (BH)",10,0,0
+"215","Mars DS",11,0,1
+"215","Mars MS",11,0,1
+"215","DataSplitting",11,0,0
+"215","MultipleDataSplitting",11,0,0
+"215","Knockoff",11,0.6875,0.5
+"215","Benjamini–Hochberg (BH)",11,0,0
+"216","Mars DS",12,0.0909090909090909,1
+"216","Mars MS",12,0,1
+"216","DataSplitting",12,0,0
+"216","MultipleDataSplitting",12,0,0
+"216","Knockoff",12,0.6875,0.5
+"216","Benjamini–Hochberg (BH)",12,0,0
+"217","Mars DS",13,0.0909090909090909,1
+"217","Mars MS",13,0,1
+"217","DataSplitting",13,0,0
+"217","MultipleDataSplitting",13,0,0
+"217","Knockoff",13,0.705882352941177,0.5
+"217","Benjamini–Hochberg (BH)",13,0,0
+"218","Mars DS",7,0,0
+"218","Mars MS",7,0,0.8
+"218","DataSplitting",7,0,0
+"218","MultipleDataSplitting",7,0,0
+"218","Knockoff",7,0.833333333333333,0.2
+"218","Benjamini–Hochberg (BH)",7,0,0
+"219","Mars DS",8,0,0
+"219","Mars MS",8,0,0.7
+"219","DataSplitting",8,0,0
+"219","MultipleDataSplitting",8,0,0
+"219","Knockoff",8,0.833333333333333,0.2
+"219","Benjamini–Hochberg (BH)",8,0,0
+"220","Mars DS",9,0,0
+"220","Mars MS",9,0,0.8
+"220","DataSplitting",9,0,0
+"220","MultipleDataSplitting",9,0,0
+"220","Knockoff",9,0.833333333333333,0.2
+"220","Benjamini–Hochberg (BH)",9,0,0
+"221","Mars DS",10,0,0
+"221","Mars MS",10,0,0.7
+"221","DataSplitting",10,0,0
+"221","MultipleDataSplitting",10,0,0
+"221","Knockoff",10,0.833333333333333,0.2
+"221","Benjamini–Hochberg (BH)",10,0,0
+"222","Mars DS",11,0,0
+"222","Mars MS",11,0,0.8
+"222","DataSplitting",11,0,0
+"222","MultipleDataSplitting",11,0,0
+"222","Knockoff",11,0.833333333333333,0.2
+"222","Benjamini–Hochberg (BH)",11,0,0
+"223","Mars DS",12,0,0
+"223","Mars MS",12,0,0.8
+"223","DataSplitting",12,0,0
+"223","MultipleDataSplitting",12,0,0
+"223","Knockoff",12,0.833333333333333,0.2
+"223","Benjamini–Hochberg (BH)",12,0,0
+"224","Mars DS",13,0,0
+"224","Mars MS",13,0,0.8
+"224","DataSplitting",13,0,0
+"224","MultipleDataSplitting",13,0,0
+"224","Knockoff",13,0.833333333333333,0.2
+"224","Benjamini–Hochberg (BH)",13,0,0
+"225","Mars DS",7,0,0
+"225","Mars MS",7,0,0
+"225","DataSplitting",7,0,0
+"225","MultipleDataSplitting",7,0,0
+"225","Knockoff",7,0,0
+"225","Benjamini–Hochberg (BH)",7,0,0
+"226","Mars DS",8,0,0
+"226","Mars MS",8,0,0
+"226","DataSplitting",8,0,0
+"226","MultipleDataSplitting",8,0,0
+"226","Knockoff",8,0,0
+"226","Benjamini–Hochberg (BH)",8,0,0
+"227","Mars DS",9,0,0
+"227","Mars MS",9,0,0
+"227","DataSplitting",9,0,0
+"227","MultipleDataSplitting",9,0,0
+"227","Knockoff",9,0,0
+"227","Benjamini–Hochberg (BH)",9,0,0
+"228","Mars DS",10,0,0
+"228","Mars MS",10,0,0
+"228","DataSplitting",10,0,0
+"228","MultipleDataSplitting",10,0,0
+"228","Knockoff",10,0,0
+"228","Benjamini–Hochberg (BH)",10,0,0
+"229","Mars DS",11,0,0
+"229","Mars MS",11,0,0
+"229","DataSplitting",11,0,0
+"229","MultipleDataSplitting",11,0,0
+"229","Knockoff",11,0,0
+"229","Benjamini–Hochberg (BH)",11,0,0
+"230","Mars DS",12,0,0
+"230","Mars MS",12,0,0
+"230","DataSplitting",12,0,0
+"230","MultipleDataSplitting",12,0,0
+"230","Knockoff",12,0,0
+"230","Benjamini–Hochberg (BH)",12,0,0
+"231","Mars DS",13,0,0
+"231","Mars MS",13,0,0
+"231","DataSplitting",13,0,0
+"231","MultipleDataSplitting",13,0,0
+"231","Knockoff",13,0,0
+"231","Benjamini–Hochberg (BH)",13,0,0
+"232","Mars DS",7,0,0
+"232","Mars MS",7,0,0.4
+"232","DataSplitting",7,0,0
+"232","MultipleDataSplitting",7,0,0
+"232","Knockoff",7,0,0
+"232","Benjamini–Hochberg (BH)",7,0,0
+"233","Mars DS",8,0,0
+"233","Mars MS",8,0,0.2
+"233","DataSplitting",8,0,0
+"233","MultipleDataSplitting",8,0,0
+"233","Knockoff",8,0,0
+"233","Benjamini–Hochberg (BH)",8,0,0
+"234","Mars DS",9,0,0
+"234","Mars MS",9,0,0.4
+"234","DataSplitting",9,0,0
+"234","MultipleDataSplitting",9,0,0
+"234","Knockoff",9,0,0
+"234","Benjamini–Hochberg (BH)",9,0,0
+"235","Mars DS",10,0,0
+"235","Mars MS",10,0,0.4
+"235","DataSplitting",10,0,0
+"235","MultipleDataSplitting",10,0,0
+"235","Knockoff",10,0,0
+"235","Benjamini–Hochberg (BH)",10,0,0
+"236","Mars DS",11,0,0
+"236","Mars MS",11,0,0.6
+"236","DataSplitting",11,0,0
+"236","MultipleDataSplitting",11,0,0
+"236","Knockoff",11,0,0
+"236","Benjamini–Hochberg (BH)",11,0,0
+"237","Mars DS",12,0,0
+"237","Mars MS",12,0,0.2
+"237","DataSplitting",12,0,0
+"237","MultipleDataSplitting",12,0,0
+"237","Knockoff",12,0,0
+"237","Benjamini–Hochberg (BH)",12,0,0
+"238","Mars DS",13,0,0
+"238","Mars MS",13,0,0
+"238","DataSplitting",13,0,0
+"238","MultipleDataSplitting",13,0,0
+"238","Knockoff",13,0,0
+"238","Benjamini–Hochberg (BH)",13,0,0
+"239","Mars DS",7,0,1
+"239","Mars MS",7,0,1
+"239","DataSplitting",7,0,0
+"239","MultipleDataSplitting",7,0,0
+"239","Knockoff",7,0,0
+"239","Benjamini–Hochberg (BH)",7,0,0
+"240","Mars DS",8,0.166666666666667,1
+"240","Mars MS",8,0,0.9
+"240","DataSplitting",8,0,0
+"240","MultipleDataSplitting",8,0,0
+"240","Knockoff",8,0,0
+"240","Benjamini–Hochberg (BH)",8,0,0
+"241","Mars DS",9,0.230769230769231,1
+"241","Mars MS",9,0,1
+"241","DataSplitting",9,0,0
+"241","MultipleDataSplitting",9,0,0
+"241","Knockoff",9,0,0
+"241","Benjamini–Hochberg (BH)",9,0,0
+"242","Mars DS",10,0.230769230769231,1
+"242","Mars MS",10,0,1
+"242","DataSplitting",10,0,0
+"242","MultipleDataSplitting",10,0,0
+"242","Knockoff",10,0,0
+"242","Benjamini–Hochberg (BH)",10,0,0
+"243","Mars DS",11,0.166666666666667,1
+"243","Mars MS",11,0,1
+"243","DataSplitting",11,0,0
+"243","MultipleDataSplitting",11,0,0
+"243","Knockoff",11,0,0
+"243","Benjamini–Hochberg (BH)",11,0,0
+"244","Mars DS",12,0.230769230769231,1
+"244","Mars MS",12,0,1
+"244","DataSplitting",12,0,0
+"244","MultipleDataSplitting",12,0,0
+"244","Knockoff",12,0,0
+"244","Benjamini–Hochberg (BH)",12,0,0
+"245","Mars DS",13,0.166666666666667,1
+"245","Mars MS",13,0,0.9
+"245","DataSplitting",13,0,0
+"245","MultipleDataSplitting",13,0,0
+"245","Knockoff",13,0,0
+"245","Benjamini–Hochberg (BH)",13,0,0
+"246","Mars DS",7,0,0
+"246","Mars MS",7,0,0.9
+"246","DataSplitting",7,0,0
+"246","MultipleDataSplitting",7,0,0
+"246","Knockoff",7,0,0
+"246","Benjamini–Hochberg (BH)",7,0,0
+"247","Mars DS",8,0,0
+"247","Mars MS",8,0,0.8
+"247","DataSplitting",8,0,0
+"247","MultipleDataSplitting",8,0,0
+"247","Knockoff",8,0,0
+"247","Benjamini–Hochberg (BH)",8,0,0
+"248","Mars DS",9,0,0
+"248","Mars MS",9,0,0.8
+"248","DataSplitting",9,0,0
+"248","MultipleDataSplitting",9,0,0
+"248","Knockoff",9,0,0
+"248","Benjamini–Hochberg (BH)",9,0,0
+"249","Mars DS",10,0,0
+"249","Mars MS",10,0,0.8
+"249","DataSplitting",10,0,0
+"249","MultipleDataSplitting",10,0,0
+"249","Knockoff",10,0,0
+"249","Benjamini–Hochberg (BH)",10,0,0
+"250","Mars DS",11,0,0
+"250","Mars MS",11,0,0.8
+"250","DataSplitting",11,0,0
+"250","MultipleDataSplitting",11,0,0
+"250","Knockoff",11,0,0
+"250","Benjamini–Hochberg (BH)",11,0,0
+"251","Mars DS",12,0.181818181818182,0.9
+"251","Mars MS",12,0,0.8
+"251","DataSplitting",12,0,0
+"251","MultipleDataSplitting",12,0,0
+"251","Knockoff",12,0,0
+"251","Benjamini–Hochberg (BH)",12,0,0
+"252","Mars DS",13,0.181818181818182,0.9
+"252","Mars MS",13,0,0.8
+"252","DataSplitting",13,0,0
+"252","MultipleDataSplitting",13,0,0
+"252","Knockoff",13,0,0
+"252","Benjamini–Hochberg (BH)",13,0,0
+"253","Mars DS",7,0,0
+"253","Mars MS",7,0,0.8
+"253","DataSplitting",7,0,0
+"253","MultipleDataSplitting",7,0,0
+"253","Knockoff",7,0,0
+"253","Benjamini–Hochberg (BH)",7,0,0
+"254","Mars DS",8,0,0
+"254","Mars MS",8,0,0.8
+"254","DataSplitting",8,0,0
+"254","MultipleDataSplitting",8,0,0
+"254","Knockoff",8,0,0
+"254","Benjamini–Hochberg (BH)",8,0,0
+"255","Mars DS",9,0,0
+"255","Mars MS",9,0,0.8
+"255","DataSplitting",9,0,0
+"255","MultipleDataSplitting",9,0,0
+"255","Knockoff",9,0,0
+"255","Benjamini–Hochberg (BH)",9,0,0
+"256","Mars DS",10,0,0
+"256","Mars MS",10,0,0.8
+"256","DataSplitting",10,0,0
+"256","MultipleDataSplitting",10,0,0
+"256","Knockoff",10,0,0
+"256","Benjamini–Hochberg (BH)",10,0,0
+"257","Mars DS",11,0,0
+"257","Mars MS",11,0,0.8
+"257","DataSplitting",11,0,0
+"257","MultipleDataSplitting",11,0,0
+"257","Knockoff",11,0,0
+"257","Benjamini–Hochberg (BH)",11,0,0
+"258","Mars DS",12,0,0
+"258","Mars MS",12,0,0.8
+"258","DataSplitting",12,0,0
+"258","MultipleDataSplitting",12,0,0
+"258","Knockoff",12,0,0
+"258","Benjamini–Hochberg (BH)",12,0,0
+"259","Mars DS",13,0,0
+"259","Mars MS",13,0,0.8
+"259","DataSplitting",13,0,0
+"259","MultipleDataSplitting",13,0,0
+"259","Knockoff",13,0,0
+"259","Benjamini–Hochberg (BH)",13,0,0
+"260","Mars DS",7,0,1
+"260","Mars MS",7,0,1
+"260","DataSplitting",7,0,0
+"260","MultipleDataSplitting",7,0,0
+"260","Knockoff",7,0,0
+"260","Benjamini–Hochberg (BH)",7,0,0
+"261","Mars DS",8,0,1
+"261","Mars MS",8,0,1
+"261","DataSplitting",8,0,0
+"261","MultipleDataSplitting",8,0,0
+"261","Knockoff",8,0,0
+"261","Benjamini–Hochberg (BH)",8,0,0
+"262","Mars DS",9,0,1
+"262","Mars MS",9,0,1
+"262","DataSplitting",9,0,0
+"262","MultipleDataSplitting",9,0,0
+"262","Knockoff",9,0,0
+"262","Benjamini–Hochberg (BH)",9,0,0
+"263","Mars DS",10,0,1
+"263","Mars MS",10,0,1
+"263","DataSplitting",10,0,0
+"263","MultipleDataSplitting",10,0,0
+"263","Knockoff",10,0,0
+"263","Benjamini–Hochberg (BH)",10,0,0
+"264","Mars DS",11,0,1
+"264","Mars MS",11,0,1
+"264","DataSplitting",11,0,0
+"264","MultipleDataSplitting",11,0,0
+"264","Knockoff",11,0,0
+"264","Benjamini–Hochberg (BH)",11,0,0
+"265","Mars DS",12,0,1
+"265","Mars MS",12,0,1
+"265","DataSplitting",12,0,0
+"265","MultipleDataSplitting",12,0,0
+"265","Knockoff",12,0,0
+"265","Benjamini–Hochberg (BH)",12,0,0
+"266","Mars DS",13,0,1
+"266","Mars MS",13,0,1
+"266","DataSplitting",13,0,0
+"266","MultipleDataSplitting",13,0,0
+"266","Knockoff",13,0,0
+"266","Benjamini–Hochberg (BH)",13,0,0
+"267","Mars DS",7,0.1,0.9
+"267","Mars MS",7,0,0.9
+"267","DataSplitting",7,0,0
+"267","MultipleDataSplitting",7,0,0
+"267","Knockoff",7,0,0
+"267","Benjamini–Hochberg (BH)",7,0,0
+"268","Mars DS",8,0.1,0.9
+"268","Mars MS",8,0,0.9
+"268","DataSplitting",8,0,0
+"268","MultipleDataSplitting",8,0,0
+"268","Knockoff",8,0,0
+"268","Benjamini–Hochberg (BH)",8,0,0
+"269","Mars DS",9,0,0
+"269","Mars MS",9,0,0.9
+"269","DataSplitting",9,0,0
+"269","MultipleDataSplitting",9,0,0
+"269","Knockoff",9,0,0
+"269","Benjamini–Hochberg (BH)",9,0,0
+"270","Mars DS",10,0.307692307692308,0.9
+"270","Mars MS",10,0,0.9
+"270","DataSplitting",10,0,0
+"270","MultipleDataSplitting",10,0,0
+"270","Knockoff",10,0,0
+"270","Benjamini–Hochberg (BH)",10,0,0
+"271","Mars DS",11,0.1,0.9
+"271","Mars MS",11,0,0.9
+"271","DataSplitting",11,0,0
+"271","MultipleDataSplitting",11,0,0
+"271","Knockoff",11,0,0
+"271","Benjamini–Hochberg (BH)",11,0,0
+"272","Mars DS",12,0.1,0.9
+"272","Mars MS",12,0,0.9
+"272","DataSplitting",12,0,0
+"272","MultipleDataSplitting",12,0,0
+"272","Knockoff",12,0,0
+"272","Benjamini–Hochberg (BH)",12,0,0
+"273","Mars DS",13,0.1,0.9
+"273","Mars MS",13,0,0.9
+"273","DataSplitting",13,0,0
+"273","MultipleDataSplitting",13,0,0
+"273","Knockoff",13,0,0
+"273","Benjamini–Hochberg (BH)",13,0,0
+"274","Mars DS",7,0,0
+"274","Mars MS",7,0,0.8
+"274","DataSplitting",7,0,0
+"274","MultipleDataSplitting",7,0,0
+"274","Knockoff",7,0,0
+"274","Benjamini–Hochberg (BH)",7,0,0
+"275","Mars DS",8,0,0
+"275","Mars MS",8,0,0.8
+"275","DataSplitting",8,0,0
+"275","MultipleDataSplitting",8,0,0
+"275","Knockoff",8,0,0
+"275","Benjamini–Hochberg (BH)",8,0,0
+"276","Mars DS",9,0,0
+"276","Mars MS",9,0,0.7
+"276","DataSplitting",9,0,0
+"276","MultipleDataSplitting",9,0,0
+"276","Knockoff",9,0,0
+"276","Benjamini–Hochberg (BH)",9,0,0
+"277","Mars DS",10,0,0
+"277","Mars MS",10,0,0.8
+"277","DataSplitting",10,0,0
+"277","MultipleDataSplitting",10,0,0
+"277","Knockoff",10,0,0
+"277","Benjamini–Hochberg (BH)",10,0,0
+"278","Mars DS",11,0,0
+"278","Mars MS",11,0,0.8
+"278","DataSplitting",11,0,0
+"278","MultipleDataSplitting",11,0,0
+"278","Knockoff",11,0,0
+"278","Benjamini–Hochberg (BH)",11,0,0
+"279","Mars DS",12,0,0
+"279","Mars MS",12,0,0.8
+"279","DataSplitting",12,0,0
+"279","MultipleDataSplitting",12,0,0
+"279","Knockoff",12,0,0
+"279","Benjamini–Hochberg (BH)",12,0,0
+"280","Mars DS",13,0,0
+"280","Mars MS",13,0,0.7
+"280","DataSplitting",13,0,0
+"280","MultipleDataSplitting",13,0,0
+"280","Knockoff",13,0,0
+"280","Benjamini–Hochberg (BH)",13,0,0
+"281","Mars DS",7,0,0
+"281","Mars MS",7,0,0.6
+"281","DataSplitting",7,0,0
+"281","MultipleDataSplitting",7,0,0
+"281","Knockoff",7,0,0
+"281","Benjamini–Hochberg (BH)",7,0,0
+"282","Mars DS",8,0,0
+"282","Mars MS",8,0,0.7
+"282","DataSplitting",8,0,0
+"282","MultipleDataSplitting",8,0,0
+"282","Knockoff",8,0,0
+"282","Benjamini–Hochberg (BH)",8,0,0
+"283","Mars DS",9,0,0
+"283","Mars MS",9,0,0.7
+"283","DataSplitting",9,0,0
+"283","MultipleDataSplitting",9,0,0
+"283","Knockoff",9,0,0
+"283","Benjamini–Hochberg (BH)",9,0,0
+"284","Mars DS",10,0,0
+"284","Mars MS",10,0,0.7
+"284","DataSplitting",10,0,0
+"284","MultipleDataSplitting",10,0,0
+"284","Knockoff",10,0,0
+"284","Benjamini–Hochberg (BH)",10,0,0
+"285","Mars DS",11,0,0
+"285","Mars MS",11,0,0.7
+"285","DataSplitting",11,0,0
+"285","MultipleDataSplitting",11,0,0
+"285","Knockoff",11,0,0
+"285","Benjamini–Hochberg (BH)",11,0,0
+"286","Mars DS",12,0,0
+"286","Mars MS",12,0,0.7
+"286","DataSplitting",12,0,0
+"286","MultipleDataSplitting",12,0,0
+"286","Knockoff",12,0,0
+"286","Benjamini–Hochberg (BH)",12,0,0
+"287","Mars DS",13,0,0
+"287","Mars MS",13,0,0.7
+"287","DataSplitting",13,0,0
+"287","MultipleDataSplitting",13,0,0
+"287","Knockoff",13,0,0
+"287","Benjamini–Hochberg (BH)",13,0,0
+"288","Mars DS",7,0.230769230769231,1
+"288","Mars MS",7,0,1
+"288","DataSplitting",7,0,0
+"288","MultipleDataSplitting",7,0,0
+"288","Knockoff",7,0.928571428571429,0.1
+"288","Benjamini–Hochberg (BH)",7,0,0
+"289","Mars DS",8,0.0909090909090909,1
+"289","Mars MS",8,0,1
+"289","DataSplitting",8,0,0
+"289","MultipleDataSplitting",8,0,0
+"289","Knockoff",8,0.928571428571429,0.1
+"289","Benjamini–Hochberg (BH)",8,0,0
+"290","Mars DS",9,0.0909090909090909,1
+"290","Mars MS",9,0,1
+"290","DataSplitting",9,0,0
+"290","MultipleDataSplitting",9,0,0
+"290","Knockoff",9,0.923076923076923,0.1
+"290","Benjamini–Hochberg (BH)",9,0,0
+"291","Mars DS",10,0.166666666666667,1
+"291","Mars MS",10,0,1
+"291","DataSplitting",10,0,0
+"291","MultipleDataSplitting",10,0,0
+"291","Knockoff",10,0.928571428571429,0.1
+"291","Benjamini–Hochberg (BH)",10,0,0
+"292","Mars DS",11,0.166666666666667,1
+"292","Mars MS",11,0,1
+"292","DataSplitting",11,0,0
+"292","MultipleDataSplitting",11,0,0
+"292","Knockoff",11,0.928571428571429,0.1
+"292","Benjamini–Hochberg (BH)",11,0,0
+"293","Mars DS",12,0.166666666666667,1
+"293","Mars MS",12,0,1
+"293","DataSplitting",12,0,0
+"293","MultipleDataSplitting",12,0,0
+"293","Knockoff",12,0.928571428571429,0.1
+"293","Benjamini–Hochberg (BH)",12,0,0
+"294","Mars DS",13,0.166666666666667,1
+"294","Mars MS",13,0,1
+"294","DataSplitting",13,0,0
+"294","MultipleDataSplitting",13,0,0
+"294","Knockoff",13,0.928571428571429,0.1
+"294","Benjamini–Hochberg (BH)",13,0,0
+"295","Mars DS",7,0,0
+"295","Mars MS",7,0,0.8
+"295","DataSplitting",7,0,0
+"295","MultipleDataSplitting",7,0,0
+"295","Knockoff",7,0,0
+"295","Benjamini–Hochberg (BH)",7,0,0
+"296","Mars DS",8,0,0
+"296","Mars MS",8,0,0.8
+"296","DataSplitting",8,0,0
+"296","MultipleDataSplitting",8,0,0
+"296","Knockoff",8,0,0
+"296","Benjamini–Hochberg (BH)",8,0,0
+"297","Mars DS",9,0,0
+"297","Mars MS",9,0,0.8
+"297","DataSplitting",9,0,0
+"297","MultipleDataSplitting",9,0,0
+"297","Knockoff",9,0,0
+"297","Benjamini–Hochberg (BH)",9,0,0
+"298","Mars DS",10,0,0
+"298","Mars MS",10,0,0.8
+"298","DataSplitting",10,0,0
+"298","MultipleDataSplitting",10,0,0
+"298","Knockoff",10,0,0
+"298","Benjamini–Hochberg (BH)",10,0,0
+"299","Mars DS",11,0,0
+"299","Mars MS",11,0,0.8
+"299","DataSplitting",11,0,0
+"299","MultipleDataSplitting",11,0,0
+"299","Knockoff",11,0,0
+"299","Benjamini–Hochberg (BH)",11,0,0
+"300","Mars DS",12,0,0
+"300","Mars MS",12,0,0.8
+"300","DataSplitting",12,0,0
+"300","MultipleDataSplitting",12,0,0
+"300","Knockoff",12,0,0
+"300","Benjamini–Hochberg (BH)",12,0,0
+"301","Mars DS",13,0,0
+"301","Mars MS",13,0,0.8
+"301","DataSplitting",13,0,0
+"301","MultipleDataSplitting",13,0,0
+"301","Knockoff",13,0,0
+"301","Benjamini–Hochberg (BH)",13,0,0
+"302","Mars DS",7,0,0
+"302","Mars MS",7,0,0.8
+"302","DataSplitting",7,0,0
+"302","MultipleDataSplitting",7,0,0
+"302","Knockoff",7,0,0
+"302","Benjamini–Hochberg (BH)",7,0,0
+"303","Mars DS",8,0,0
+"303","Mars MS",8,0,0.8
+"303","DataSplitting",8,0,0
+"303","MultipleDataSplitting",8,0,0
+"303","Knockoff",8,0,0
+"303","Benjamini–Hochberg (BH)",8,0,0
+"304","Mars DS",9,0,0
+"304","Mars MS",9,0,0.7
+"304","DataSplitting",9,0,0
+"304","MultipleDataSplitting",9,0,0
+"304","Knockoff",9,0,0
+"304","Benjamini–Hochberg (BH)",9,0,0
+"305","Mars DS",10,0,1
+"305","Mars MS",10,0,0.8
+"305","DataSplitting",10,0,0
+"305","MultipleDataSplitting",10,0,0
+"305","Knockoff",10,0,0
+"305","Benjamini–Hochberg (BH)",10,0,0
+"306","Mars DS",11,0,1
+"306","Mars MS",11,0,0.9
+"306","DataSplitting",11,0,0
+"306","MultipleDataSplitting",11,0,0
+"306","Knockoff",11,0,0
+"306","Benjamini–Hochberg (BH)",11,0,0
+"307","Mars DS",12,0,1
+"307","Mars MS",12,0,0.9
+"307","DataSplitting",12,0,0
+"307","MultipleDataSplitting",12,0,0
+"307","Knockoff",12,0,0
+"307","Benjamini–Hochberg (BH)",12,0,0
+"308","Mars DS",13,0,1
+"308","Mars MS",13,0,0.9
+"308","DataSplitting",13,0,0
+"308","MultipleDataSplitting",13,0,0
+"308","Knockoff",13,0,0
+"308","Benjamini–Hochberg (BH)",13,0,0
+"309","Mars DS",7,0,0
+"309","Mars MS",7,0,0.6
+"309","DataSplitting",7,0,0
+"309","MultipleDataSplitting",7,0,0
+"309","Knockoff",7,0,0
+"309","Benjamini–Hochberg (BH)",7,0,0
+"310","Mars DS",8,0,0
+"310","Mars MS",8,0,0.7
+"310","DataSplitting",8,0,0
+"310","MultipleDataSplitting",8,0,0
+"310","Knockoff",8,0,0
+"310","Benjamini–Hochberg (BH)",8,0,0
+"311","Mars DS",9,0,0
+"311","Mars MS",9,0,0.6
+"311","DataSplitting",9,0,0
+"311","MultipleDataSplitting",9,0,0
+"311","Knockoff",9,0,0
+"311","Benjamini–Hochberg (BH)",9,0,0
+"312","Mars DS",10,0,0
+"312","Mars MS",10,0,0.7
+"312","DataSplitting",10,0,0
+"312","MultipleDataSplitting",10,0,0
+"312","Knockoff",10,0,0
+"312","Benjamini–Hochberg (BH)",10,0,0
+"313","Mars DS",11,0,0
+"313","Mars MS",11,0,0.6
+"313","DataSplitting",11,0,0
+"313","MultipleDataSplitting",11,0,0
+"313","Knockoff",11,0,0
+"313","Benjamini–Hochberg (BH)",11,0,0
+"314","Mars DS",12,0,0
+"314","Mars MS",12,0,0.4
+"314","DataSplitting",12,0,0
+"314","MultipleDataSplitting",12,0,0
+"314","Knockoff",12,0,0
+"314","Benjamini–Hochberg (BH)",12,0,0
+"315","Mars DS",13,0,0
+"315","Mars MS",13,0,0.7
+"315","DataSplitting",13,0,0
+"315","MultipleDataSplitting",13,0,0
+"315","Knockoff",13,0,0
+"315","Benjamini–Hochberg (BH)",13,0,0
+"316","Mars DS",7,0,0
+"316","Mars MS",7,0,0
+"316","DataSplitting",7,0,0
+"316","MultipleDataSplitting",7,0,0
+"316","Knockoff",7,0,0
+"316","Benjamini–Hochberg (BH)",7,0,0
+"317","Mars DS",8,0,0
+"317","Mars MS",8,0,0
+"317","DataSplitting",8,0,0
+"317","MultipleDataSplitting",8,0,0
+"317","Knockoff",8,0,0
+"317","Benjamini–Hochberg (BH)",8,0,0
+"318","Mars DS",9,0,0
+"318","Mars MS",9,0,0
+"318","DataSplitting",9,0,0
+"318","MultipleDataSplitting",9,0,0
+"318","Knockoff",9,0,0
+"318","Benjamini–Hochberg (BH)",9,0,0
+"319","Mars DS",10,0,0
+"319","Mars MS",10,0,0
+"319","DataSplitting",10,0,0
+"319","MultipleDataSplitting",10,0,0
+"319","Knockoff",10,0,0
+"319","Benjamini–Hochberg (BH)",10,0,0
+"320","Mars DS",11,0,0
+"320","Mars MS",11,0,0
+"320","DataSplitting",11,0,0
+"320","MultipleDataSplitting",11,0,0
+"320","Knockoff",11,0,0
+"320","Benjamini–Hochberg (BH)",11,0,0
+"321","Mars DS",12,0,0
+"321","Mars MS",12,0,0
+"321","DataSplitting",12,0,0
+"321","MultipleDataSplitting",12,0,0
+"321","Knockoff",12,0,0
+"321","Benjamini–Hochberg (BH)",12,0,0
+"322","Mars DS",13,0,0
+"322","Mars MS",13,0,0
+"322","DataSplitting",13,0,0
+"322","MultipleDataSplitting",13,0,0
+"322","Knockoff",13,0,0
+"322","Benjamini–Hochberg (BH)",13,0,0
+"323","Mars DS",7,0,0
+"323","Mars MS",7,0,0.9
+"323","DataSplitting",7,0,0
+"323","MultipleDataSplitting",7,0,0
+"323","Knockoff",7,0,0
+"323","Benjamini–Hochberg (BH)",7,0,0
+"324","Mars DS",8,0,0
+"324","Mars MS",8,0,0.9
+"324","DataSplitting",8,0,0
+"324","MultipleDataSplitting",8,0,0
+"324","Knockoff",8,0.9,0.1
+"324","Benjamini–Hochberg (BH)",8,0,0
+"325","Mars DS",9,0,0
+"325","Mars MS",9,0,0.9
+"325","DataSplitting",9,0,0
+"325","MultipleDataSplitting",9,0,0
+"325","Knockoff",9,0,0
+"325","Benjamini–Hochberg (BH)",9,0,0
+"326","Mars DS",10,0,1
+"326","Mars MS",10,0,0.9
+"326","DataSplitting",10,0,0
+"326","MultipleDataSplitting",10,0,0
+"326","Knockoff",10,0,0
+"326","Benjamini–Hochberg (BH)",10,0,0
+"327","Mars DS",11,0,0
+"327","Mars MS",11,0,0.9
+"327","DataSplitting",11,0,0
+"327","MultipleDataSplitting",11,0,0
+"327","Knockoff",11,0,0
+"327","Benjamini–Hochberg (BH)",11,0,0
+"328","Mars DS",12,0,0
+"328","Mars MS",12,0,0.9
+"328","DataSplitting",12,0,0
+"328","MultipleDataSplitting",12,0,0
+"328","Knockoff",12,0,0
+"328","Benjamini–Hochberg (BH)",12,0,0
+"329","Mars DS",13,0,0
+"329","Mars MS",13,0,0.9
+"329","DataSplitting",13,0,0
+"329","MultipleDataSplitting",13,0,0
+"329","Knockoff",13,0,0
+"329","Benjamini–Hochberg (BH)",13,0,0
+"330","Mars DS",7,0,0
+"330","Mars MS",7,0,0.7
+"330","DataSplitting",7,0,0
+"330","MultipleDataSplitting",7,0,0
+"330","Knockoff",7,0,0
+"330","Benjamini–Hochberg (BH)",7,0,0
+"331","Mars DS",8,0,0
+"331","Mars MS",8,0,0.8
+"331","DataSplitting",8,0,0
+"331","MultipleDataSplitting",8,0,0
+"331","Knockoff",8,0,0
+"331","Benjamini–Hochberg (BH)",8,0,0
+"332","Mars DS",9,0,0
+"332","Mars MS",9,0,0.8
+"332","DataSplitting",9,0,0
+"332","MultipleDataSplitting",9,0,0
+"332","Knockoff",9,0,0
+"332","Benjamini–Hochberg (BH)",9,0,0
+"333","Mars DS",10,0,0
+"333","Mars MS",10,0,0.8
+"333","DataSplitting",10,0,0
+"333","MultipleDataSplitting",10,0,0
+"333","Knockoff",10,0,0
+"333","Benjamini–Hochberg (BH)",10,0,0
+"334","Mars DS",11,0,0
+"334","Mars MS",11,0,0.8
+"334","DataSplitting",11,0,0
+"334","MultipleDataSplitting",11,0,0
+"334","Knockoff",11,0,0
+"334","Benjamini–Hochberg (BH)",11,0,0
+"335","Mars DS",12,0,0
+"335","Mars MS",12,0,0.8
+"335","DataSplitting",12,0,0
+"335","MultipleDataSplitting",12,0,0
+"335","Knockoff",12,0,0
+"335","Benjamini–Hochberg (BH)",12,0,0
+"336","Mars DS",13,0,0
+"336","Mars MS",13,0,0.8
+"336","DataSplitting",13,0,0
+"336","MultipleDataSplitting",13,0,0
+"336","Knockoff",13,0,0
+"336","Benjamini–Hochberg (BH)",13,0,0
+"337","Mars DS",7,0,1
+"337","Mars MS",7,0,1
+"337","DataSplitting",7,0,0
+"337","MultipleDataSplitting",7,0,0
+"337","Knockoff",7,0,0
+"337","Benjamini–Hochberg (BH)",7,0,0
+"338","Mars DS",8,0,1
+"338","Mars MS",8,0,1
+"338","DataSplitting",8,0,0
+"338","MultipleDataSplitting",8,0,0
+"338","Knockoff",8,0,0
+"338","Benjamini–Hochberg (BH)",8,0,0
+"339","Mars DS",9,0,1
+"339","Mars MS",9,0,1
+"339","DataSplitting",9,0,0
+"339","MultipleDataSplitting",9,0,0
+"339","Knockoff",9,0,0
+"339","Benjamini–Hochberg (BH)",9,0,0
+"340","Mars DS",10,0,1
+"340","Mars MS",10,0,1
+"340","DataSplitting",10,0,0
+"340","MultipleDataSplitting",10,0,0
+"340","Knockoff",10,0,0
+"340","Benjamini–Hochberg (BH)",10,0,0
+"341","Mars DS",11,0,1
+"341","Mars MS",11,0,1
+"341","DataSplitting",11,0,0
+"341","MultipleDataSplitting",11,0,0
+"341","Knockoff",11,0,0
+"341","Benjamini–Hochberg (BH)",11,0,0
+"342","Mars DS",12,0,1
+"342","Mars MS",12,0,1
+"342","DataSplitting",12,0,0
+"342","MultipleDataSplitting",12,0,0
+"342","Knockoff",12,0,0
+"342","Benjamini–Hochberg (BH)",12,0,0
+"343","Mars DS",13,0,1
+"343","Mars MS",13,0,1
+"343","DataSplitting",13,0,0
+"343","MultipleDataSplitting",13,0,0
+"343","Knockoff",13,0,0
+"343","Benjamini–Hochberg (BH)",13,0,0
+"344","Mars DS",7,0,0
+"344","Mars MS",7,0,0.8
+"344","DataSplitting",7,0,0
+"344","MultipleDataSplitting",7,0,0
+"344","Knockoff",7,1,0
+"344","Benjamini–Hochberg (BH)",7,0,0
+"345","Mars DS",8,0.1,0.9
+"345","Mars MS",8,0,0.9
+"345","DataSplitting",8,0,0
+"345","MultipleDataSplitting",8,0,0
+"345","Knockoff",8,1,0
+"345","Benjamini–Hochberg (BH)",8,0,0
+"346","Mars DS",9,0.1,0.9
+"346","Mars MS",9,0,0.8
+"346","DataSplitting",9,0,0
+"346","MultipleDataSplitting",9,0,0
+"346","Knockoff",9,1,0
+"346","Benjamini–Hochberg (BH)",9,0,0
+"347","Mars DS",10,0.307692307692308,0.9
+"347","Mars MS",10,0,0.8
+"347","DataSplitting",10,0,0
+"347","MultipleDataSplitting",10,0,0
+"347","Knockoff",10,1,0
+"347","Benjamini–Hochberg (BH)",10,0,0
+"348","Mars DS",11,0.1,0.9
+"348","Mars MS",11,0,0.8
+"348","DataSplitting",11,0,0
+"348","MultipleDataSplitting",11,0,0
+"348","Knockoff",11,1,0
+"348","Benjamini–Hochberg (BH)",11,0,0
+"349","Mars DS",12,0.1,0.9
+"349","Mars MS",12,0,0.8
+"349","DataSplitting",12,0,0
+"349","MultipleDataSplitting",12,0,0
+"349","Knockoff",12,1,0
+"349","Benjamini–Hochberg (BH)",12,0,0
+"350","Mars DS",13,0.1,0.9
+"350","Mars MS",13,0,0.8
+"350","DataSplitting",13,0,0
+"350","MultipleDataSplitting",13,0,0
+"350","Knockoff",13,1,0
+"350","Benjamini–Hochberg (BH)",13,0,0
