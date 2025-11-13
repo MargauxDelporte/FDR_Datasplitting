@@ -60,7 +60,7 @@ Compare_SignalStrength <- function(i, s,other=T) {
   y <- (X^2 %*% beta_star + rnorm(n))
   
   # run your custom methods
-  g1 <- ApplyMarsTrain_parallel( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
+  g1 <- ApplyMarsTrain_HDparallel( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
   # FDR methods
   if(other){
   DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
