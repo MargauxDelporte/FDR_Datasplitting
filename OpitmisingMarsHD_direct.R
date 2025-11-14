@@ -1,7 +1,7 @@
 #Finetune Mars for the high-dimensional case
 
 library(earth)
-
+source('C:/Users/mde4023/Downloads/FDR_Datasplitting/Functions/MarsParallelHD.R')
 finetune <- function(
     myseed, mynk,
     # --- data generation ---
@@ -13,14 +13,7 @@ finetune <- function(
     # --- MARS (earth) options ---
     penalty = 2,
     mypmethod = "cv",
-    nfold = 5,
-    myfast.k = 50,
-    trace = 0,
-    myfast.beta=1,
-    mythresh,
-    myminspan,
-    mynprune,
-    mypenalty
+    myprmethod=myprmethod
 ) {
   # Derive default per-stage seeds (stable & independent) if not provided
   # --- choose signal indices ---
@@ -39,88 +32,47 @@ finetune <- function(
   # Nonlinear quadratic signal + Gaussian noise
   y <- as.vector((X^2 %*% beta_star) + rnorm(n, sd = noise_sd))
   
-  # --- prepare frames & split ---
-  amountTest <- 1 - amountTrain
-  data <- data.frame(y = y, X)
-  names(data) <- c("y", paste0("X", seq_len(p)))
-  
-  size_half <- floor((amountTest / 2) * n)
-  
-  train_index     <- sample.int(n, size = floor(amountTrain * n), replace = FALSE)
-  remaining_index <- setdiff(seq_len(n), train_index)
-  sample_index1   <- sample(remaining_index, size = size_half, replace = FALSE)
-  sample_index2   <- setdiff(remaining_index, sample_index1)
-  
-  dataTrain <- data[train_index, , drop = FALSE]
-  
   # --- fit MARS --- ?earth
-  mars_fit <- earth(
-    y ~ .,
-    data    = dataTrain,
-    degree  = 2,
-    nk      = mynk,
-    pmethod = mypmethod,
-    nfold   = 5,
-    ncross  = 3,
-    penalty   = mypenalty,
-    thresh= mythresh,
-    fast.k= myfast.k,
-    fast.beta= myfast.beta,
-    minspan=myminspan,
-   nprune=mynprune
-  )
+  g1 <- ApplyMarsTrain_HDparallel( X = X, y = y, q = 0.10, num_split = 5,mynk=mynk, ,mypmethod=mypmethod,myprmethod=myprmethod, signal_index = signal_index, myseed = 1)
   
-  # --- evaluate on two disjoint test halves ---
-  pred1 <- predict(mars_fit, newdata = data[sample_index1, , drop = FALSE])
-  pred2 <- predict(mars_fit, newdata = data[sample_index2, , drop = FALSE])
-  
-  y1 <- y[sample_index1]; y2 <- y[sample_index2]
-  
-  R2orig1 <- 1 - sum((y1 - pred1)^2) / sum((y1 - mean(y1))^2)
-  R2orig2 <- 1 - sum((y2 - pred2)^2) / sum((y2 - mean(y2))^2)
-  
-  mean(c(R2orig1, R2orig2))
+  return(g1$MDS_power)
 }
 
 # Define grid of (nk, seed)
-?earth
-nk_grid <- c(30,40,50) # adjust range
+
+nk_grid <- c(30,40,50,60,70,80,90,100,110,120) # adjust range
 mypmethod_grid   <- c("backward", "seqrep", "cv", "forward")
-mynprune_grid=c(10,25,50)
-mythresh_grid=c(0.0001,0.001,0.01)
-mypenalty_grid=c(-1,0,2,3)
-myfast.k_grid=c(0,5,20)
-myfast.beta_grid=c(0,1)
-myminspan_grid=c(-3,0,1)
-seed_grid <- 101:105   # single seed
+myprmethod_g=c(5,10,25)
 
 grid_full <- expand.grid(
-  seed=seed_grid,
+  seed=c(11132025,11132026,11132027),
   nk        = nk_grid,
   pmethod   = mypmethod_grid,
-  nprune    = mynprune_grid,
-  penalty   = mypenalty_grid,
-  thresh =    mythresh_grid,
-  fast.k    = myfast.k_grid,
-  fast.beta = myfast.beta_grid,
-  minspan   = myminspan_grid,
-  KEEP.OUT.ATTRS = FALSE,
-  stringsAsFactors = FALSE
+  myprmethod=myprmethod_g
 )
-nrow(grid_full)
-
-
-library(foreach)
-library(doParallel)
-library(doRNG)
-
-# Parallel setup
-n_cores <- max(1, parallel::detectCores() - 1)
-cl <- makeCluster(n_cores)
-registerDoParallel(cl)
-registerDoRNG(12345)
-
-## Parallel grid search: for each row in grid × each seed i=1 s=1
+result=c()
+for(i in 1:nrow(grid_full)){
+  seed  <- grid_full$seed[i]
+  nk      <- grid_full$nk[i]
+  pmethod <- as.character(grid_full$pmethod[i])
+  myprmethod=grid_full$myprmethod[i]
+  
+  r2 <- finetune(
+    myseed      = seed,
+    mynk        = nk,
+    mypmethod   = pmethod,
+    myprmethod=myprmethod
+  )
+  nresult=data.frame(
+    seed=seed,
+    nk        = nk,
+    pmethod   = pmethod,
+    myprmethod=myprmethod,
+    MDS_power        = r2
+  )
+  result=rbind(result,nresult)
+  print(result)
+}
 res <- foreach(i = seq_len(nrow(grid_full)),
                .combine = rbind,
                .inorder = FALSE,

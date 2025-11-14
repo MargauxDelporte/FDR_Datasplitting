@@ -52,12 +52,15 @@ Compare_SignalStrength <- function(i, s,other=T) {
   signal_index <- sample(c(1:p), size = p0, replace = F)
   # simulate data
   n1 <- floor(n/2); n2 <- n - n1
-  X1 <- matrix(rnorm(n1*p, mean= 1), n1, p)
-  X2 <- matrix(rnorm(n2*p, mean=-1), n2, p)
+  X1 <- matrix(rnorm(n1 * p, mean = -1), n1, p)
+  X2 <- matrix(rnorm(n2 * p, mean = 1), n2, p)
   X  <- rbind(X1, X2)
+  
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*1000
-  y <- (X^2 %*% beta_star + rnorm(n))
+  beta_star[signal_index] <- rnorm(p0, mean = 0, sd = delta * sqrt(log(p) / n)) * 100
+  
+  # Nonlinear quadratic signal + Gaussian noise
+  y <- as.vector((X^2 %*% beta_star) + rnorm(n, sd = 1))
   
   # run your custom methods
   g1 <- ApplyMarsTrain_HDparallel( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
@@ -92,7 +95,7 @@ Compare_SignalStrength <- function(i, s,other=T) {
   }
   return(ResultsDataFrame)
 }
-Compare_SignalStrength(15,15,F)
+Compare_SignalStrength(7,7,F)
 Compare_SignalStrength(15,15,F)
 # build grid
 param_grid <- expand.grid(

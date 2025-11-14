@@ -16,8 +16,8 @@ permR2Mars<-function(data,Y,j,model){
   rsq_perm
   return(rsq_perm)
 }
-ApplyMarsTrain_HDparallel <- function(X, y, q, myseed,mynk=20, num_split = 50,
-                                    signal_index = signal_index,
+ApplyMarsTrain_HDparallel <- function(X, y, q=0.10, myseed,mynk=25, num_split = 50,
+                                    signal_index = signal_index,mypmethod="seqrep",myprmethod=25,
                                     plot_hist = FALSE) {
   
   stopifnot(nrow(X) == length(y))
@@ -58,15 +58,13 @@ ApplyMarsTrain_HDparallel <- function(X, y, q, myseed,mynk=20, num_split = 50,
                          y ~ .,
                          data    = dataTrain,
                          degree  = 2,
-<<<<<<< Updated upstream
-                         nk      = 30,
-=======
                          nk      = mynk,
->>>>>>> Stashed changes
-                         pmethod = "cv",
+                         pmethod = mypmethod,
                          nfold   = 5,
                          ncross  = 3,
                          trace   = 0,
+                         nprune=myprmethod,
+                         penalty=0,
                          fast.k=5,
                          fast.beta=1,
                          minspan=-3
