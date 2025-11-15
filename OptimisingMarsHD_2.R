@@ -64,13 +64,13 @@ sim_once <- function(mnk,mprune,seed) {
 
 result=c()
 for(i in seq(from=30,to=200,by=10)){
-  for(j in seq(from=i,to=200,by=10)){
+  for(j in seq(from=25,to=i,by=10)){
     for(k in c(11,123,569)){
     r2=sim_once(mnk=i,mprune=j,k)
     nresult=data.frame(
       seed=k,
       nk        = i,
-      pmethod   = j,
+      pruned   = j,
       MDS_power        = r2
     )
     result=rbind(result,nresult)
