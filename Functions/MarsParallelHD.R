@@ -16,7 +16,7 @@ permR2Mars<-function(data,Y,j,model){
   rsq_perm
   return(rsq_perm)
 }
-ApplyMarsTrain_HDparallel <- function(X, y, q=0.10,mynk,myprune, myseed,num_split = 50,
+ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split = 50,
                                     signal_index = signal_index,plot_hist = FALSE) {
   
   stopifnot(nrow(X) == length(y))
@@ -55,15 +55,7 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=0.10,mynk,myprune, myseed,num_spli
                        dataTrain <- data[train_index, , drop = FALSE]
                        mars_poly= earth(
                          y ~ .,
-                         data    = dataTrain,
-                         degree  = 2,        # still allow interactions
-                         nk      = mynk,      # MUCH larger cap on #basis functions
-                         fast.k  = 0,        # turn off fast MARS (more exhaustive forward step)
-                         pmethod = "backward",  # prune by GCV, not CV (so we can control size)
-                         nprune  = myprune,       # target a richer final model
-                         penalty = -1,       # negative/low penalty -> prefers *more* terms
-                         thresh  = 1e-3,     # small threshold -> easier to add new terms
-                         trace   = 0
+                         data    = dataTrain
                        )
                        lm <- mars_poly
                        
@@ -96,8 +88,8 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=0.10,mynk,myprune, myseed,num_spli
                        
                        num_sel <- length(selected_index)
                        inc_row <- numeric(p)
-                       fdp_val <- NA_real_
-                       pow_val <- NA_real_
+                       fdp_val <- 0
+                       pow_val <- 0
                        
                        if (num_sel > 0) {
                          inc_row[selected_index] <- 1 / num_sel
