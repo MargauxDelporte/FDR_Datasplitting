@@ -73,147 +73,67 @@ for(i in 1:nrow(grid_full)){
   result=rbind(result,nresult)
   print(result)
 }
-res <- foreach(i = seq_len(nrow(grid_full)),
-               .combine = rbind,
-               .inorder = FALSE,
-               .packages = c("earth")) %dopar% {
-                 seed  <- grid_full$seed[i]
-                 nk      <- grid_full$nk[i]
-                 pmethod <- grid_full$pmethod[i]
-                 nprune  <- grid_full$nprune[i]
-                 thresh  <- grid_full$thresh[i]
-                 penalty <- grid_full$penalty[i]
-                 fast.k  <- grid_full$fast.k[i]
-                 fast.beta <- grid_full$fast.beta[i]
-                 minspan <- grid_full$minspan[i]
-                 
-                 r2 <- finetune(
-                   myseed      = seed,
-                   mynk        = nk,
-                   mypmethod   = pmethod,
-                   mynprune    = nprune,
-                   mypenalty   = penalty,
-                   mythresh =thresh,
-                   myfast.k    = fast.k,
-                   myfast.beta = fast.beta,
-                   myminspan   = minspan
-                 )
-                 
-                 # INTERMEDIATE OUTPUT (appears in console)
-                 cat(sprintf(
-                   "Done %d/%d | nk=%d | pmethod=%s | R2=%.4f\n",
-                   i, nrow(grid_full), nk, pmethod, r2
-                 ))
-                 
-                 data.frame(
-                   nk        = nk,
-                   pmethod   = pmethod,
-                   nprune    = nprune,
-                     penalty   = penalty,
-                   fast.k    = fast.k,
-                   thresh =thresh,
-                   fast.beta = fast.beta,
-                   minspan   = minspan,
-                   R2        = r2
-                 )
-               }
-stopCluster(cl)
-View(res)
-summary_res <- res %>%
-  group_by(nk, pmethod, nprune,thresh, penalty, fast.k, fast.beta, minspan) %>%
-  summarise(
-    mean_R2 = mean(R2),
-    sd_R2   = sd(R2),
-    .groups = "drop"
-  ) %>%
-  arrange(desc(mean_R2))
-newgrid=summary_res[which(round(summary_res$mean_R2,3)==round(max(summary_res$mean_R2),3)),]
-
-seeds <- 121:150   # the 10 seeds you want to use
-
-# newgrid has 12 rows in your example
-n_rows <- nrow(newgrid)
-
-# Repeat each row 10 times and add a seed column
-grid_full <- newgrid[rep(seq_len(n_rows), each = length(seeds)), ]
-grid_full$seed <- rep(seeds, times = n_rows)
-
-# (Optional) drop old R2 column if you don't want it in the run
-grid_full$R2 <- NULL
-
-head(grid_full)
-nrow(grid_full) 
-suppressPackageStartupMessages({
-  library(earth)
-  library(foreach)
-  library(doParallel)
-  library(doRNG)
-  library(dplyr)
-})
-
-# Parallel setup
-n_cores <- max(1, parallel::detectCores() - 1)
-cl <- makeCluster(n_cores)
-registerDoParallel(cl)
-registerDoRNG(12345)
 
 
-res <- foreach(i = seq_len(nrow(grid_full)),
-               .combine = rbind,
-               .inorder = FALSE,
-               .packages = "earth") %dopar% {
-                 
-                 nk        <- grid_full$nk[i]
-                 pmethod   <- grid_full$pmethod[i]
-                 nprune    <- grid_full$nprune[i]
-                 penalty   <- grid_full$penalty[i]
-                 fast.k    <- grid_full$fast.k[i]
-                 thresh  <- grid_full$thresh[i]
-                 fast.beta <- grid_full$fast.beta[i]
-                 minspan   <- grid_full$minspan[i]
-                 seed      <- grid_full$seed[i]
-                 
-                 r2 <- finetune(
-                   myseed      = seed,
-                   mynk        = nk,
-                   mypmethod   = pmethod,
-                   mynprune    = nprune,
-                   mypenalty   = penalty,
-                   mythresh =thresh,
-                   myfast.k    = fast.k,
-                   myfast.beta = fast.beta,
-                   myminspan   = minspan
-                 )
-                 
-                 # ---- INTERMEDIATE OUTPUT ----
-                 cat(sprintf(
-                   "Done %3d/%3d | seed=%2d | nk=%d | pmethod=%s | penalty=%d | fast.k=%d | fast.beta=%d | minspan=%d | R2=%.4f\n",
-                   i, nrow(grid_full), seed, nk, pmethod, penalty, fast.k, fast.beta, minspan, r2
-                 ))
-                 
-                 data.frame(
-                   nk        = nk,
-                   pmethod   = pmethod,
-                   nprune    = nprune,
-                   penalty   = penalty,
-                   fast.k    = fast.k,
-                   fast.beta = fast.beta,
-                   minspan   = minspan,
-                   thresh =thresh,
-                   seed      = seed,
-                   R2        = r2
-                 )
-               }
+result[which(result$MDS_power>0.5),]
+#> result[which(result$MDS_power>0.5),]
+#seed  nk  pmethod myprmethod MDS_power
+#245 11132026  40 backward         25      0.52
+#248 11132026  50 backward         25      0.52
+#251 11132026  60 backward         25      0.52
+#254 11132026  70 backward         25      0.52
+#257 11132026  80 backward         25      0.52
+#260 11132026  90 backward         25      0.52
+#263 11132026 100 backward         25      0.52
+#266 11132026 110 backward         25      0.52
+#269 11132026 120 backward         25      0.52
 
-stopCluster(cl)      
+nk_grid <- seq(from=30,to=150,by=10) # adjust range
+mypmethod_grid   <- c("backward")
+myprmethod_g=seq(from=25,to=35,by=5)
 
-summary_res <- res %>%
-  group_by(nk, pmethod, nprune, penalty, fast.k, fast.beta, minspan) %>%
-  summarise(
-    mean_R2 = mean(R2),
-    sd_R2   = sd(R2),
-    .groups = "drop"
-  ) %>%
-  arrange(desc(mean_R2))
+grid_full <- expand.grid(
+  seed=c(11142025,11142026,11142027),
+  nk        = nk_grid,
+  pmethod   = mypmethod_grid,
+  myprmethod=myprmethod_g
+)
 
-print(summary_res, n = nrow(summary_res))
+result=c()
+for(i in 1:nrow(grid_full)){
+  seed  <- grid_full$seed[i]
+  nk      <- grid_full$nk[i]
+  pmethod <- as.character(grid_full$pmethod[i])
+  myprmethod=grid_full$myprmethod[i]
+  
+  r2 <- finetune(
+    myseed      = seed,
+    mynk        = nk,
+    mypmethod   = pmethod,
+    myprmethod=myprmethod
+  )
+  nresult=data.frame(
+    seed=seed,
+    nk        = nk,
+    pmethod   = pmethod,
+    myprmethod=myprmethod,
+    MDS_power        = r2
+  )
+  result=rbind(result,nresult)
+  print(result)
+}
+result[which(result$MDS_power>0.47),]
+
+#> result[which(result$MDS_power>0.47),]
+#seed  nk  pmethod myprmethod MDS_power
+#46 11142025  50 backward         30      0.48
+#49 11142025  60 backward         30      0.48
+#52 11142025  70 backward         30      0.48
+#55 11142025  80 backward         30      0.48
+#58 11142025  90 backward         30      0.48
+#61 11142025 100 backward         30      0.48
+#64 11142025 110 backward         30      0.48
+#67 11142025 120 backward         30      0.48
+#70 11142025 130 backward         30      0.48
+#73 11142025 140 backward         30      0.48
+#76 11142025 150 backward         30      0.48
