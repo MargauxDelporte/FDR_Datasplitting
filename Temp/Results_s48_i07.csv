@@ -1,7 +1,0 @@
-"Method","Delta","FDP","Power"
-"Mars DS",7,0.266666666666667,0.44
-"Mars MS",7,0,0.52
-"DataSplitting",7,0,0
-"MultipleDataSplitting",7,0,0
-"Knockoff",7,0.769230769230769,0.12
-"Benjamini–Hochberg (BH)",7,0,0

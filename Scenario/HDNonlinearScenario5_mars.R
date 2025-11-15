@@ -29,7 +29,7 @@ library(mvtnorm)
 library(hdi)
 
 # algorithmic settings
-num_split <- 5#0
+num_split <- 50
 n <-400
 p <- 500
 p0 <- 10#25
