@@ -57,7 +57,7 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split =
                          y ~ .,
                          pmethod="seqrep",
                          minspan=2,
-                         thresh=0.001,
+                         thresh=0.0001,
                          data    = dataTrain
                        )
                        lm <- mars_poly

@@ -56,7 +56,7 @@ Compare_SignalStrength <- function(i, s) {
   X2 <- matrix(rnorm(n2*p, mean=-1), n2, p)
   X  <- rbind(X1, X2)
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*100
   y <- (X^2 %*% beta_star + rnorm(n))
   
   # run your custom methods
@@ -88,7 +88,7 @@ Compare_SignalStrength <- function(i, s) {
   
   return(ResultsDataFrame)
 }
-Compare_SignalStrength(7,7)
+# Compare_SignalStrength(7,7)
 # build grid
 param_grid <- expand.grid(
   s = 1:50,
