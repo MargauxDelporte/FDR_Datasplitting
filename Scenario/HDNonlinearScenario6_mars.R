@@ -200,7 +200,7 @@ PlotPermute=ggarrange(
   common.legend = TRUE, legend = "right"
 )
 PlotPermute
-ggsave("NLScenario.png",
+ggsave("hDNLScenario.png",
        plot   = PlotPermute,
        width  = 8,
        height = 8/18*8,
