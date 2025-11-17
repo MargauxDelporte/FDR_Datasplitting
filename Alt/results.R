@@ -1,5 +1,5 @@
 # Path to your folder
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Alt/Temp"
+csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/Temp"
 csv_files <- list.files(
   path       = csv_dir,
   pattern    = "\\.csv$",
