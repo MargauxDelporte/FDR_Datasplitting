@@ -30,9 +30,9 @@ library(hdi)
 
 ## algorithmic settings
 num_split <- 50
-n <-500
-p <- 100
-p0 <- 10
+n <-700
+p <-800
+p0 <- 25
 q <- 0.1
 ###choose the parameters
 params =list(
