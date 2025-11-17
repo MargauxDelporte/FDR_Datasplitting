@@ -16,8 +16,9 @@ permR2Mars<-function(data,Y,j,model){
   rsq_perm
   return(rsq_perm)
 }
-ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split = 50,
-                                    signal_index = signal_index,plot_hist = FALSE) {
+ApplyMarsTrain_parallel <- function(X, y, q, myseed, num_split = 50,
+                                    signal_index = signal_index,
+                                    plot_hist = FALSE) {
   
   stopifnot(nrow(X) == length(y))
   set.seed(myseed)
@@ -33,7 +34,7 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split =
   n_cores <- max(1, parallel::detectCores(logical = TRUE) - 1)
   cl <- parallel::makeCluster(n_cores)
   doParallel::registerDoParallel(cl)
-
+  
   # We’ll collect per-split:
   # [1] num_selected, [2] fdp, [3] power,
   # [4] R2orig1, [5] R2orig2, [6:(5+p)] inclusion_rate_row (length p)
@@ -53,9 +54,11 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split =
                        
                        # --- fit MARS ---
                        dataTrain <- data[train_index, , drop = FALSE]
-                       mars_poly= earth(
+                       mars_poly <- earth(
                          y ~ .,
-                         data    = dataTrain
+                         data    = dataTrain,
+                         minspan=2,
+                         thresh=0.0001,
                        )
                        lm <- mars_poly
                        
@@ -88,8 +91,8 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split =
                        
                        num_sel <- length(selected_index)
                        inc_row <- numeric(p)
-                       fdp_val <- 0
-                       pow_val <- 0
+                       fdp_val <- NA_real_
+                       pow_val <- NA_real_
                        
                        if (num_sel > 0) {
                          inc_row[selected_index] <- 1 / num_sel
@@ -138,12 +141,12 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split =
     MDS_power <- 0
   }
   
-  message(paste0("First R squared: ", round(R2orig1_vec[1], 3)))
-    message(paste0("Second R squared: ", round(R2orig2_vec[1], 3)))
-    message(paste0("DS_fdp = ", DS_fdp,
-                " DS_power = ", DS_power,
-                                 " MDS_fdp = ", MDS_fdp,
-                                 " MDS_power = ", MDS_power))
+ # message(paste0("First R squared: ", round(R2orig1_vec[1], 3)))
+  #  message(paste0("Second R squared: ", round(R2orig2_vec[1], 3)))
+  #  message(paste0("DS_fdp = ", DS_fdp,
+  #              " DS_power = ", DS_power,
+                 #                " MDS_fdp = ", MDS_fdp,
+                 #                " MDS_power = ", MDS_power))
   
   return(list(
     DS_fdp   = ifelse(is.na(DS_fdp),0,DS_fdp),

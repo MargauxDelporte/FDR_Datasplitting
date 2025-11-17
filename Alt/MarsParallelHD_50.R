@@ -16,9 +16,8 @@ permR2Mars<-function(data,Y,j,model){
   rsq_perm
   return(rsq_perm)
 }
-ApplyMarsTrain_HDparallel <- function(X, y, q=0.10, myseed,mynk=25, num_split = 50,
-                                    signal_index = signal_index,mypmethod="seqrep",myprmethod=25,
-                                    plot_hist = FALSE) {
+ApplyMarsTrain_HDparallel50 <- function(X, y, q=q,mynk,myprune, myseed,num_split = 50,
+                                    signal_index = signal_index,plot_hist = FALSE) {
   
   stopifnot(nrow(X) == length(y))
   set.seed(myseed)
@@ -34,7 +33,7 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=0.10, myseed,mynk=25, num_split = 
   n_cores <- max(1, parallel::detectCores(logical = TRUE) - 1)
   cl <- parallel::makeCluster(n_cores)
   doParallel::registerDoParallel(cl)
-  
+
   # We’ll collect per-split:
   # [1] num_selected, [2] fdp, [3] power,
   # [4] R2orig1, [5] R2orig2, [6:(5+p)] inclusion_rate_row (length p)
@@ -52,22 +51,13 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=0.10, myseed,mynk=25, num_split = 
                        sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
                        sample_index2 <- setdiff(remaining_index, sample_index1)
                        
-                       # --- fit MARS ---
+                       # --- fit MARS ---?earth
                        dataTrain <- data[train_index, , drop = FALSE]
-                       mars_poly <- earth(
+                       mars_poly= earth(
                          y ~ .,
-                         data    = dataTrain,
-                         degree  = 2,
-                         nk      = mynk,
-                         pmethod = mypmethod,
-                         nfold   = 5,
-                         ncross  = 3,
-                         trace   = 0,
-                         nprune=myprmethod,
-                         penalty=0,
-                         fast.k=5,
-                         fast.beta=1,
-                         minspan=-3
+                         minspan=2,
+                         thresh=0.0001,
+                         data    = dataTrain
                        )
                        lm <- mars_poly
                        
@@ -100,8 +90,8 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=0.10, myseed,mynk=25, num_split = 
                        
                        num_sel <- length(selected_index)
                        inc_row <- numeric(p)
-                       fdp_val <- NA_real_
-                       pow_val <- NA_real_
+                       fdp_val <- 0
+                       pow_val <- 0
                        
                        if (num_sel > 0) {
                          inc_row[selected_index] <- 1 / num_sel
