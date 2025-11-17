@@ -1,9 +1,11 @@
+
 library(earth) 
+source('C:/Users/mde4023/Downloads/FDR_Datasplitting/Functions/PermR2Mars.R')
 num_split <- 50
-n <-400
-p <- 500
+n <-200
+p <- 250
 p0 <- 10#25
-q <- 0.25
+q <- 0.10
 delta <- 10
 amountTest=0.5
 amountTrain=0.5
@@ -39,8 +41,12 @@ dataTrain <- data[train_index, , drop = FALSE]
 #)
 mars_poly= earth(
   y ~ .,
+  pmethod="seqrep",
+  minspan=2,
+  thresh=0.001,
   data    = dataTrain
 )
+mars_poly
 lm <- mars_poly
 pred1 <- predict(lm, newdata = as.data.frame(X[sample_index1, , drop = FALSE]))
 pred2 <- predict(lm, newdata = as.data.frame(X[sample_index2, , drop = FALSE]))
