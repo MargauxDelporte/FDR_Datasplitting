@@ -89,6 +89,7 @@ Compare_SignalStrength <- function(i, s) {
   return(ResultsDataFrame)
 }
 Compare_SignalStrength(7,7)
+Compare_SignalStrength(8,8)
 # build grid
 param_grid <- expand.grid(
   s = 1:50,
