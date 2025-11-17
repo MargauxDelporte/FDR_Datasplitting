@@ -16,7 +16,7 @@ permR2Mars<-function(data,Y,j,model){
   rsq_perm
   return(rsq_perm)
 }
-ApplyMarsTrain_HDparallel50 <- function(X, y, q=q,mynk,myprune, myseed,num_split = 50,
+ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split = 50,
                                     signal_index = signal_index,plot_hist = FALSE) {
   
   stopifnot(nrow(X) == length(y))
@@ -51,16 +51,17 @@ ApplyMarsTrain_HDparallel50 <- function(X, y, q=q,mynk,myprune, myseed,num_split
                        sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
                        sample_index2 <- setdiff(remaining_index, sample_index1)
                        
-                       # --- fit MARS ---?earth
+                       # --- fit MARS ---
                        dataTrain <- data[train_index, , drop = FALSE]
                        mars_poly= earth(
                          y ~ .,
+                         pmethod="seqrep",
                          minspan=2,
-                         thresh=0.0001,
+                         thresh=0.001,
                          data    = dataTrain
                        )
                        lm <- mars_poly
-                       
+                       lm
                        # --- R^2 on train (not stored) / test halves (stored) ---
                        pred1 <- predict(lm, newdata = as.data.frame(X[sample_index1, , drop = FALSE]))
                        pred2 <- predict(lm, newdata = as.data.frame(X[sample_index2, , drop = FALSE]))

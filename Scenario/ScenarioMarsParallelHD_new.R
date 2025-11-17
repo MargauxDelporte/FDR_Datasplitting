@@ -1,6 +1,6 @@
 ### High dimension linear model
 rm(list = ls())
-# C:/Users/mde4023/Downloads/FDR_Datasplitting/Alt/HDNonlinearScenario.R
+
 mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 #mywd='C:/Users/mde4023/Documents/GitHub/FDR_Datasplitting'
 #mywd='C:/Users/marga/Downloads/FDR_Datasplitting'
@@ -9,7 +9,7 @@ setwd(mywd)
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 source(paste0(mywd,'/Functions/TriangleBoosterTrainMS.R'))
 source(paste0(mywd,'/Functions/ApplyGBMKnockoff.R'))
-source('C:/Users/mde4023/Downloads/FDR_Datasplitting/Alt/MarsParallelHD_50.R')
+source(paste0(mywd,'/Functions/MarsParallelHD_new.R'))
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
@@ -28,15 +28,12 @@ library(knockoff)
 library(mvtnorm)
 library(hdi)
 
-#algorithmic settings
+## algorithmic settings
 num_split <- 50
-n <-400
-p <- 500
+n <-200
+p <- 250
 p0 <- 10#25
 q <- 0.10
-delta <- 10
-amountTest=0.5
-amountTrain=0.5
 ###choose the parameters
 params =list(
   objective = "reg:squarederror",
@@ -48,8 +45,8 @@ params =list(
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-#######set up the method for the comparison############# i=7 s=4 num_split=3
-Compare_SignalStrength <- function(i, s,other=T) {
+#######set up the method for the comparison############# i=10 s=10 num_split=1
+Compare_SignalStrength <- function(i, s) {
   set.seed(s)
   delta <- i
   signal_index <- sample(c(1:p), size = p0, replace = F)
@@ -59,17 +56,16 @@ Compare_SignalStrength <- function(i, s,other=T) {
   X2 <- matrix(rnorm(n2*p, mean=-1), n2, p)
   X  <- rbind(X1, X2)
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*1000
-  y <- (X^2 %*% beta_star+ rnorm(n))
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))
+  y <- (X^2 %*% beta_star + rnorm(n))
   
   # run your custom methods
-  g1 <- ApplyMarsTrain_HDparallel50( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
+  g1 <- ApplyMarsTrain_HDparallel( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
   # FDR methods
-  if(other){
   DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
   knockoff_result<- ApplyGBMKnockoff(    X = X, y = y, q = q,param=params)
   BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
-  }
+  
   # init empty results df
   ResultsDataFrame <- data.frame(
     Method = character(),
@@ -83,20 +79,16 @@ Compare_SignalStrength <- function(i, s,other=T) {
   ResultsDataFrame <- rbind(
     ResultsDataFrame,
     data.frame(Method = "Mars DS",                Delta = i, FDP = g1$DS_fdp,    Power = g1$DS_power),
-    data.frame(Method = "Mars MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power))
-  if(other){
-    ResultsDataFrame <- rbind(
-      ResultsDataFrame,
+    data.frame(Method = "Mars MS",                Delta = i, FDP = g1$MDS_fdp,   Power = g1$MDS_power),
     data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
     data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
     data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
     data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
   )
-  }
+  
   return(ResultsDataFrame)
 }
-Compare_SignalStrength(7,7,F)
-Compare_SignalStrength(15,15,F)
+Compare_SignalStrength(7,7)
 # build grid
 param_grid <- expand.grid(
   s = 1:50,
@@ -104,7 +96,7 @@ param_grid <- expand.grid(
 )
 
 # make sure output dir exists
-out_dir <- file.path('C:/Users/mde4023/Downloads/FDR_Datasplitting/Alt/', "Temp")
+out_dir <- file.path(mywd, "Temp")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # iterate over ROWS, not columns
@@ -130,11 +122,10 @@ for (k in seq_len(nrow(param_grid))) {
 
 # === CLEANUP AND FINAL SAVE ===
 
-# Path to your folder
-# === CLEANUP AND FINAL SAVE ===
+# === Add 25 additional simulations ===
 
 # Path to your folder
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Alt/Temp"
+csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/Temp"
 csv_files <- list.files(
   path       = csv_dir,
   pattern    = "\\.csv$",
@@ -146,22 +137,19 @@ warnings()
 # Read each file into a list of data.frames
 data_list <- lapply(csv_files, read.csv, stringsAsFactors = FALSE)
 library(dplyr)
-library(openxlsx)
 all_data <- bind_rows(data_list, .id = "source_file")
-#write.xlsx(all_data,file='C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/Mars_HDNL_q25.xlsx')
-Results=all_data
-#View(subset(Results2,Results2$Method=='Mars MS'))
+# write.csv(all_data, file = paste0(mywd,'/Results/NLScenario3_mars_Additional50simulations.csv'), row.names = FALSE)
 ##########visualise the results###########
 library(ggplot2)
 library(dplyr)
 library(ggpubr)
 library(readr)
-mywd='C:/Users/marga/Downloads/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 mywd <- paste0(mywd,'/Results')
 
 colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
-Results2=Results
-names(Results2)=c('seed','Method','SignalStrength','FDR','Power')
+Results2=all_data
+names(Results2)=c('source_file','Method','SignalStrength','FDR','Power')
 Results2$FDR=round(as.numeric(Results2$FDR),3)
 Results2$Power=round(as.numeric(Results2$Power),2)
 resultsagg <- Results2 %>%
@@ -201,9 +189,10 @@ PlotPermute=ggarrange(
   common.legend = TRUE, legend = "right"
 )
 PlotPermute
-ggsave("NLScenario.png",
+ggsave("C:/Users/mde4023/Downloads/FDR_Datasplitting/NLScenario_mars.png",
        plot   = PlotPermute,
        width  = 8,
        height = 8/18*8,
        units  = "in",
        dpi    = 100)
+?earth
