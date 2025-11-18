@@ -9,7 +9,7 @@ setwd(mywd)
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 source(paste0(mywd,'/Functions/TriangleBoosterTrainMS.R'))
 source(paste0(mywd,'/Functions/ApplyGBMKnockoff.R'))
-source(paste0(mywd,'/Functions/MarsParallelHD.R'))
+source('C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario/MarsParallelHD.R')
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
@@ -27,12 +27,12 @@ library(glmnet)
 library(knockoff)
 library(mvtnorm)
 library(hdi)
-
+#C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario/HDNonlinearScenario6_mars.R
 #algorithmic settings
 num_split <- 50
 n <-400
 p <- 500
-p0 <- 10#25
+p0 <- 10
 q <- 0.10
 delta <- 10
 amountTest=0.5
@@ -48,7 +48,7 @@ params =list(
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-#######set up the method for the comparison############# i=10 s=10 num_split=1
+#######set up the method for the comparison############# i=7 s=1 num_split=1
 Compare_SignalStrength <- function(i, s,other=T) {
   set.seed(s)
   delta <- i
@@ -59,7 +59,7 @@ Compare_SignalStrength <- function(i, s,other=T) {
   X2 <- matrix(rnorm(n2*p, mean=-1), n2, p)
   X  <- rbind(X1, X2)
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*1000
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*10
   y <- (X^2 %*% beta_star+ rnorm(n))
   
   # run your custom methods
@@ -95,8 +95,8 @@ Compare_SignalStrength <- function(i, s,other=T) {
   }
   return(ResultsDataFrame)
 }
-Compare_SignalStrength(7,7,F)
-Compare_SignalStrength(15,15,F)
+#Compare_SignalStrength(7,7,F)
+#Compare_SignalStrength(13,13,F)
 # build grid
 param_grid <- expand.grid(
   s = 1:50,
@@ -104,6 +104,7 @@ param_grid <- expand.grid(
 )
 
 # make sure output dir exists
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario/'
 out_dir <- file.path(mywd, "Temp2")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 

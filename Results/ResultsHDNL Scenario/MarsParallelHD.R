@@ -16,7 +16,7 @@ permR2Mars<-function(data,Y,j,model){
   rsq_perm
   return(rsq_perm)
 }
-ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split = 50,
+ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed=1,num_split = 50,
                                     signal_index = signal_index,plot_hist = FALSE) {
   
   stopifnot(nrow(X) == length(y))
@@ -51,14 +51,16 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split =
                        sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
                        sample_index2 <- setdiff(remaining_index, sample_index1)
                        
-                       # --- fit MARS ---
+                       # --- fit MARS ---?earth
                        dataTrain <- data[train_index, , drop = FALSE]
-                       mars_poly= earth(
+                       mars_poly <- earth(
                          y ~ .,
-                         data    = dataTrain
+                         data    = dataTrain,
+                         minspan=2,
+                         thresh=0.001
                        )
                        lm <- mars_poly
-                       
+                       lm
                        # --- R^2 on train (not stored) / test halves (stored) ---
                        pred1 <- predict(lm, newdata = as.data.frame(X[sample_index1, , drop = FALSE]))
                        pred2 <- predict(lm, newdata = as.data.frame(X[sample_index2, , drop = FALSE]))
@@ -66,7 +68,7 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split =
                        
                        R2orig1 <- 1 - sum((y1 - pred1)^2) / sum((y1 - mean(y1))^2)
                        R2orig2 <- 1 - sum((y2 - pred2)^2) / sum((y2 - mean(y2))^2)
-                       
+                       R2orig1;R2orig2
                        # --- permutation-based drops ---
                        Rnew1 <- sapply(seq_len(p), function(j)
                          permR2Mars(as.data.frame(X[sample_index1, , drop = FALSE]), Y = y1, j = j, model = lm))
@@ -77,16 +79,9 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split =
                        beta2 <- R2orig2 - Rnew2
                        mirror <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
                        
-                       # optional: plotting is off by default in parallel
-                       if (plot_hist && length(setdiff(seq_len(p), signal_index)) > 1) {
-                         # store stats silently, or skip to avoid device contention
-                         # hist(mirror[-signal_index])  # not recommended inside parallel loop
-                         invisible(NULL)
-                       }
-                       
                        selected_index <- SelectFeatures(mirror, abs(mirror), q)
-                       
                        num_sel <- length(selected_index)
+                       num_sel
                        inc_row <- numeric(p)
                        fdp_val <- 0
                        pow_val <- 0
@@ -97,7 +92,7 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed,num_split =
                          fdp_val <- res$fdp
                          pow_val <- res$power
                        }
-                       
+                       fdp_val;pow_val
                        c(num_sel, fdp_val, pow_val, R2orig1, R2orig2, inc_row)
                      }
   

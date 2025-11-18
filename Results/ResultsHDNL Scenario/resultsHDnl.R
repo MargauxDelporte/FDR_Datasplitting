@@ -1,6 +1,6 @@
 # Path to your folder
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/Temp"
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Temp"
+csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario/Temp2"
+setwd("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario")
 csv_files <- list.files(
   path       = csv_dir,
   pattern    = "\\.csv$",
@@ -14,7 +14,7 @@ data_list <- lapply(csv_files, read.csv, stringsAsFactors = FALSE)
 library(dplyr)
 library(openxlsx)
 all_data <- bind_rows(data_list, .id = "source_file")
-#write.xlsx(all_data,file='C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/Mars_NL.xlsx')
+
 Results=all_data
 #View(subset(Results2,Results2$Method=='Mars MS'))
 ##########visualise the results###########
@@ -34,7 +34,8 @@ resultsagg <- Results2 %>%
   group_by(Method, SignalStrength) %>%
   summarize(
     Avg_FDR = mean(FDR),
-    Avg_Power = mean(Power)
+    Avg_Power = mean(Power),
+    N=length(FDR)
   )
 resultsagg$Signal_noisy <- as.numeric(resultsagg$SignalStrength) + runif(nrow(resultsagg), -0.2, 0.2)
 View(resultsagg)
