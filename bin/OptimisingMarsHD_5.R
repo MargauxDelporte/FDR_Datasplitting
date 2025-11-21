@@ -1,6 +1,14 @@
-
+rm(list = ls())
 library(earth) 
-source('C:/Users/mde4023/Downloads/FDR_Datasplitting/Functions/PermR2Mars.R')
+permR2Mars<-function(data,Y,j,model){
+  Xperm <- data
+  Xperm[, j] <- sample(data[, j], replace = FALSE)
+  pred_perm <- predict(model, newdata = as.data.frame(Xperm))
+  rsq_perm <- 1 - sum((Y - pred_perm)^2) / sum((Y - mean(Y))^2)
+  rsq_perm
+  return(rsq_perm)
+}
+source('C:/Users/mde4023/Downloads/FDR_Datasplitting/Functions/HelperFunctions.R')
 num_split <- 50
 n <-200
 p <- 250
@@ -46,7 +54,7 @@ mars_poly= earth(
   thresh=0.001,
   data    = dataTrain
 )
-mars_poly
+summary(mars_poly)
 lm <- mars_poly
 pred1 <- predict(lm, newdata = as.data.frame(X[sample_index1, , drop = FALSE]))
 pred2 <- predict(lm, newdata = as.data.frame(X[sample_index2, , drop = FALSE]))
@@ -65,8 +73,8 @@ Rnew2 <- sapply(seq_len(p), function(j)
 beta1 <- R2orig1 - Rnew1
 beta2 <- R2orig2 - Rnew2
 mirror <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
-hist(mirror)
-selected_index <- SelectFeatures(mirror, abs(mirror), q)
+summary(mirror[-signal_index])
+selected_index <- SelectFeatures(mirror, abs(mirror), q=.25)
 res <- CalculateFDP_Power(selected_index, signal_index)
 fdp_val <- res$fdp
 pow_val <- res$power
