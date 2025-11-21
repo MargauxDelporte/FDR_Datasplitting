@@ -30,11 +30,10 @@ library(hdi)
 #C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario/HDNonlinearScenario6_mars.R
 #algorithmic settings
 num_split <- 50
-n <-500
-p <- 550
-p0 <- 10
+n <-1000
+p <- 1250
+p0 <- 10#25
 q <- 0.10
-delta <- 10
 amountTest=0.5
 amountTrain=0.5
 ###choose the parameters
@@ -45,8 +44,6 @@ params =list(
   lambda    = 0,
   alpha     = 0
 )
-set.seed(456)
-signal_index <- sample(c(1:p), size = p0, replace = F)
 
 #######set up the method for the comparison############# i=7 s=1 num_split=1
 Compare_SignalStrength <- function(i, s,other=T) {
@@ -61,7 +58,6 @@ Compare_SignalStrength <- function(i, s,other=T) {
   beta_star <- numeric(p)
   beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*1000
   y <- (X^2 %*% beta_star+ rnorm(n))
-  
   # run your custom methods
   g1 <- ApplyMarsTrain_HDparallel( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
   # FDR methods
@@ -95,7 +91,8 @@ Compare_SignalStrength <- function(i, s,other=T) {
   }
   return(ResultsDataFrame)
 }
-#Compare_SignalStrength(7,7,F)
+#Compare_SignalStrength(7,1,F)
+
 #Compare_SignalStrength(13,13,F)
 # build grid
 param_grid <- expand.grid(

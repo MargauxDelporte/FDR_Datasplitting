@@ -50,9 +50,8 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed=1,num_split
                        size_half <- floor((amountTest/2) * n)
                        sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
                        sample_index2 <- setdiff(remaining_index, sample_index1)
-                       
-                       # --- fit MARS ---?earth
                        dataTrain <- data[train_index, , drop = FALSE]
+                       
                        mars_poly= earth(
                          y ~ .,
                          pmethod="seqrep",
