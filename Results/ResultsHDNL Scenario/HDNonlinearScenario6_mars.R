@@ -30,12 +30,14 @@ library(hdi)
 #C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario/HDNonlinearScenario6_mars.R
 #algorithmic settings
 num_split <- 50
-n <-1000
-p <- 1250
+n <-500
+p <- 550
 p0 <- 10#25
 q <- 0.10
 amountTest=0.5
 amountTrain=0.5
+set.seed(11212025)
+signal_index <- sample(c(1:p), size = p0, replace = F)
 ###choose the parameters
 params =list(
   objective = "reg:squarederror",
@@ -45,11 +47,10 @@ params =list(
   alpha     = 0
 )
 
-#######set up the method for the comparison############# i=7 s=1 num_split=1
+#######set up the method for the comparison############# i=7;s=1 num_split=1
 Compare_SignalStrength <- function(i, s,other=T) {
   set.seed(s)
   delta <- i
-  signal_index <- sample(c(1:p), size = p0, replace = F)
   # simulate data
   n1 <- floor(n/2); n2 <- n - n1
   X1 <- matrix(rnorm(n1*p, mean= 1), n1, p)
@@ -62,9 +63,9 @@ Compare_SignalStrength <- function(i, s,other=T) {
   g1 <- ApplyMarsTrain_HDparallel( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
   # FDR methods
   if(other){
-  DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
-  knockoff_result<- ApplyGBMKnockoff(    X = X, y = y, q = q,param=params)
-  BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
+    DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
+    knockoff_result<- ApplyGBMKnockoff(    X = X, y = y, q = q,param=params)
+    BH_result      <- MBHq(        X = X, y = y, q = q, num_split = num_split)
   }
   # init empty results df
   ResultsDataFrame <- data.frame(
@@ -83,15 +84,15 @@ Compare_SignalStrength <- function(i, s,other=T) {
   if(other){
     ResultsDataFrame <- rbind(
       ResultsDataFrame,
-    data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
-    data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
-    data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
-    data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
-  )
+      data.frame(Method = "DataSplitting",           Delta = i, FDP = DS_result$DS_fdp,  Power = DS_result$DS_power),
+      data.frame(Method = "MultipleDataSplitting",   Delta = i, FDP = DS_result$MDS_fdp, Power = DS_result$MDS_power),
+      data.frame(Method = "Knockoff",                Delta = i, FDP = knockoff_result$fdp, Power = knockoff_result$power),
+      data.frame(Method = "Benjamini–Hochberg (BH)", Delta = i, FDP = BH_result$fdp,     Power = BH_result$power)
+    )
   }
   return(ResultsDataFrame)
 }
-#Compare_SignalStrength(7,1,F)
+Compare_SignalStrength(7,1,F)
 
 #Compare_SignalStrength(13,13,F)
 # build grid
