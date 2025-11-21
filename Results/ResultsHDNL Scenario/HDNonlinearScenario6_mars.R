@@ -30,8 +30,8 @@ library(hdi)
 #C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario/HDNonlinearScenario6_mars.R
 #algorithmic settings
 num_split <- 50
-n <-400
-p <- 500
+n <-500
+p <- 550
 p0 <- 10
 q <- 0.10
 delta <- 10
@@ -59,7 +59,7 @@ Compare_SignalStrength <- function(i, s,other=T) {
   X2 <- matrix(rnorm(n2*p, mean=-1), n2, p)
   X  <- rbind(X1, X2)
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*10
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*1000
   y <- (X^2 %*% beta_star+ rnorm(n))
   
   # run your custom methods
@@ -100,7 +100,7 @@ Compare_SignalStrength <- function(i, s,other=T) {
 # build grid
 param_grid <- expand.grid(
   s = 1:50,
-  i = 7:13
+  i = 7
 )
 
 # make sure output dir exists

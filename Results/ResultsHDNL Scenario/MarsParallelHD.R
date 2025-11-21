@@ -53,11 +53,12 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed=1,num_split
                        
                        # --- fit MARS ---?earth
                        dataTrain <- data[train_index, , drop = FALSE]
-                       mars_poly <- earth(
+                       mars_poly= earth(
                          y ~ .,
-                         data    = dataTrain,
+                         pmethod="seqrep",
                          minspan=2,
-                         thresh=0.001
+                         thresh=0.001,
+                         data    = dataTrain
                        )
                        lm <- mars_poly
                        lm
