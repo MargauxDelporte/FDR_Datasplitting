@@ -98,7 +98,7 @@ Compare_SignalStrength(7,1,F)
 # build grid
 param_grid <- expand.grid(
   s = 1:50,
-  i = 7
+  i = 8:13
 )
 
 # make sure output dir exists
