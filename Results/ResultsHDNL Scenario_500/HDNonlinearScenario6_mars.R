@@ -102,7 +102,7 @@ param_grid <- expand.grid(
 )
 
 # make sure output dir exists
-mywd='C:\Users\mde4023\Downloads\FDR_Datasplitting\Results\ResultsHDNL Scenario_500/'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario_500/'
 out_dir <- file.path(mywd, "Temp2")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 

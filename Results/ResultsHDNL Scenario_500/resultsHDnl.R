@@ -1,6 +1,5 @@
 # Path to your folder
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario/Temp2"
-setwd("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario")
+csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario_500/Temp2"
 csv_files <- list.files(
   path       = csv_dir,
   pattern    = "\\.csv$",
@@ -22,8 +21,8 @@ library(ggplot2)
 library(dplyr)
 library(ggpubr)
 library(readr)
-mywd='C:/Users/marga/Downloads/FDR_Datasplitting'
-mywd <- paste0(mywd,'/Results')
+#mywd='C:/Users/marga/Downloads/FDR_Datasplitting'
+#mywd <- paste0(mywd,'/Results')
 
 colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
 Results2=Results
@@ -68,7 +67,7 @@ PlotPermute=ggarrange(
   common.legend = TRUE, legend = "right"
 )
 PlotPermute
-ggsave("NLScenario.png",
+ggsave("NLScenario_p500n400.png",
        plot   = PlotPermute,
        width  = 8,
        height = 8/18*8,
