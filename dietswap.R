@@ -2,6 +2,12 @@ library(BiocManager)
 BiocManager::install("microbiome")
 library(microbiome)
 library(earth)
+library(dplyr)
+  library(earth)        # MARS
+  library(foreach)
+  library(doParallel)
+  library(doRNG)  
+
 mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 data("dietswap")
@@ -20,7 +26,8 @@ data <- data.frame(cbind(y, otu_clr))
 colnames(data) <- c("y", paste0("X", 1:p))
 amountTrain <- 0.5
 amountTest  <- 1 - amountTrain
-
+num_split=10
+q=0.10
 # ---- parallel backend ----
 n_cores <- max(1, parallel::detectCores(logical = TRUE) - 1)
 cl <- parallel::makeCluster(n_cores)
