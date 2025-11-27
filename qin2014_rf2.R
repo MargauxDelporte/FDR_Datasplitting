@@ -33,7 +33,7 @@ permR2 <- function(data, Y, j, model) {
 # 1. File Paths & Data Import
 # ==============================================================================
 
-base_dir <- "C:/Users/mde4023/Downloads/MLRepo-master/MLRepo-master/datasets/qin2014"
+base_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Case study/qin2014"
 
 task <- read_delim("mapping-orig.txt", 
                    delim = "\t", escape_double = FALSE, 
