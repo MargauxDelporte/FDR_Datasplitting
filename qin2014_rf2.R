@@ -8,7 +8,7 @@ library(earth)        # MARS
 library(foreach)
 library(doParallel)
 library(doRNG)  
-
+library(randomForest)
 source(paste0('C:/Users/mde4023/Downloads/FDR_Datasplitting','/Functions/HelperFunctions.R'))
 # ==============================================================================
 #Helper functions
@@ -28,14 +28,13 @@ permR2 <- function(data, Y, j, model) {
   return(rsq_perm)
 }
 
-
 # ==============================================================================
 # 1. File Paths & Data Import
 # ==============================================================================
 
 base_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Case study/qin2014"
 
-task <- read_delim("mapping-orig.txt", 
+task <- read_delim(file.path(base_dir, "mapping-orig.txt"), 
                    delim = "\t", escape_double = FALSE, 
                    trim_ws = TRUE)
 names(task)[1]='SampleID'
@@ -100,16 +99,6 @@ mydata <- mydata[, -1]
 n <- nrow(mydata)
 p <- ncol(mydata) - 1   # number of OTUs
 
-# Design matrix X and outcome y
-X <- mydata[, -1, drop = FALSE]
-colnames(X) <- paste0("X", seq_len(p))
-
-y <- mydata$Total_bilirubin
-
-# Combined data frame for modeling
-mydata <- data.frame(y = y, X)
-
-
 
 # ==============================================================================
 # 4. Parameters and Parallel Setup
@@ -122,10 +111,11 @@ p=ncol(mydata)-1
 q=0.1
 
 # Setup Parallel Backend
-X=mydata[,-c(1)]
-names(X)=paste0('X',1:p)
-y=mydata[,1]
-
+table(mydata$Age)
+names(mydata)
+X=mydata[,-c(1,4,8,9,12,13,16,17,18,19)]
+y <- log(mydata$BMI)#mydata$Age#log(mydata$Total_bilirubin)
+p <- ncol(X)   # number of OTUs
 
 n_cores <- max(1, parallel::detectCores(logical = TRUE) - 1)
 cl <- parallel::makeCluster(n_cores)
@@ -137,7 +127,6 @@ registerDoRNG(11272025) # Set seed for reproducibility
 res_mat <- foreach(iter = 1:num_split,
                    .combine = "rbind",
                    .packages = c("randomForest")) %dorng% {
-                     set.seed(num_split)
                      # --- indices ---
                      train_index <- sample.int(n, size = floor(amountTrain * n), replace = FALSE)
                      remaining_index <- setdiff(seq_len(n), train_index)
@@ -151,7 +140,7 @@ res_mat <- foreach(iter = 1:num_split,
                      rf_mod <- randomForest(
                        y ~ .,
                        data  = dataTrain,
-                       ntree = 100,              # increase for more stable RF
+                       ntree = 500,              # increase for more stable RF
                        mtry  = 526,
                        nodesize=15)  # typical default
                      
@@ -173,9 +162,9 @@ res_mat <- foreach(iter = 1:num_split,
                      
                      R2orig1
                      R2orig2
-                     # --- permutation-based drops ---
+                     # --- permutation-based drops ---j = 1
                      Rnew1 <- sapply(seq_len(p), function(j)
-                       permR2(as.data.frame(X[sample_index1, , drop = FALSE]), Y = y1, j = j, model = lm))
+                       permR2(data=as.data.frame(X[sample_index1, , drop = FALSE]), Y = y1, j = j, model = lm))
                      Rnew2 <- sapply(seq_len(p), function(j)
                        permR2(as.data.frame(X[sample_index2, , drop = FALSE]), Y = y2, j = j, model = lm))
                      
@@ -183,6 +172,7 @@ res_mat <- foreach(iter = 1:num_split,
                      beta2 <- R2orig2 - Rnew2
                      mirror <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
                      #hist(mirror)
+                     #summary(mirror)
                      selected_index <- SelectFeatures(mirror, abs(mirror),q)
                      num_sel <- length(selected_index)
                      num_sel

@@ -8,7 +8,7 @@ library(earth)        # MARS
 library(foreach)
 library(doParallel)
 library(doRNG)  
-
+library(randomForest)
 source(paste0('C:/Users/mde4023/Downloads/FDR_Datasplitting','/Functions/HelperFunctions.R'))
 # ==============================================================================
 #Helper functions
@@ -33,14 +33,12 @@ permR2 <- function(data, Y, j, model) {
 # 1. File Paths & Data Import
 # ==============================================================================
 
-base_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Case study/yatsunenko/refseq"
+base_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Case study/qin2014"
 
-task <- read.delim(
-  file         = file.path(base_dir, "task-baby-age.txt"),
-  header       = FALSE,
-  comment.char = "#"
-)
-
+task <- read_delim(file.path(base_dir, "mapping-orig.txt"), 
+                   delim = "\t", escape_double = FALSE, 
+                   trim_ws = TRUE)
+names(task)[1]='SampleID'
 otu <- read_delim(
   file         = file.path(base_dir, "otutable.txt"),
   delim        = "\t",
@@ -54,6 +52,7 @@ taxa <- read_delim(
   escape_double = FALSE,
   trim_ws       = TRUE
 )
+
 
 # ==============================================================================
 # 2. OTU Pre-processing (prevalence + relative abundance filter)
@@ -83,7 +82,7 @@ otu_filtered <- otu_t[, keep, drop = FALSE]
 # 3. Merge with phenotype (age) & basic setup
 # ==============================================================================
 
-names(task) <- c("SampleID", "Age")
+names(task) 
 
 # Check alignment
 stopifnot(all(task$SampleID %in% rownames(otu_t)))
@@ -98,17 +97,11 @@ mydata <- merge(
 # Drop SampleID after merge
 mydata <- mydata[, -1]
 
+mydata=mydata[complete.cases(mydata),]
 n <- nrow(mydata)
 p <- ncol(mydata) - 1   # number of OTUs
 
-# Design matrix X and outcome y
-X <- mydata[, -1, drop = FALSE]
-colnames(X) <- paste0("X", seq_len(p))
-
-y <- mydata[,1]
-
-# Combined data frame for modeling
-mydata <- data.frame(y = y, X)
+y <- log(mydata$Total_bilirubin)
 
 
 
@@ -117,17 +110,16 @@ mydata <- data.frame(y = y, X)
 # ==============================================================================
 amountTrain <- 0.5
 amountTest  <- 1 - amountTrain
-num_split   <- 50#10   # Number of data splits
+num_split   <- 2#5010   # Number of data splits
 n= nrow(mydata)
 p=ncol(mydata)-1
 q=0.1
-
 # Setup Parallel Backend
-X=mydata[,-c(1)]
-names(X)=paste0('X',1:p)
-y=mydata[,1]
-
-
+table(mydata$Age)
+names(mydata)
+X=mydata[,-c(1,4,8,9,12,13,16,17,18,19)]
+y <- log(mydata$BMI)#mydata$Age#log(mydata$Total_bilirubin)
+p <- ncol(X)   # number of OTUs
 n_cores <- max(1, parallel::detectCores(logical = TRUE) - 1)
 cl <- parallel::makeCluster(n_cores)
 registerDoParallel(cl)
@@ -137,8 +129,7 @@ registerDoRNG(11272025) # Set seed for reproducibility
 # ==============================================================================
 res_mat <- foreach(iter = 1:num_split,
                    .combine = "rbind",
-                   .packages = c("randomForest")) %dorng% {
-                     #set.seed(num_split)
+                   .packages = c("earth")) %dorng% {
                      # --- indices ---
                      train_index <- sample.int(n, size = floor(amountTrain * n), replace = FALSE)
                      remaining_index <- setdiff(seq_len(n), train_index)
@@ -148,15 +139,13 @@ res_mat <- foreach(iter = 1:num_split,
                      sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
                      sample_index2 <- setdiff(remaining_index, sample_index1)
                      dataTrain <- data[train_index, , drop = FALSE]
-                     
-                     rf_mod <- randomForest(
+                     mars_poly <- earth(
                        y ~ .,
-                       data  = dataTrain,
-                       ntree = 100,              # increase for more stable RF
-                       mtry  = floor(sqrt(ncol(dataTrain) - 1))  # typical default
+                       data    = dataTrain,
                      )
                      
-                     lm <- rf_mod   # keep the rest of your code unchanged
+                     
+                     lm <- mars_poly   # keep the rest of your code unchanged
                      
                      lm
                      
@@ -183,6 +172,7 @@ res_mat <- foreach(iter = 1:num_split,
                      beta2 <- R2orig2 - Rnew2
                      mirror <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
                      #hist(mirror)
+                     #summary(mirror)
                      selected_index <- SelectFeatures(mirror, abs(mirror),q)
                      num_sel <- length(selected_index)
                      num_sel
