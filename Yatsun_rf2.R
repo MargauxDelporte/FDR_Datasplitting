@@ -58,9 +58,11 @@ taxa <- read_delim(
 # ==============================================================================
 # 2. OTU Pre-processing (prevalence + relative abundance filter)
 # ==============================================================================
-
+name=otu[[1]]
+name_clean <- substr(otu[[1]], 4, 9)
 # Samples as rows, OTUs as columns
 otu_t <- t(as.matrix(otu[, -1]))   # drop OTU ID column, transpose
+names(otu_t)=name_clean
 
 # Prevalence per OTU
 prev <- colSums(otu_t > 0) / nrow(otu_t)
@@ -78,7 +80,9 @@ keep_abund <- colSums(otu_rel > min_relab) / nrow(otu_rel) >= min_relab_prev
 keep       <- keep_prev & keep_abund
 
 otu_filtered <- otu_t[, keep, drop = FALSE]
-
+name_filt=name[keep]
+names(otu_filtered)
+length(name_filt)
 # ==============================================================================
 # 3. Merge with phenotype (age) & basic setup
 # ==============================================================================
@@ -103,7 +107,7 @@ p <- ncol(mydata) - 1   # number of OTUs
 
 # Design matrix X and outcome y
 X <- mydata[, -1, drop = FALSE]
-colnames(X) <- paste0("X", seq_len(p))
+#colnames(X) <- paste0("X", seq_len(p))
 
 y <- mydata[,1]
 
@@ -124,7 +128,7 @@ q=0.1
 
 # Setup Parallel Backend
 X=mydata[,-c(1)]
-names(X)=paste0('X',1:p)
+#names(X)=paste0('X',1:p)
 y=mydata[,1]
 
 
@@ -138,7 +142,7 @@ registerDoRNG(11272025) # Set seed for reproducibility
 res_mat <- foreach(iter = 1:num_split,
                    .combine = "rbind",
                    .packages = c("randomForest")) %dorng% {
-                     set.seed(num_split)
+                     #set.seed(num_split)
                      # --- indices ---
                      train_index <- sample.int(n, size = floor(amountTrain * n), replace = FALSE)
                      remaining_index <- setdiff(seq_len(n), train_index)
@@ -222,3 +226,7 @@ if (length(feature_rank) != 0) {
 selected_index
 mean(R2orig1_vec)
 mean(R2orig2_vec)
+
+X[1:5,selected_index]
+#X293 X285  X246
+name_filt[selected_index]
