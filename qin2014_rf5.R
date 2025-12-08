@@ -103,10 +103,10 @@ mydata=mydata[complete.cases(mydata),]
 n <- nrow(mydata)
 p <- ncol(mydata) - 1   # number of OTUs
 
-y <- log(mydata$Total_bilirubin)
+y <- log(mydata$Serum_albumin)#log(mydata$Total_bilirubin)
 names(mydata)
 #X=mydata[,c(1:19)]
-X=mydata[,-c(1,4,8,9,12,13,16,17,18,19)]
+X=mydata[,-c(1,4,8,9,11,12,13,16,17,18,19)]
 
 
 # ==============================================================================
@@ -146,7 +146,7 @@ fit_rf <- function(mydata_full,myntree,mymtry,mynodesize, num_split=50, amountTr
                          return(rsq_perm)
                        }
                        source(paste0('C:/Users/mde4023/Downloads/FDR_Datasplitting','/Functions/HelperFunctions.R'))
-                       p=1043;n=130
+                       p=1042;n=130
                        data_full=mydata_full
                        X=mydata_full[,-1]
                        y=mydata_full[,1]
@@ -232,7 +232,7 @@ myresults=rep(0,6)
 for(i in seq(from=100,to=1000,by=250)){
   for(j in round(c(p/10,p/7,p/5,p/4,p/3,p/2))){
     for(k in seq(from=1,to=25,by=5)){
-      result=fit_rf(mydata_full=mydata_full,myntree=i,mymtry=j,mynodesize=k,num_split=2)
+      result=fit_rf(mydata_full=mydata_full,myntree=i,mymtry=j,mynodesize=k,num_split=34)
       print(result)
       myresults=rbind(myresults,result)
     }}}
