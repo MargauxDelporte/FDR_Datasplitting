@@ -126,67 +126,78 @@ registerDoRNG(11272025) # Set seed for reproducibility
 # ==============================================================================
 # 5. Main Parallel Loop (Data Splitting)
 # ==============================================================================
-res_mat <- foreach(iter = 1:num_split,
-                   .combine = "rbind",
-                   .packages = c("randomForest")) %dorng% {
-                     # --- indices ---
-                     train_index <- sample.int(n, size = floor(amountTrain * n), replace = FALSE)
-                     remaining_index <- setdiff(seq_len(n), train_index)
-                     data=cbind(y,X)
-                     # split the remaining half evenly ?earth
-                     size_half <- floor((amountTest/2) * n)
-                     sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
-                     sample_index2 <- setdiff(remaining_index, sample_index1)
-                     dataTrain <- data[train_index, , drop = FALSE]
-                     mars_poly=  randomForest(
-                       y ~ ., 
-                       ntry=100,
-                       ntree=104,
-                       nodesize=1,
-                       data    = data_full
-                     )
-                     
-                     
-                     lm <- mars_poly   # keep the rest of your code unchanged
-                     
-                     lm
-                     
-                     ## --- R² on the two halves, same as before ---
-                     
-                     pred1 <- predict(lm, newdata = as.data.frame(X[sample_index1, ]))
-                     pred2 <- predict(lm, newdata = as.data.frame(X[sample_index2, ]))
-                     
-                     y1 <- y[sample_index1]
-                     y2 <- y[sample_index2]
-                     
-                     R2orig1 <- 1 - sum((y1 - pred1)^2) / sum((y1 - mean(y1))^2)
-                     R2orig2 <- 1 - sum((y2 - pred2)^2) / sum((y2 - mean(y2))^2)
-                     
-                     R2orig1
-                     R2orig2
-                     # --- permutation-based drops ---
-                     Rnew1 <- sapply(seq_len(p), function(j)
-                       permR2(as.data.frame(X[sample_index1, , drop = FALSE]), Y = y1, j = j, model = lm))
-                     Rnew2 <- sapply(seq_len(p), function(j)
-                       permR2(as.data.frame(X[sample_index2, , drop = FALSE]), Y = y2, j = j, model = lm))
-                     
-                     beta1 <- R2orig1 - Rnew1
-                     beta2 <- R2orig2 - Rnew2
-                     mirror <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
-                     #hist(mirror)
-                     #summary(mirror)
-                     selected_index <- SelectFeatures(mirror, abs(mirror),q=0.1)
-                     num_sel <- length(selected_index)
-                     num_sel
-                     inc_row <- numeric(p)
-                     fdp_val <- 0
-                     pow_val <- 0
-                     
-                     if (num_sel > 0) {
-                       inc_row[selected_index] <- 1 / num_sel
+fit_rf <- function(mydata_full,myntree,mymtry,mynodesize, num_split=50, amountTrain=0.5, amountTest=0.5) {
+  res_mat <- foreach(iter = 1:num_split,
+                     .combine = "rbind",
+                     .packages = c("randomForest")) %dorng% {
+                       
+                       permR2 <- function(data, Y, j, model) {
+                         Xperm <- data
+                         # Permute column j
+                         Xperm[, j] <- sample(data[, j], replace = FALSE)
+                         
+                         # Predict using permuted data
+                         pred_perm <- predict(model, newdata = as.data.frame(Xperm))
+                         
+                         # Calculate R2
+                         rsq_perm <- 1 - sum((Y - pred_perm)^2) / sum((Y - mean(Y))^2)
+                         return(rsq_perm)
+                       }
+                       source(paste0('C:/Users/mde4023/Downloads/FDR_Datasplitting','/Functions/HelperFunctions.R'))
+                       p=1043;n=130
+                       data_full=mydata_full
+                       X=mydata_full[,-1]
+                       y=mydata_full[,1]
+                       # --- indices ---
+                       train_index     <- sample.int(n, size = floor(amountTrain * n), replace = FALSE)
+                       remaining_index <- setdiff(seq_len(n), train_index)
+                       
+                       # split the remaining part in two halves
+                       size_half     <- floor((amountTest / 2) * n)
+                       sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
+                       sample_index2 <- setdiff(remaining_index, sample_index1)
+                       
+                       dataTrain <- data_full[train_index, , drop = FALSE]
+                       
+                       # --- fit RF using parameter vector pm ---
+                       mynlm <- randomForest(
+                         y ~ ., 
+                         ntry=mymtry,
+                         ntree=myntree,
+                         nodesize=mynodesize,
+                         data    = dataTrain
+                       )
+                       
+                       # --- R² on the two halves ---
+                       pred1 <- predict(mynlm, newdata = as.data.frame(X[sample_index1, , drop = FALSE]))
+                       pred2 <- predict(mynlm, newdata = as.data.frame(X[sample_index2, , drop = FALSE]))
+                       
+                       y1 <- y[sample_index1]
+                       y2 <- y[sample_index2]
+                       
+                       R2orig1 <- 1 - sum((y1 - pred1)^2) / sum((y1 - mean(y1))^2)
+                       R2orig2 <- 1 - sum((y2 - pred2)^2) / sum((y2 - mean(y2))^2)
+                       
+                       # --- permutation-based drops ---
+                       Rnew1 <- sapply(seq_len(p), function(j)
+                         permR2(as.data.frame(X[sample_index1, , drop = FALSE]), Y = y1, j = j, model = mynlm))
+                       Rnew2 <- sapply(seq_len(p), function(j)
+                         permR2(as.data.frame(X[sample_index2, , drop = FALSE]), Y = y2, j = j, model = mynlm))
+                       
+                       beta1  <- R2orig1 - Rnew1
+                       beta2  <- R2orig2 - Rnew2
+                       mirror <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
+                       
+                       selected_index <- SelectFeatures(mirror, abs(mirror), q = 0.1)
+                       num_sel <- length(selected_index)
+                       
+                       inc_row <- numeric(p)
+                       if (num_sel > 0) {
+                         inc_row[selected_index] <- 1 / num_sel
+                       }
+                       
+                       c(num_sel, R2orig1, R2orig2, inc_row)
                      }
-                     c(num_sel, R2orig1, R2orig2, inc_row)
-                   }
 
 # ---- unpack ----
 num_select     <- res_mat[, 1]
@@ -208,8 +219,18 @@ if (length(feature_rank) != 0) {
     null_feature <- c(null_feature, feature_rank[feature_index])
   }
   selected_index <- setdiff(feature_rank, null_feature)
+}else(
+  selected_index=c()
+)
+return(c(myntree,mymtry,mynodesize,mean(R2orig1_vec),mean(R2orig2_vec),length(selected_index)))
 }
-selected_index
-selected_index
-mean(R2orig1_vec)
-mean(R2orig2_vec)
+mydata_full=as.data.frame(cbind(y,X))
+#fit_rf(mydata_full=mydata_full,myntree=10,mymtry=10,mynodesize=1,num_split=2)
+for(i in seq(from=100,to=1000,by=250)){
+  for(j in round(c(p/10,p/7,p/5,p/4,p/3,p/2))){
+    for(k in seq(from=1,to=25,by=5)){
+      result=fit_rf(mydata_full=mydata_full,myntree=i,mymtry=j,mynodesize=1,num_split=2)
+      myresults=rbind(myresults,result)
+    }}}
+
+
