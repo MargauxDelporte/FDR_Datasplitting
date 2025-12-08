@@ -164,7 +164,7 @@ res_mat <- foreach(iter = 1:num_split,
                      # --- fit RF using parameter vector pm ---
                      mynlm <- randomForest(
                        y ~ ., 
-                       ntry=104,
+                       ntry=324,
                        ntree=100,
                        nodesize=1,
                        data    = dataTrain
@@ -189,8 +189,8 @@ res_mat <- foreach(iter = 1:num_split,
                      beta1  <- R2orig1 - Rnew1
                      beta2  <- R2orig2 - Rnew2
                      mirror <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
-                     
-                     selected_index <- SelectFeatures(mirror, abs(mirror), q = 0.1)
+                     hist(mirror)
+                     selected_index <- SelectFeatures(mirror, abs(mirror), q = 0.10)
                      num_sel <- length(selected_index)
                      
                      inc_row <- numeric(p)

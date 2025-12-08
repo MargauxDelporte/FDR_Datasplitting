@@ -103,7 +103,7 @@ mydata=mydata[complete.cases(mydata),]
 n <- nrow(mydata)
 p <- ncol(mydata) - 1   # number of OTUs
 
-y <- log(mydata$Serum_albumin)#log(mydata$Total_bilirubin)
+y <- (mydata$Serum_albumin)#log(mydata$Total_bilirubin)
 names(mydata)
 #X=mydata[,c(1:19)]
 X=mydata[,-c(1,4,8,9,11,12,13,16,17,18,19)]
@@ -320,13 +320,4 @@ myresults2=myresults
 mean_rsquared=as.vector((myresults[,4]+myresults[,5])/2)
 myresults2=as.data.frame(myresults2)
 myresults2=cbind(myresults2,mean_rsquared)
-View(myresults2)
-#max is 100 522 21 0 selected
-#max is 850 348 1
-100
-261
-21
 
-fit_rf(mydata_full=mydata_full,myntree=100,mymtry=522,mynodesize=21,num_split=50)#0
-fit_rf(mydata_full=mydata_full,myntree=850,mymtry=348,mynodesize=1,num_split=50)#0
-fit_rf(mydata_full=mydata_full,myntree=100,mymtry=261,mynodesize=21,num_split=50)
