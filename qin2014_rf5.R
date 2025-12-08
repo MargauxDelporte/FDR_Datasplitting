@@ -127,6 +127,8 @@ registerDoRNG(11272025) # Set seed for reproducibility
 # 5. Main Parallel Loop (Data Splitting)
 # ==============================================================================
 fit_rf <- function(mydata_full,myntree,mymtry,mynodesize, num_split=50, amountTrain=0.5, amountTest=0.5) {
+  registerDoRNG(11272025) # Set seed for reproducibility
+  set.seed(1272025)
   res_mat <- foreach(iter = 1:num_split,
                      .combine = "rbind",
                      .packages = c("randomForest")) %dorng% {
@@ -230,7 +232,7 @@ myresults=rep(0,6)
 for(i in seq(from=100,to=1000,by=250)){
   for(j in round(c(p/10,p/7,p/5,p/4,p/3,p/2))){
     for(k in seq(from=1,to=25,by=5)){
-      result=fit_rf(mydata_full=mydata_full,myntree=i,mymtry=j,mynodesize=1,num_split=2)
+      result=fit_rf(mydata_full=mydata_full,myntree=i,mymtry=j,mynodesize=k,num_split=2)
       print(result)
       myresults=rbind(myresults,result)
     }}}

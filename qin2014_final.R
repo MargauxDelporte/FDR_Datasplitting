@@ -123,6 +123,7 @@ n_cores <- max(1, parallel::detectCores(logical = TRUE) - 1)
 cl <- parallel::makeCluster(n_cores)
 registerDoParallel(cl)
 registerDoRNG(11272025) # Set seed for reproducibility
+set.seed(1272025)
 # ==============================================================================
 # 5. Main Parallel Loop (Data Splitting)
 # ==============================================================================
