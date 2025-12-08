@@ -309,9 +309,22 @@ myresults=rep(0,5)
 for(i in seq(from=100,to=1000,by=250)){
   for(j in round(c(p/10,p/7,p/5,p/4,p/3,p/2))){
     for(k in seq(from=1,to=25,by=5)){
-      result=fit_rf(mydata_full=mydata_full,myntree=i,mymtry=j,mynodesize=k,num_split=32)
+      result=check_rf(mydata_full=mydata_full,myntree=i,mymtry=j,mynodesize=k,num_split=32)
       print(result)
       myresults=rbind(myresults,result)
       print(nrow(myresults))
     }}}
-detectCores()
+myresults2=myresults
+mean_rsquared=as.vector((myresults[,4]+myresults[,5])/2)
+myresults2=as.data.frame(myresults2)
+myresults2=cbind(myresults2,mean_rsquared)
+View(myresults2)
+#max is 100 522 21 0 selected
+#max is 850 348 1
+100
+261
+21
+
+fit_rf(mydata_full=mydata_full,myntree=100,mymtry=522,mynodesize=21,num_split=50)#0
+fit_rf(mydata_full=mydata_full,myntree=850,mymtry=348,mynodesize=1,num_split=50)#0
+fit_rf(mydata_full=mydata_full,myntree=100,mymtry=261,mynodesize=21,num_split=50)
