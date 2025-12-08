@@ -103,10 +103,11 @@ mydata=mydata[complete.cases(mydata),]
 n <- nrow(mydata)
 p <- ncol(mydata) - 1   # number of OTUs
 
-y <- log(mydata$Total_bilirubin)
+y <- mydata$Serum_albumin#log(mydata$Total_bilirubin)
+hist(mydata$Serum_albumin)
 names(mydata)
 #X=mydata[,c(1:19)]
-X=mydata[,-c(1,4,8,9,12,13,16,17,18,19)]
+X=mydata[,-c(1,4,8,9,11,12,13,16,17,18,19)]
 
 
 # ==============================================================================
@@ -145,7 +146,7 @@ res_mat <- foreach(iter = 1:num_split,
                        return(rsq_perm)
                      }
                      source(paste0('C:/Users/mde4023/Downloads/FDR_Datasplitting','/Functions/HelperFunctions.R'))
-                     p=1043;n=130
+                     p=1042;n=130
                      data_full=mydata_full
                      X=mydata_full[,-1]
                      y=mydata_full[,1]
