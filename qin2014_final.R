@@ -161,12 +161,12 @@ res_mat <- foreach(iter = 1:num_split,
                      
                      dataTrain <- data_full[train_index, , drop = FALSE]
                      
-                     # --- fit RF using parameter vector pm ---
+                     # --- fit RF using parameter vector pm ---350 260 16
                      mynlm <- randomForest(
                        y ~ ., 
-                       ntry=324,
-                       ntree=100,
-                       nodesize=1,
+                       ntry=260,
+                       ntree=350,
+                       nodesize=16,
                        data    = dataTrain
                      )
                      

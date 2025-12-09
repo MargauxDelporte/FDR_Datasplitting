@@ -320,4 +320,11 @@ myresults2=myresults
 mean_rsquared=as.vector((myresults[,4]+myresults[,5])/2)
 myresults2=as.data.frame(myresults2)
 myresults2=cbind(myresults2,mean_rsquared)
-
+View(subset(myresults2,myresults2$V3==16&myresults2$V1==350))
+setwd('C:/Users/mde4023/Downloads/FDR_Datasplitting')
+write.table(myresults2,file='qin_2024_rf5_r2.txt')
+library(readr)
+qin_2024_rf5_select <- read_table("qin_2024_rf5_select.txt", 
+                                  col_names = FALSE)
+View(qin_2024_rf5_select)
+cbind()
