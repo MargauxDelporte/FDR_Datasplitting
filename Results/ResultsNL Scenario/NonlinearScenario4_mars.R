@@ -96,7 +96,7 @@ param_grid <- expand.grid(
 )
 
 # make sure output dir exists
-out_dir <- file.path(mywd, "Temp")
+out_dir <- file.path("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsNL Scenario/Temp")
 dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
 
 # iterate over ROWS, not columns
