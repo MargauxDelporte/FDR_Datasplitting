@@ -60,7 +60,7 @@ taxa <- read_delim(
 
 # Samples as rows, OTUs as columns
 otu_t <- t(as.matrix(otu[, -1]))   # drop OTU ID column, transpose
-
+namess=as.vector(otu[,1])
 # Prevalence per OTU
 prev <- colSums(otu_t > 0) / nrow(otu_t)
 
@@ -79,6 +79,8 @@ keep       <- keep_prev & keep_abund
 otu_filtered <- otu_t[, keep, drop = FALSE]
 ncol(otu_filtered)
 ncol(otu_t)
+
+namess_filtered=unlist(namess)[which(keep)]
 # ==============================================================================
 # 3. Merge with phenotype (age) & basic setup
 # ==============================================================================
@@ -109,18 +111,20 @@ names(mydata)
 #X=mydata[,c(1:19)]
 X=mydata[,-c(1,4,8,9,11,12,13,16,17,18,19)]
 
-
+namess_filtered_combined=c(names(task)[-1],namess_filtered)
+namess_filtered_combined=namess_filtered_combined[-c(1,4,8,9,11,12,13,16,17,18,19)]
+length(namess_filtered_combined)
 # ==============================================================================
 # 4. Parameters and Parallel Setup
 # ==============================================================================
 amountTrain <- 0.5
 amountTest  <- 1 - amountTrain
-num_split   <- 50#5010   # Number of data splits
+num_split   <- 25#0#5010   # Number of data splits
 q=0.1
 # Setup Parallel Backend
 #X=mydata[,-c(1,4,8,9,12,13,16,17,18,19)]
 p <- ncol(X)   # number of OTUs
-n_cores <- max(1, parallel::detectCores(logical = TRUE) - 1)
+n_cores <- min(num_split, parallel::detectCores(logical = TRUE) - 1)
 cl <- parallel::makeCluster(n_cores)
 registerDoParallel(cl)
 registerDoRNG(11272025) # Set seed for reproducibility
@@ -226,3 +230,29 @@ selected_index
 selected_index
 mean(R2orig1_vec)
 mean(R2orig2_vec)
+
+
+#[1] if num_split=50  
+#select 7   8 584
+(0.5925685+0.6389054)/2
+
+X[,584]
+colnames(X)[584]
+target <- X[, 584]
+match_row <- which(apply(otu, 1, function(row) all(row == target)))
+match_row
+target
+length(target)
+ncol(otu)
+which(otu[,2]==2&otu[,3]==0&otu[,4]==0&otu[,5]==0&otu[,6]==2&otu[,7]==2&otu[,8]==0&otu[,9]==0&otu[,10]==0) &otu[,11]==6)
+otu[c(4692,5611),]   
+which(otu[,130]>1259&otu[,131]>9)
+namess_filtered_combined[c(7,8,584)]
+
+#[1] if num_split=5
+#[1] 574 584 585 592 611 615 630 683 882 896
+
+
+
+#[1] if num_split=25  7   
+# 7   8 584
