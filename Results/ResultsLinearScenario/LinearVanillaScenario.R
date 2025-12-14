@@ -129,7 +129,7 @@ results_list <- foreach(
   
   # write out this chunk immediately
   fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
-  write.csv(chunk, file = paste0(mywd,"/Results/ResultsLinearScenario/Temp/",fname), row.names = FALSE)
+  write.csv(chunk, file = paste0(mywd,"/Results/ResultsLinearScenario/Temp2/",fname), row.names = FALSE)
   
   # return for final binding
   chunk
