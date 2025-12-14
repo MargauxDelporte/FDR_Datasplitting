@@ -93,11 +93,11 @@ lapply(pkgs, library, character.only = TRUE)
 # === PARAMETER GRID ===
 param_grid <- expand.grid(
   s = 1:50,
-  i = seq(from = 7, to = 13, by = 1)
+  i = seq(from = 9, to = 13, by = 1)
 )
-
+ncore=detectCores()
 # === SET UP PARALLEL BACKEND ===
-cl <- makeCluster(5)
+cl <- makeCluster(ncore-1)
 # export working dir so workers can source
 clusterExport(cl, 'mywd')
 # have each worker source & load libraries
