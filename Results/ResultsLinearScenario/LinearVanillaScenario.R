@@ -27,7 +27,7 @@ library(ggpubr)
 
 
 ### algorithmic settings
-num_split <- 10
+num_split <- 50
 n <-1500
 p <- 250
 p0 <- 25
@@ -51,13 +51,13 @@ Compare_SignalStrength=function(i,s){
   y <- X%*%beta_star + rnorm(n, mean = 0, sd = 1)
   
   ###my own methods:
-  g=ApplyTriangleLinRegTrain(X=as.data.frame(X), y, q=0.1,num_split=10, signal_index=signal_index, amountTrain=0.333, myseed = 1)
+  g=ApplyTriangleLinRegTrain(X=as.data.frame(X), y, q=0.1,num_split=num_split, signal_index=signal_index, amountTrain=0.333, myseed = 1)
   
   ResultsDataFrame=c('LinReg DS',i, as.numeric(g$DS_fdp),as.numeric(g$DS_power))
   ResultsDataFrame=rbind(ResultsDataFrame,c('LinReg MS',i, as.numeric(g$MDS_fdp),as.numeric(g$MDS_power)))
   
   ### Competition
-  DS_result <- DS(X,y, num_split=10, q=0.1)
+  DS_result <- DS(X,y, num_split=num_split, q=0.1)
   ResultsDataFrame=rbind(ResultsDataFrame,c('DataSplitting',i,DS_result$DS_fdp,DS_result$DS_power))
   ResultsDataFrame=rbind(ResultsDataFrame,c('MultipleDataSplitting',i,DS_result$MDS_fdp,DS_result$MDS_power))
   
@@ -129,7 +129,7 @@ results_list <- foreach(
   
   # write out this chunk immediately
   fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
-  write.csv(chunk, file = paste0(mywd,"/Temp/",fname), row.names = FALSE)
+  write.csv(chunk, file = paste0(mywd,"/Results/ResultsLinearScenario/Temp/",fname), row.names = FALSE)
   
   # return for final binding
   chunk
@@ -171,12 +171,12 @@ resultsagg$Signal_noisy <- as.numeric(resultsagg$SignalStrength) + runif(nrow(re
 
 resultsagg <- resultsagg %>%
   mutate(Method  = case_when(
-    Method == "BH" ~ "Benjamini–Hochberg",
+    Method == "BH" ~ "Benjamini–Hochberg (BH)",
     Method == "DataSplitting" ~ "Dai (single split)",
-    Method == "MultipleDataSplitting" ~ "Dai (10 splits)",
+    Method == "MultipleDataSplitting" ~ "Dai (50 splits)",
     Method == "Knockoff" ~ "Knockoff",
     Method == "LinReg DS" ~ "Delporte (single split)",
-    Method == "LinReg MS" ~ "Delporte (10 splits)",
+    Method == "LinReg MS" ~ "Delporte (50 splits)",
     TRUE ~ Method  # default if none match
   ))
 PowerPlot <- ggplot(resultsagg, aes(x = Signal_noisy, y = as.numeric(Avg_Power), color = Method)) +
