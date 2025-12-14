@@ -116,9 +116,9 @@ param_grid <- expand.grid(
   s = 1:50,
   i = seq(from = 7, to = 13, by = 1)
 )
-
+ncore=detectCores()
 # === SET UP PARALLEL BACKEND ===
-cl <- makeCluster(20)
+cl <- makeCluster(ncore-1)
 # export working dir so workers can source
 clusterExport(cl, 'mywd')
 # have each worker source & load libraries
@@ -150,7 +150,7 @@ results_list <- foreach(
   
   # write out this chunk immediately
   fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
-  write.csv(chunk, file = paste0(mywd,"/Temp2/",fname), row.names = FALSE)
+  write.csv(chunk, file = paste0("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHD scenario/Temp2/",fname), row.names = FALSE)
   
   # return for final binding
   chunk
