@@ -60,13 +60,13 @@ Compare_SignalStrength <- function(i, s) {
   # simulate data
   n1 <- floor(n/2); n2 <- n - n1
   X <- matrix(rnorm(n * p), nrow = n, ncol = p)
-  X1 <- matrix(rnorm(n1*p, mean= 0.5), n1, p)
-  X2 <- matrix(rnorm(n2*p, mean=-0.5), n2, p)
+  X1 <- matrix(rnorm(n1*p, mean= 1), n1, p)
+  X2 <- matrix(rnorm(n2*p, mean=-1), n2, p)
   X  <- rbind(X1, X2)
   #beta_star <- numeric(p)
   #beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*1000
   #y <- (X^2 %*% beta_star + rnorm(n))
-  S <- scale((X[, signal_index] > 0.3) * 1)    # 0/1 -> numeric -> standardize per column
+  S <- scale((X[, signal_index] > 1.7) * 1)    # 0/1 -> numeric -> standardize per column
   signal_step <- rowSums(S)
   y <- delta * signal_step + rnorm(n)
   # run your custom methods

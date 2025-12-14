@@ -1,6 +1,6 @@
 # Path to your folder
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/Temp"
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Temp2"
+csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsNL Scenario/Temp"
+#csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Temp2"
 csv_files <- list.files(
   path       = csv_dir,
   pattern    = "\\.csv$",
@@ -40,7 +40,7 @@ resultsagg$Signal_noisy <- as.numeric(resultsagg$SignalStrength) + runif(nrow(re
 View(resultsagg)
 resultsagg <- resultsagg %>%
   mutate(Method  = case_when(
-    Method == "BH" ~ "Benjamini–Hochberg",
+    Method == "BH" ~ "Benjamini–Hochberg (BH)",
     Method == "DataSplitting" ~ "Dai (single split)",
     Method == "MultipleDataSplitting" ~ "Dai (50 splits)",
     Method == "Knockoff" ~ "Knockoff",
@@ -67,9 +67,11 @@ PlotPermute=ggarrange(
   common.legend = TRUE, legend = "right"
 )
 PlotPermute
+setwd('C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsNL Scenario')
 ggsave("NLScenario.png",
        plot   = PlotPermute,
        width  = 8,
        height = 8/18*8,
        units  = "in",
        dpi    = 100)
+write.xlsx(resultsagg,file='C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsNL Scenario/NLScenarioResults.xlsx')
