@@ -36,7 +36,7 @@ q <- 0.1
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-################################Triange: train test test each 30####################################
+
 Compare_SignalStrength=function(i,s){
   set.seed(s)
   ResultsDataFrame=data.frame()
