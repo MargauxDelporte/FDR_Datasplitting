@@ -1,6 +1,13 @@
+library(dplyr)
+library(openxlsx)
+library(ggplot2)
+library(ggpubr)
+library(readr)
+
 # Path to your folder
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario/Temp2"
-setwd("C:/Users/mde4023/Downloads/FDR_Datasplitting/Results/ResultsHDNL Scenario")
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario4'
+csv_dir=paste0(mywd,'/Temp2')
+setwd("mywd")
 csv_files <- list.files(
   path       = csv_dir,
   pattern    = "\\.csv$",
@@ -14,14 +21,9 @@ data_list <- lapply(csv_files, read.csv, stringsAsFactors = FALSE)
 library(dplyr)
 library(openxlsx)
 all_data <- bind_rows(data_list, .id = "source_file")
-
 Results=all_data
-#View(subset(Results2,Results2$Method=='Mars MS'))
-##########visualise the results###########
-library(ggplot2)
-library(dplyr)
-library(ggpubr)
-library(readr)
+
+#visualise the results###########
 mywd='C:/Users/marga/Downloads/FDR_Datasplitting'
 mywd <- paste0(mywd,'/Results')
 
