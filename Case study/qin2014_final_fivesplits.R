@@ -39,6 +39,7 @@ task <- read_delim(file.path(base_dir, "mapping-orig.txt"),
                    delim = "\t", escape_double = FALSE, 
                    trim_ws = TRUE)
 names(task)[1]='SampleID'
+table(task$Cirrhotic)
 otu <- read_delim(
   file         = file.path(base_dir, "otutable.txt"),
   delim        = "\t",
@@ -52,7 +53,7 @@ taxa <- read_delim(
   escape_double = FALSE,
   trim_ws       = TRUE
 )
-
+View(taxa)
 
 # ==============================================================================
 # 2. OTU Pre-processing (prevalence + relative abundance filter)
