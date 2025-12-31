@@ -1,4 +1,0 @@
-/etc/profile.d/modules.sh: line 7: .: /shared/apps/admin/lmod/lmod/init: is a directory
-/etc/profile.d/modules.sh: line 16: module: command not found
-/home/mde4023/miniconda3/envs/r_env/lib/R/bin/BATCH: line 60: 4034745 Killed                  ${R_HOME}/bin/R -f ${in} ${opts} ${R_BATCH_OPTIONS} > ${out} 2>&1
-/var/spool/slurmd/job13384352/slurm_script: line 32: EOF: command not found
