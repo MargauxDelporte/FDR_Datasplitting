@@ -1,0 +1,3 @@
+/etc/profile.d/modules.sh: line 7: .: /shared/apps/admin/lmod/lmod/init: is a directory
+/etc/profile.d/modules.sh: line 16: module: command not found
+/var/spool/slurmd/job13384356/slurm_script: line 32: EOF: command not found

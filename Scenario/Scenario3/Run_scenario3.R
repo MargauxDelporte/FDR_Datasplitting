@@ -113,7 +113,7 @@ clusterEvalQ(cl, {
 })
 registerDoParallel(cl)
 
-# === RUN IN PARALLEL AND WRITE OUT === k=1
+# === RUN IN PARALLEL AND WRITE OUT === k=1s_val=82;i_val=10
 results_list <- foreach(
   k = seq_len(nrow(param_grid)),
   .packages = pkgs,
