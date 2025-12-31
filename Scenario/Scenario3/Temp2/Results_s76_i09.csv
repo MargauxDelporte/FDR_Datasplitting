@@ -1,0 +1,7 @@
+"Method","Delta","FDP","Power"
+"Boost DS",9,0.15,0.68
+"Boost MS",9,0,0.8
+"DataSplitting",9,0.148148148148148,0.92
+"MultipleDataSplitting",9,0.08,0.92
+"Knockoff",9,0.233333333333333,0.92
+"Benjamini-Hochberg (BH)",9,0,0.84
