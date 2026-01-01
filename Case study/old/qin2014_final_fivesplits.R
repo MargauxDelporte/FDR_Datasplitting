@@ -10,58 +10,6 @@ library(doParallel)
 library(ranger)  
 library(randomForest)
 source(paste0('C:/Users/mde4023/Downloads/FDR_Datasplitting','/Functions/HelperFunctions.R'))
-# Install packages if needed
-if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
-
-if (!require("curatedMetagenomicData", quietly = TRUE))
-  BiocManager::install("curatedMetagenomicData")
-
-# Load library
-library(curatedMetagenomicData)
-
-# Search for Qin studies
-library(dplyr)
-all_studies <- sampleMetadata %>%
-  filter(grepl("Qin", study_name, ignore.case = TRUE)) %>%
-  select(study_name) %>%
-  distinct()
-
-print(all_studies)
-
-# Get Qin2014 data
-# First, see what datasets are available from Qin2014
-qin_datasets <- sampleMetadata %>%
-  filter(study_name == "QinN_2014")  # Note: might be QinJ_2012 not Qin2014
-
-# View available datasets
-unique(qin_datasets$study_name)
-
-# Get the data - returns a TreeSummarizedExperiment object
-qin_data <- curatedMetagenomicData(
-  "QinN_2014.relative_abundance",
-  dryrun = FALSE,
-  counts = TRUE
-)
-
-
-# Access the data
-qin_tse <- qin_data[[1]]  # Extract TreeSummarizedExperiment
-
-# Get relative abundance matrix
-abundance <- assay(qin_tse)
-dim(abundance)
-# Get sample metadata
-metadata <- colData(qin_tse)
-table(metadata$disease)
-sum(duplicated(metadata$subject_id)) 
-# Get taxonomic information
-taxonomy <- rowData(qin_tse)
-
-# Check for validation cohort or batch information
-table(metadata$study_condition)
-table(metadata$body_site)
-
 # ==============================================================================
 #Helper functions
 # ==============================================================================
