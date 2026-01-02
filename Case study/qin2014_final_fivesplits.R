@@ -51,6 +51,7 @@ qin_tse <- qin_data[[1]]  # Extract TreeSummarizedExperiment
 # Get relative abundance matrix
 abundance <- assay(qin_tse)
 dim(abundance)
+View(abundance)
 # Get sample metadata
 metadata <- colData(qin_tse)
 table(metadata$disease)
@@ -85,35 +86,14 @@ permR2 <- function(data, Y, j, model) {
 # 1. File Paths & Data Import
 # ==============================================================================
 
-base_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Case study/qin2014"
-
-task <- read_delim(file.path(base_dir, "mapping-orig.txt"), 
-                   delim = "\t", escape_double = FALSE, 
-                   trim_ws = TRUE)
-names(task)[1]='SampleID'
-table(task$Cirrhotic)
-otu <- read_delim(
-  file         = file.path(base_dir, "otutable.txt"),
-  delim        = "\t",
-  escape_double = FALSE,
-  trim_ws       = TRUE
-)
-
-taxa <- read_delim(
-  file         = file.path(base_dir, "taxatable.txt"),
-  delim        = "\t",
-  escape_double = FALSE,
-  trim_ws       = TRUE
-)
-View(taxa)
-
+abundance
 # ==============================================================================
 # 2. OTU Pre-processing (prevalence + relative abundance filter)
 # ==============================================================================
 
 # Samples as rows, OTUs as columns
-otu_t <- t(as.matrix(otu[, -1]))   # drop OTU ID column, transpose
-namess=as.vector(otu[,1])
+otu_t <- t(abundance)   # drop OTU ID column, transpose
+namess=row.names(abundance)
 # Prevalence per OTU
 prev <- colSums(otu_t > 0) / nrow(otu_t)
 
@@ -138,50 +118,50 @@ namess_filtered=unlist(namess)[which(keep)]
 # 3. Merge with phenotype (age) & basic setup
 # ==============================================================================
 
-names(task) 
+names(metadata) 
 
 # Check alignment
-stopifnot(all(task$SampleID %in% rownames(otu_t)))
+stopifnot(all(metadata$subject_id %in% rownames(otu_t)))
 
 mydata <- merge(
-  x     = task,
+  x     = metadata,
   y     = otu_filtered,
-  by.x  = "SampleID",
+  by.x  = "subject_id",
   by.y  = "row.names"
 )
 
 # Drop SampleID after merge
 mydata[, 1]
 mydata <- mydata[, -1]
+names(mydata)[1:20]
+# mydata=mydata[complete.cases(mydata),]
 
-mydata=mydata[complete.cases(mydata),]
-n <- nrow(mydata)
-p <- ncol(mydata) - 1   # number of OTUs
-
-y <- mydata$Serum_albumin#log(mydata$Total_bilirubin)
-hist(mydata$Serum_albumin)
+y <- mydata$albumine#log(mydata$Total_bilirubin)
+hist(mydata$albumine)
 names(mydata)
-#X=mydata[,c(1:19)]
-X=mydata[,-c(1,4,8,9,11,12,13,16,17,18,19)]
+#X=mydata[,c(1:29)]
+X=mydata[,-c(23)]
 
-namess_filtered_combined=c(names(task)[-1],namess_filtered)
-namess_filtered_combined=namess_filtered_combined[-c(1,4,8,9,11,12,13,16,17,18,19)]
-length(namess_filtered_combined)
+names_x=names(X)
+names(X)=paste0('X',1:p)
+#namess_filtered_combined=namess_filtered_combined[-c(1,4,8,9,11,12,13,16,17,18,19)]
+#length(namess_filtered_combined)
 # ==============================================================================
 # 4. Parameters and Parallel Setup
 # ==============================================================================
 amountTrain <- 0.5
 amountTest  <- 1 - amountTrain
-num_split   <- 5 #25#0#5010   # Number of data splits
+num_split   <- 50 #25#0#5010   # Number of data splits
 q=0.1
 # Setup Parallel Backend
 #X=mydata[,-c(1,4,8,9,12,13,16,17,18,19)]
 p <- ncol(X)   # number of OTUs
-n_cores <- min(num_split, parallel::detectCores(logical = TRUE) - 1)
-cl <- parallel::makeCluster(n_cores)
-registerDoParallel(cl)
-registerDoRNG(11272025) # Set seed for reproducibility
-set.seed(1272025)
+n=237
+#n_cores <- min(num_split, parallel::detectCores(logical = TRUE) - 1)
+#cl <- parallel::makeCluster(n_cores)
+#registerDoParallel(cl)
+#registerDoRNG(11272025) # Set seed for reproducibility
+#set.seed(1272025)
 # ==============================================================================
 # 5. Main Parallel Loop (Data Splitting)
 # ==============================================================================
@@ -203,7 +183,6 @@ res_mat <- foreach(iter = 1:num_split,
                        return(rsq_perm)
                      }
                      source(paste0('C:/Users/mde4023/Downloads/FDR_Datasplitting','/Functions/HelperFunctions.R'))
-                     p=1042;n=130
                      data_full=mydata_full
                      X=mydata_full[,-1]
                      y=mydata_full[,1]
@@ -221,9 +200,9 @@ res_mat <- foreach(iter = 1:num_split,
                      # --- fit RF using parameter vector pm ---350 260 16
                      mynlm <- randomForest(
                        y ~ ., 
-                       ntry=260,
-                       ntree=350,
-                       nodesize=16,
+                       ntry=100,
+                       ntree=100,
+                       nodesize=10,
                        data    = dataTrain
                      )
                      
