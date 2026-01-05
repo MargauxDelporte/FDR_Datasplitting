@@ -43,19 +43,20 @@ colors <- c("#000000","#FF00FF","#009900", "#99ccff", "#0000FF", "#FF0000")
 PowerPlot_all <- ggplot(combined_results, aes(x = Signal_noisy, y = as.numeric(Avg_Power), color = Method)) +
   geom_point(size = 3) +
   geom_line() +
-  labs(x = "Signal", y = "Power") +
+  labs(x = "Signal Strength", y = "Power") +
   scale_x_continuous(breaks = seq(from = 5, to = 13, by = 1)) +
   geom_hline(yintercept = 0.8, linetype = "dashed") +
   scale_color_manual(values = colors) +
   coord_cartesian(ylim = c(-0.01, 1)) +
   facet_wrap(~ Scenario, ncol = 4) +
-  theme_minimal()
+  theme_minimal() +
+  theme(strip.text = element_blank())  
 PowerPlot_all
 # FDR plot with facets
 FDRPlot_all <- ggplot(combined_results, aes(x = Signal_noisy, y = as.numeric(Avg_FDR), color = Method)) +
   geom_point(size = 3) +
   geom_line() +
-  labs(x = "Signal", y = "FDR") +
+  labs(x = "", y = "FDR") +
   scale_x_continuous(breaks = seq(from = 5, to = 13, by = 1)) +
   geom_hline(yintercept = 0.1, linetype = "dashed") +
   scale_color_manual(values = colors) +
@@ -64,7 +65,7 @@ FDRPlot_all <- ggplot(combined_results, aes(x = Signal_noisy, y = as.numeric(Avg
 
 # Combined view
 ggarrange(
-  PowerPlot_all, FDRPlot_all,
+  FDRPlot_all,PowerPlot_all, 
   nrow = 2,
   common.legend = TRUE, 
   legend = "bottom"
