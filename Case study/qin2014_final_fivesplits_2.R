@@ -138,7 +138,7 @@ names(mydata)[1:35]
 y <- mydata$albumine#log(mydata$Total_bilirubin)
 hist(mydata$albumine)
 names(mydata)
-X=mydata[,-c(20, 21, 23, 25:28)] #response and variables with missingness
+X=mydata[,-c(1:3,7,9:21,23,25:28)]
 p=ncol(X)
 names_x=names(X)
 names(X)=paste0('X',1:p)
@@ -201,9 +201,9 @@ res_mat <- foreach(iter = 1:num_split,
                      # --- fit RF using parameter vector pm ---350 260 16
                      mynlm <- randomForest(
                        y ~ ., 
-                       ntry=50,
-                       ntree=100,
-                       nodesize=16,
+                       ntry=260,#260,#260,
+                       ntree=100,#500,
+                       nodesize=16,#10,
                        data    = dataTrain
                      )
                      
@@ -263,6 +263,6 @@ length(selected_index)
 (mean(R2orig1_vec)+mean(R2orig2_vec))/2
 names_x[selected_index]
 
-#[1] 110 105   5 169   4  17 167
+#[1]  95 151 152 154
 
 head(X[,selected_index])

@@ -19,17 +19,40 @@ results <- data.frame(
   nodesize = integer(),
   R2_test1 = numeric(),
   R2_test2 = numeric(),
-  R2_avg = numeric()
+  R2_avg = numeric(),
+  selected = numeric()
 )
-sum(is.na(mydata))
-colSums(is.na(mydata))
+names(mydata)
 # prepare the data
-data_full=mydata_full
-X=mydata_full[,-1]
-y=mydata_full[,1]
+mydata <- merge(
+  x     = metadata,
+  y     = otu_filtered,
+  by.x  = "subject_id",
+  by.y  = "row.names"
+)
+
+# Drop SampleID after merge
+mydata[, 1]
+mydata <- mydata[, -1]
+names(mydata)[1:35]
+
+y <- mydata$albumine#log(mydata$Total_bilirubin)
+X=mydata[,-c(1:3,7,9:21,23,25:28)] #response and variables with missingness
+head(X[,1:25])
+p=ncol(X)
+names_x=names(X)
+names(X)=paste0('X',1:p)
+mydata_full=as.data.frame(cbind(y,X))
+names(mydata_full)
+
 # --- indices ---
 set.seed(20260501)
-train_index     <- sample.int(n, size = floor(amountTrain * n), replace = FALSE)
+amountTrain <- 0.5
+amountTest  <- 1 - amountTrain
+num_split   <- 1 #25#0#5010   # Number of data splits
+q=0.1
+n=nrow(X)
+train_index     <- sample.int(n, size = floor(0.5 * n), replace = FALSE)
 remaining_index <- setdiff(seq_len(n), train_index)
 
 # split the remaining part in two halves
@@ -65,26 +88,39 @@ for (i in 1:nrow(param_grid)) {
   y2 <- y[sample_index2]
   
   # Calculate R² for both test sets
-  R2_test1 <- calculate_r2(y1, pred1)
-  R2_test2 <- calculate_r2(y2, pred2)
-  R2_avg <- mean(c(R2_test1, R2_test2))
+  R2orig1 <- calculate_r2(y1, pred1)
+  R2orig2 <- calculate_r2(y2, pred2)
+  R2_avg <- mean(c(R2orig1, R2orig2))
+  
+  # --- permutation-based drops ---
+  Rnew1 <- sapply(seq_len(p), function(j)
+    permR2(as.data.frame(X[sample_index1, , drop = FALSE]), Y = y1, j = j, model = mynlm))
+  Rnew2 <- sapply(seq_len(p), function(j)
+    permR2(as.data.frame(X[sample_index2, , drop = FALSE]), Y = y2, j = j, model = mynlm))
+  
+  beta1  <- R2orig1 - Rnew1
+  beta2  <- R2orig2 - Rnew2
+  mirror <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
+  selected_index <- SelectFeatures(mirror, abs(mirror), q = 0.10)
+  num_sel <- length(selected_index)
   
   # Store results
   results <- rbind(results, data.frame(
     mtry = params$mtry,
     ntree = params$ntree,
     nodesize = params$nodesize,
-    R2_test1 = R2_test1,
-    R2_test2 = R2_test2,
-    R2_avg = R2_avg
+    R2_test1 = R2orig1,
+    R2_test2 = R2orig2,
+    R2_avg = R2_avg,
+    selected=num_sel
   ))
   
   # Update best parameters
   if (R2_avg > best_r2) {
     best_r2 <- R2_avg
     best_params <- params
-    cat(sprintf("New best! mtry=%d, ntree=%d, nodesize=%d, R²_avg=%.4f\n",
-                params$mtry, params$ntree, params$nodesize, R2_avg))
+    cat(sprintf("New best! mtry=%d, ntree=%d, nodesize=%d, selected=%.4f\n",
+                params$mtry, params$ntree, params$nodesize, num_sel))
   }
   
   # Progress update
@@ -94,11 +130,11 @@ for (i in 1:nrow(param_grid)) {
 }
 
 # Sort results by average R²
-results <- results[order(-results$R2_avg), ]
+results <- results[order(-results$selected), ]
 
 # Display top 10 results
 cat("\n=== Top 10 Parameter Combinations ===\n")
-print(head(results, 10))
+print(head(results, 25))
 
 cat("\n=== Best Parameters ===\n")
 cat(sprintf("mtry: %d\n", best_params$mtry))
