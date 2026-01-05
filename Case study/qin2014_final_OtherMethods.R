@@ -1,13 +1,10 @@
-### High dimension linear model
 rm(list = ls())
 
 mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 setwd(mywd)
-
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
-source(paste0(mywd,'/Functions/TriangleBoosterTrainMS.R'))
 source(paste0(mywd,'/Functions/ApplyGBMKnockoff.R'))
-source(paste0(mywd,'/Functions/MarsParallelHD_new.R'))
+
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
@@ -32,32 +29,50 @@ library(doRNG)      # Reproducible parallel random numbers
 library(dplyr)
 library(foreach)
 
-
-
+# Load library
+library(curatedMetagenomicData)
+library(dplyr)
 
 # ==============================================================================
 # 1. File Paths & Data Import
 # ==============================================================================
-
-base_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Case study/qin2014"
-
-task <- read_delim(file.path(base_dir, "mapping-orig.txt"), 
-                   delim = "\t", escape_double = FALSE, 
-                   trim_ws = TRUE)
-names(task)[1]='SampleID'
-otu <- read_delim(
-  file         = file.path(base_dir, "otutable.txt"),
-  delim        = "\t",
-  escape_double = FALSE,
-  trim_ws       = TRUE
+# Get the data - returns a TreeSummarizedExperiment object
+qin_data <- curatedMetagenomicData(
+  "QinN_2014.relative_abundance",
+  dryrun = FALSE,
+  counts = TRUE
 )
 
-taxa <- read_delim(
-  file         = file.path(base_dir, "taxatable.txt"),
-  delim        = "\t",
-  escape_double = FALSE,
-  trim_ws       = TRUE
-)
+
+# Access the data
+qin_tse <- qin_data[[1]]  # Extract TreeSummarizedExperiment
+
+# Get relative abundance matrix
+abundance <- assay(qin_tse)
+
+# Get sample metadata
+metadata <- colData(qin_tse)
+
+# Get taxonomic information
+taxonomy <- rowData(qin_tse)
+
+# ==============================================================================
+#Helper functions
+# ==============================================================================
+
+# Function to calculate Permuted R2 for a specific feature j
+permR2 <- function(data, Y, j, model) {
+  Xperm <- data
+  # Permute column j
+  Xperm[, j] <- sample(data[, j], replace = FALSE)
+  
+  # Predict using permuted data
+  pred_perm <- predict(model, newdata = as.data.frame(Xperm))
+  
+  # Calculate R2
+  rsq_perm <- 1 - sum((Y - pred_perm)^2) / sum((Y - mean(Y))^2)
+  return(rsq_perm)
+}
 
 
 # ==============================================================================
@@ -65,8 +80,8 @@ taxa <- read_delim(
 # ==============================================================================
 
 # Samples as rows, OTUs as columns
-otu_t <- t(as.matrix(otu[, -1]))   # drop OTU ID column, transpose
-namess=as.vector(otu[,1])
+otu_t <- t(abundance)   # drop OTU ID column, transpose
+namess=row.names(abundance)
 # Prevalence per OTU
 prev <- colSums(otu_t > 0) / nrow(otu_t)
 
@@ -86,57 +101,60 @@ otu_filtered <- otu_t[, keep, drop = FALSE]
 ncol(otu_filtered)
 ncol(otu_t)
 
-namess_filtered=unlist(namess)[which(keep)]
 # ==============================================================================
 # 3. Merge with phenotype (age) & basic setup
 # ==============================================================================
+
+names(metadata) 
+
+# Check alignment
+stopifnot(all(metadata$subject_id %in% rownames(otu_t)))
+
 mydata <- merge(
-  x     = task,
+  x     = metadata,
   y     = otu_filtered,
-  by.x  = "SampleID",
+  by.x  = "subject_id",
   by.y  = "row.names"
 )
 
 # Drop SampleID after merge
+mydata[, 1]
 mydata <- mydata[, -1]
+names(mydata)[1:35]
 
-mydata=mydata[complete.cases(mydata),]
-n <- nrow(mydata)
-p <- ncol(mydata) - 1   # number of OTUs
-
-y <- mydata$Serum_albumin#log(mydata$Total_bilirubin)
-X=mydata[,-c(1,4,8,9,11,12,13,16,17,18,19)]
-
-namess_filtered_combined=c(names(task)[-1],namess_filtered)
-namess_filtered_combined=namess_filtered_combined[-c(1,4,8,9,11,12,13,16,17,18,19)]
+y <- mydata$albumine#log(mydata$Total_bilirubin)
+hist(mydata$albumine)
+names(mydata)
+X=mydata[,-c(1:3,7,9:21,23,25:28)]
+p=ncol(X)
+names_x=names(X)
+names(X)=paste0('X',1:p)
 mydata_full=as.data.frame(cbind(y,X))
-p=1042;n=130
-data_full=mydata_full
-X=mydata_full[,-1]
-y=mydata_full[,1]
-#table(X[,1])
-for(i in 1:8){
-  print(names(X)[i])
-  print(table(X[,i]))
-}
-table(X$Ascites)
-X$Sex=ifelse(X$Sex=='female',1,0)
-X$Cirrhotic=ifelse(X$Cirrhotic=='Cirrhosis',1,0)
-X$HBV_related=ifelse(X$HBV_related=='Y',1,0)
-X$Alcohol_related=ifelse(X$Alcohol_related=='Y',1,0)
-X$Ascites=ifelse(X$Ascites=='Mild'|X$Ascites=='Sever',1,0)
-X$HE=ifelse(X$HE=='Grade 1',1,0)
+names(mydata_full)
+
 # ==============================================================================
-# 4. Parameters and Parallel Setup
+# 4. Parameters and  Setup
 # ==============================================================================
+amountTrain <- 0.5
+amountTest  <- 1 - amountTrain
+num_split   <- 5
 q=0.1
-num_split=5
-set.seed(1292025)
+set.seed(20260801)
+# Quick fix
+X$X1 <- as.numeric(as.factor(X$X1))
+X$X2 <- as.numeric(as.factor(X$X2))
+X$X4 <- as.numeric(as.factor(X$X4))
+X$X6 <- as.numeric(as.factor(X$X6))
+
+# Convert remaining to numeric (columns X3, X5, X7-X210)
+X_matrix <- as.matrix(X)
+
 # ==============================================================================
 # 5. Dai data splitting
 # ==============================================================================
 Dai=function(X, y, num_split=5, q){
   n <- dim(X)[1]; p <- dim(X)[2]
+  X_matrix <- as.matrix(X)
   inclusion_rate <- matrix(0, nrow = num_split, ncol = p)
   fdp <- rep(0, num_split)
   power <- rep(0, num_split)
@@ -148,16 +166,16 @@ Dai=function(X, y, num_split=5, q){
     sample_index2 <- setdiff(c(1:n), sample_index1)
     
     ### get the penalty lambda for Lasso
-    cvfit <- cv.glmnet(X[sample_index1, ], y[sample_index1], type.measure = "mse", nfolds = 10)
+    cvfit <- cv.glmnet(X_matrix[sample_index1, ], y[sample_index1], type.measure = "mse", nfolds = 10)
     lambda <- cvfit$lambda.min
     
     ### run Lasso on the first half of the data
-    beta1 <- as.vector(glmnet(X[sample_index1, ], y[sample_index1], family = "gaussian", alpha = 1, lambda = lambda)$beta)
+    beta1 <- as.vector(glmnet(X_matrix[sample_index1, ], y[sample_index1], family = "gaussian", alpha = 1, lambda = lambda)$beta)
     nonzero_index <- which(beta1 != 0)
     if(length(nonzero_index)!=0){
       ### run OLS on the second half of the data, restricted on the selected features
       beta2 <- rep(0, p)
-      beta2[nonzero_index] <- as.vector(lm(y[sample_index2] ~ X[sample_index2, nonzero_index] - 1)$coeff)
+      beta2[nonzero_index] <- as.vector(lm(y[sample_index2] ~ as.matrix(X[sample_index2, nonzero_index]) - 1)$coeff)
       
       ### calculate the mirror statistics
       M <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
@@ -202,16 +220,13 @@ Dai=function(X, y, num_split=5, q){
   }
     return(selected_index)
 }
-X_df  <- as.data.frame(X)           # list → data.frame
-X_mat <- as.matrix(X_df)            # data.frame → numeric matrix
-Dai(X=X_mat,y=y,num_split=5,q=0.1) 
-
+Dai(X=X,y=y,num_split=num_split,q=0.1) 
 # ==============================================================================
  # 5. BH
 # ==============================================================================  
-set.seed(1292025)
+set.seed(20260801)
 p <- dim(X)[2]
-multi_fit = multi.split(X_mat, y, B = num_split)
+multi_fit <- multi.split(X_matrix, y, B = num_split)
 pvalues = multi_fit$pval.corr
 sorted_pvalues = sort(pvalues, decreasing = F, index.return = T)
 cutoff <- which(sorted_pvalues$x <= (1:p)*q)
@@ -222,7 +237,7 @@ if(length(cutoff)){
 }else{
   selected_index <- NA
 }
-names(X)[selected_index]
+names_x[selected_index]
 
 
 # ==============================================================================
@@ -230,26 +245,26 @@ names(X)[selected_index]
 # ==============================================================================  
 
 q = 0.1
-nrounds = 500
+nrounds = 100
 param =list(
   objective = "reg:squarederror",
   eta       = 0.05,
   max_depth = 3,
-  subsample = 0.6,
-  colsample_bytree = 0.8,
-  lambda    = 1,
-  alpha     = 0
+  subsample = 0.8,
+  colsample_bytree = 1,
+  lambda    = 2,
+  alpha     = 1
 )
 seed = 1292025
 
 set.seed(seed)
 
 ## 1. build knockoff copies (second-order Gaussian)
-ko <- create.second_order(X)             # returns list with X_k, Sigma, etc.
+ko <- create.second_order(X_matrix)             # returns list with X_k, Sigma, etc.
 Xk <- ko
 
 ## 2. fit XGBoost on [X, X_k]
-X_aug <- cbind(X, Xk)
+X_aug <- cbind(X_matrix, Xk)
 colnames(X_aug) <- c(paste0("X",  seq_len(ncol(X))),
                      paste0("Xk", seq_len(ncol(X))))
 dtrain <- xgb.DMatrix(data = X_aug, label = y)
@@ -273,17 +288,12 @@ names(W) <- paste0("X", seq_len(p))
 T <- knockoff.threshold(W, fdr = q, offset = 1)   # BC+1 threshold
 selected_index <- which(W >= T)
 selected_index
-#X3   X7  X21  X30  X57 X186 X442 X516 X574 X584 X585 X630 X916 
-#3    7   21   30   57  186  442  516  574  584  585  630  916 
 
-
-#[1] if num_split=5
-#[1] 574 584 585 592 611 615 630 683 882 896
 length(selected_index)
 
-namess_filtered_combined[selected_index]
-
-
-GBM_knockoff(X=X_mat,y=y,q=0.1) 
+names_x[selected_index]
+signal_index=c()
+ApplyGBMKnockoff(X = X_matrix, y = y, q = q,param=param)
+ 
 
 

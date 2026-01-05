@@ -16,28 +16,11 @@ if (!require("BiocManager", quietly = TRUE))
 
 if (!require("curatedMetagenomicData", quietly = TRUE))
   BiocManager::install("curatedMetagenomicData")
-
-# Load library
 library(curatedMetagenomicData)
 
-# Search for Qin studies
-library(dplyr)
-all_studies <- sampleMetadata %>%
-  filter(grepl("Qin", study_name, ignore.case = TRUE)) %>%
-  select(study_name) %>%
-  distinct()
-
-print(all_studies)
-
-# Get Qin2014 data
-# First, see what datasets are available from Qin2014
-qin_datasets <- sampleMetadata %>%
-  filter(study_name == "QinN_2014")  # Note: might be QinJ_2012 not Qin2014
-
-# View available datasets
-unique(qin_datasets$study_name)
-
-# Get the data - returns a TreeSummarizedExperiment object
+# ==============================================================================
+# 1. File Paths & Data Import
+# ==============================================================================
 qin_data <- curatedMetagenomicData(
   "QinN_2014.relative_abundance",
   dryrun = FALSE,
@@ -50,18 +33,13 @@ qin_tse <- qin_data[[1]]  # Extract TreeSummarizedExperiment
 
 # Get relative abundance matrix
 abundance <- assay(qin_tse)
-dim(abundance)
-View(abundance)
+
 # Get sample metadata
 metadata <- colData(qin_tse)
 table(metadata$disease)
 sum(duplicated(metadata$subject_id)) 
 # Get taxonomic information
 taxonomy <- rowData(qin_tse)
-
-# Check for validation cohort or batch information
-table(metadata$study_condition)
-table(metadata$body_site)
 
 # ==============================================================================
 #Helper functions
@@ -82,11 +60,6 @@ permR2 <- function(data, Y, j, model) {
 }
 
 
-# ==============================================================================
-# 1. File Paths & Data Import
-# ==============================================================================
-
-# abundance
 # ==============================================================================
 # 2. OTU Pre-processing (prevalence + relative abundance filter)
 # ==============================================================================
@@ -135,27 +108,28 @@ mydata[, 1]
 mydata <- mydata[, -1]
 names(mydata)[1:35]
 
-y <- mydata$albumine#log(mydata$Total_bilirubin)
+y <- mydata$albumine
 hist(mydata$albumine)
 names(mydata)
-X=mydata[,-c(20, 21, 23, 25:28)] #response and variables with missingness
+X=mydata[,-c(1:3,7,9:21,23,25:28)]
 p=ncol(X)
 names_x=names(X)
 names(X)=paste0('X',1:p)
 mydata_full=as.data.frame(cbind(y,X))
 names(mydata_full)
-
+mydata_full=mydata_full[complete.cases(mydata_full),]
+mydata_full$y
 # ==============================================================================
 # 4. Parameters and Parallel Setup
 # ==============================================================================
 amountTrain <- 0.5
 amountTest  <- 1 - amountTrain
-num_split   <- 50
+num_split   <- 5
 q=0.1
 # Setup Parallel Backend
 
-p <- ncol(X)   # number of OTUs
-n <- nrow(X) 
+p <- ncol(mydata_full)-1   # number of OTUs
+n <- nrow(mydata_full) 
 
 cl <- parallel::makeCluster(25)
 registerDoParallel(cl)
@@ -201,9 +175,9 @@ res_mat <- foreach(iter = 1:num_split,
                      # --- fit RF using parameter vector pm ---350 260 16
                      mynlm <- randomForest(
                        y ~ ., 
-                       ntry=50,
-                       ntree=100,
-                       nodesize=16,
+                       ntry=260,#260,#260,
+                       ntree=100,#500,
+                       nodesize=16,#10,
                        data    = dataTrain
                      )
                      
@@ -263,6 +237,7 @@ length(selected_index)
 (mean(R2orig1_vec)+mean(R2orig2_vec))/2
 names_x[selected_index]
 
-#[1] 110 105   5 169   4  17 167
+#[1]  132 151 153 157 178 188 193   1   2 152 154 171
 
+length(selected_index)-2
 head(X[,selected_index])
