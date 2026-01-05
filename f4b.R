@@ -60,7 +60,7 @@ size_half     <- floor((amountTest / 2) * n)
 sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
 sample_index2 <- setdiff(remaining_index, sample_index1)
 
-dataTrain <- data_full[train_index, , drop = FALSE]
+dataTrain <- mydata_full[train_index, , drop = FALSE]
 # Grid search
 best_r2 <- -Inf
 best_params <- NULL
@@ -131,7 +131,7 @@ for (i in 1:nrow(param_grid)) {
 
 # Sort results by average R²
 results <- results[order(-results$selected), ]
-
+results <- results[order(-results$R2_avg), ]
 # Display top 10 results
 cat("\n=== Top 10 Parameter Combinations ===\n")
 print(head(results, 25))
