@@ -6,7 +6,7 @@ library(ggpubr)
 #import results
 s1=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario1/Scenario1.xlsx')
 s2=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario2/Scenario2.xlsx')
-s3=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario3/Scenario3.xlsx')
+s3=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario3b/Scenario3.xlsx')
 s4=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario4/Scenario4.xlsx')
 
 myresults <- list(
@@ -96,36 +96,3 @@ ggarrange(
   legend = "bottom"
 )
 
-# Alternative: Use error bars instead of ribbons
-PowerPlot_errorbars <- ggplot(combined_results, aes(x = Signal_noisy, y = as.numeric(Avg_Power), 
-                                                    color = Method)) +
-  geom_errorbar(aes(ymin = Power_Lower, ymax = Power_Upper), width = 0.2, alpha = 0.5) +
-  geom_point(size = 2) +
-  geom_line() +
-  labs(x = "Signal Strength", y = "Power") +
-  scale_x_continuous(breaks = seq(from = 5, to = 13, by = 1)) +
-  geom_hline(yintercept = 0.8, linetype = "dashed") +
-  scale_color_manual(values = colors) +
-  coord_cartesian(ylim = c(-0.01, 1)) +
-  facet_wrap(~ Scenario, ncol = 4) +
-  theme_minimal() +
-  theme(strip.text = element_blank())  
-
-FDRPlot_errorbars <- ggplot(combined_results, aes(x = Signal_noisy, y = as.numeric(Avg_FDR), 
-                                                  color = Method)) +
-  geom_errorbar(aes(ymin = FDR_Lower, ymax = FDR_Upper), width = 0.2, alpha = 0.5) +
-  geom_point(size = 2) +
-  geom_line() +
-  labs(x = "", y = "FDR") +
-  scale_x_continuous(breaks = seq(from = 5, to = 13, by = 1)) +
-  geom_hline(yintercept = 0.1, linetype = "dashed") +
-  scale_color_manual(values = colors) +
-  facet_wrap(~ Scenario, ncol = 4) +
-  theme_minimal()
-
-ggarrange(
-  FDRPlot_errorbars, PowerPlot_errorbars, 
-  nrow = 2,
-  common.legend = TRUE, 
-  legend = "bottom"
-)
