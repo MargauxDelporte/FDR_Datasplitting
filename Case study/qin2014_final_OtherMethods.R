@@ -137,7 +137,7 @@ names(mydata_full)
 # ==============================================================================
 amountTrain <- 0.5
 amountTest  <- 1 - amountTrain
-num_split   <- 5
+num_split   <- 50
 q=0.1
 set.seed(20260801)
 # Quick fix
@@ -292,8 +292,7 @@ selected_index
 length(selected_index)
 
 names_x[selected_index]
-signal_index=c()
-ApplyGBMKnockoff(X = X_matrix, y = y, q = q,param=param)
+
  
 
 

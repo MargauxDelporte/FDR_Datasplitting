@@ -5,8 +5,8 @@ mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
-#source(paste0(mywd,'/Scenario/Scenario3b/TriangleLassoHD.R'))
-source(paste0(mywd,'/Scenario/Scenario3b/MarsParallelHD.R'))
+#source(paste0(mywd,'/Scenario/Scenario3c/TriangleLassoHD.R'))
+source(paste0(mywd,'/Scenario/Scenario3c/MarsParallelHD.R'))
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
 source(paste0(mywd,'/Functions Dai/MBHq.R'))
@@ -74,11 +74,11 @@ Compare_SignalStrength <- function(i, s) {
   
   return(ResultsDataFrame)
 }
-Compare_SignalStrength(i=7,s=5)
-Compare_SignalStrength(i=7,s=6)
-Compare_SignalStrength(i=7,s=7)
-Compare_SignalStrength(i=7,s=8)
-Compare_SignalStrength(i=7,s=9)
+Compare_SignalStrength(i=10,s=5)
+Compare_SignalStrength(i=10,s=6)
+Compare_SignalStrength(i=10,s=7)
+Compare_SignalStrength(i=10,s=8)
+Compare_SignalStrength(i=10,s=9)
 
 #######run the code#############
 # Dai?s routines
@@ -131,7 +131,7 @@ results_list <- foreach(
   
   # write out this chunk immediately
   fname <- sprintf("Results_s%02d_i%02d.csv", s_val, i_val)
-  write.csv(chunk, file = paste0("/home/mde4023/FDR_Datasplitting/Scenario/Scenario3b/Temp2/",fname), row.names = FALSE)
+  write.csv(chunk, file = paste0("/home/mde4023/FDR_Datasplitting/Scenario/Scenario3c/Temp2/",fname), row.names = FALSE)
   
   # return for final binding
   chunk
@@ -144,3 +144,4 @@ warnings()
 Results <- results_list
 write.csv(Results, file = "ResultsHDScenario.csv", row.names = FALSE)
 
+OR=1.3*(1-p0)/(1-p1)
