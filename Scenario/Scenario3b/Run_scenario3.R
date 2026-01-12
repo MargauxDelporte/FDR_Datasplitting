@@ -1,12 +1,12 @@
 ### High dimension linear model
 rm(list = ls())
 
-mywd='/home/mde4023/FDR_Datasplitting'
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
-source(paste0(mywd,'/Scenario/Scenario3b/TriangleLassoHD.R'))
-
+#source(paste0(mywd,'/Scenario/Scenario3b/TriangleLassoHD.R'))
+source(paste0(mywd,'/Scenario/Scenario3b/MarsParallelHD.R'))
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
 source(paste0(mywd,'/Functions Dai/MBHq.R'))
@@ -22,7 +22,7 @@ library(hdi)
 library(parallel)
 
 ### algorithmic settings
-num_split <- 50
+num_split <- 5
 n <-400
 p <- 500
 p0 <- 25
@@ -30,7 +30,7 @@ q <- 0.1
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-#######set up the method for the comparison############# 
+#######set up the method for the comparison#############  s=15;i=10
 Compare_SignalStrength <- function(i, s) {
   set.seed(s)
   delta <- i
@@ -40,11 +40,11 @@ Compare_SignalStrength <- function(i, s) {
   X2 <- matrix(rnorm(n2*p, mean= 1), n2, p)
   X  <- rbind(X1, X2)
   beta_star <- numeric(p)
-  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))*10
   y <- (X %*% beta_star + rnorm(n))
   
   # run your custom methods
-  g1 <- ApplyTriangleLassoHD( X = X, y = y, q = q, num_split = num_split,
+  g1 <- ApplyMarsTrain_HDparallel( X = X, y = y, q = q, num_split = num_split,
                                  signal_index = signal_index, myseed = 1)
   print(g1)
   # FDR methods
@@ -74,10 +74,14 @@ Compare_SignalStrength <- function(i, s) {
   
   return(ResultsDataFrame)
 }
-
+Compare_SignalStrength(i=10,s=5)
+Compare_SignalStrength(i=10,s=6)
+Compare_SignalStrength(i=10,s=7)
+Compare_SignalStrength(i=10,s=8)
+Compare_SignalStrength(i=10,s=9)
 
 #######run the code#############
-# Dai’s routines
+# Dai?s routines
 source(file.path(mywd, 'Functions Dai', 'analysis.R'))
 source(file.path(mywd, 'Functions Dai', 'MBHq.R'))
 source(file.path(mywd, 'Functions Dai', 'DS.R'))

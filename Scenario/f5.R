@@ -1,0 +1,151 @@
+suppressPackageStartupMessages({
+  library(earth)        # MARS
+  library(foreach)
+  library(doParallel)
+  library(doRNG)        # reproducible %dopar%
+})
+
+
+#setwd("~/Desktop/temp") j=1 model=lm
+
+permR2Mars<-function(data,Y,j,model){
+  Xperm <- data
+  Xperm[, j] <- sample(data[, j], replace = FALSE)
+  pred_perm <- predict(model, newdata = as.data.frame(Xperm))
+  rsq_perm <- 1 - sum((Y - pred_perm)^2) / sum((Y - mean(Y))^2)
+  rsq_perm
+  return(rsq_perm)
+}
+ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed=1,num_split = 50,
+                                      signal_index = signal_index,plot_hist = FALSE) {
+  
+
+
+  num_split <- 5
+  n <-400
+  p <- 500
+  p0 <- 25
+  q <- 0.1
+  set.seed(456)
+  signal_index <- sample(c(1:p), size = p0, replace = F)
+  amountTrain <- 0.5
+  amountTest  <- 1 - amountTrain
+  
+  n <- nrow(X); p <- ncol(X)
+  data <- data.frame(cbind(y, X))
+  colnames(data) <- c("y", paste0("X", 1:p))
+  
+  #######set up the method for the comparison############# 
+  s=15
+  i=10
+  set.seed(s)
+  delta <- i
+  # simulate data
+  n1 <- floor(n/2); n2 <- n - n1
+  X1 <- matrix(rnorm(n1*p, mean= -1), n1, p)
+  X2 <- matrix(rnorm(n2*p, mean= 1), n2, p)
+  X  <- rbind(X1, X2)
+  beta_star <- numeric(p)
+  beta_star[signal_index] <- rnorm(p0, 0, delta*sqrt(log(p)/n))
+  y <- (X %*% beta_star + rnorm(n))
+  
+  
+                       
+                       # --- indices ---
+                       train_index <- sample.int(n, size = floor(amountTrain * n), replace = FALSE)
+                       remaining_index <- setdiff(seq_len(n), train_index)
+                       
+                       # split the remaining half evenly
+                       size_half <- floor((amountTest/2) * n)
+                       sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
+                       sample_index2 <- setdiff(remaining_index, sample_index1)
+                       dataTrain <- data[train_index, , drop = FALSE]
+                       
+                       mars_poly= earth(
+                         y ~ .,
+                         pmethod="cv",
+                         nfold=5,
+                         minspan=2,
+                         thresh=0,
+                         data    = dataTrain
+                       )
+                       lm <- mars_poly
+                       lm
+                       # --- R^2 on train (not stored) / test halves (stored) ---
+                       pred1 <- predict(lm, newdata = as.data.frame(X[sample_index1, , drop = FALSE]))
+                       pred2 <- predict(lm, newdata = as.data.frame(X[sample_index2, , drop = FALSE]))
+                       y1 <- y[sample_index1]; y2 <- y[sample_index2]
+                       
+                       R2orig1 <- 1 - sum((y1 - pred1)^2) / sum((y1 - mean(y1))^2)
+                       R2orig2 <- 1 - sum((y2 - pred2)^2) / sum((y2 - mean(y2))^2)
+                       R2orig1;R2orig2
+                       # --- permutation-based drops ---
+                       Rnew1 <- sapply(seq_len(p), function(j)
+                         permR2Mars(as.data.frame(X[sample_index1, , drop = FALSE]), Y = y1, j = j, model = lm))
+                       Rnew2 <- sapply(seq_len(p), function(j)
+                         permR2Mars(as.data.frame(X[sample_index2, , drop = FALSE]), Y = y2, j = j, model = lm))
+                       
+                       beta1 <- R2orig1 - Rnew1
+                       beta2 <- R2orig2 - Rnew2
+                       mirror <- sign(beta1 * beta2) * (abs(beta1) + abs(beta2))
+                       #hist(mirror[-signal_index])
+                       selected_index <- SelectFeatures(mirror, abs(mirror),q)
+                         res <- CalculateFDP_Power(selected_index, signal_index)
+                         fdp_val <- res$fdp
+                         pow_val <- res$power
+
+  
+  parallel::stopCluster(cl)
+  
+  # ---- unpack ----
+  num_select     <- res_mat[, 1]
+  fdp            <- res_mat[, 2]
+  power          <- res_mat[, 3]
+  R2orig1_vec    <- res_mat[, 4]
+  R2orig2_vec    <- res_mat[, 5]
+  inclusion_rate_mat <- res_mat[, -(1:5), drop = FALSE]  # num_split x p
+  
+  # DS results from the *first* split (order preserved with foreach)
+  DS_fdp   <- fdp[1]
+  DS_power <- power[1]
+  
+  # MDS inclusion rates (avg across splits)
+  inclusion_rate <- apply(inclusion_rate_mat, 2, mean)
+  
+  # Rank features by empirical inclusion rate
+  feature_rank <- order(inclusion_rate)
+  feature_rank <- setdiff(feature_rank, which(inclusion_rate == 0))
+  
+  if (length(feature_rank) != 0) {
+    null_feature <- numeric()
+    for (feature_index in seq_along(feature_rank)) {
+      if (sum(inclusion_rate[feature_rank[1:feature_index]]) > q) break
+      null_feature <- c(null_feature, feature_rank[feature_index])
+    }
+    selected_index <- setdiff(feature_rank, null_feature)
+    
+    res_final <- CalculateFDP_Power(selected_index, signal_index)
+    MDS_fdp   <- res_final$fdp
+    MDS_power <- res_final$power
+  } else {
+    MDS_fdp <- 0
+    MDS_power <- 0
+  }
+  
+  message(paste0("First R squared: ", round(R2orig1_vec[1], 3)))
+  message(paste0("Second R squared: ", round(R2orig2_vec[1], 3)))
+  message(paste0("DS_fdp = ", DS_fdp,
+                 " DS_power = ", DS_power,
+                 " MDS_fdp = ", MDS_fdp,
+                 " MDS_power = ", MDS_power))
+  
+  return(list(
+    DS_fdp   = ifelse(is.na(DS_fdp),0,DS_fdp),
+    DS_power = ifelse(is.na(DS_power),0,DS_power),
+    MDS_fdp  = MDS_fdp,
+    MDS_power = MDS_power)
+  )
+}
+
+
+
