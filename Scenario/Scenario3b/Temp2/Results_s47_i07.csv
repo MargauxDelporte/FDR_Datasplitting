@@ -2,6 +2,6 @@
 "Boost DS",7,0,0
 "Boost MS",7,0,0
 "DataSplitting",7,0,0
-"MultipleDataSplitting",7,0,0.6
+"MultipleDataSplitting",7,0,0
 "Knockoff",7,0,0
-"Benjamini-Hochberg (BH)",7,0,0.7
+"Benjamini-Hochberg (BH)",7,0,0.8
