@@ -31,7 +31,7 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed=1,num_split
   
   # ---- parallel backend ----
   n_cores <- max(1, parallel::detectCores(logical = TRUE) - 1)
-   cl <- parallel::makeCluster(n_cores)
+  cl <- parallel::makeCluster(n_cores)
   doParallel::registerDoParallel(cl)
   
   # We’ll collect per-split:
@@ -56,10 +56,8 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed=1,num_split
                          y ~ .,
                          pmethod="cv",
                          nfold=5,
-                         minspan=1,
+                         minspan=2,
                          thresh=0,
-                         degree=2,
-                         nprune=30,
                          data    = dataTrain
                        )
                        lm <- mars_poly

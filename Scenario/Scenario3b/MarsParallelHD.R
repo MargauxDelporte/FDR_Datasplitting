@@ -57,7 +57,7 @@ ApplyMarsTrain_HDparallel <- function(X, y, q=q,mynk,myprune, myseed=1,num_split
                          pmethod="cv",
                          nfold=5,
                          minspan=1,
-                         thresh=0.001,
+                         thresh=0,
                          degree=2,
                          nprune=30,
                          data    = dataTrain
