@@ -37,15 +37,15 @@ abundance <- assay(qin_tse)
 # Get sample metadata
 metadata <- colData(qin_tse)
 table(metadata$disease)
-#metadata$ascites <- ifelse(grepl("ascites", metadata$disease), 1, 0)
-##metadata$hepatitis <- ifelse(grepl("hepatitis", metadata$disease), 1, 0)
-#metadata$schistosoma <- ifelse(grepl("schistosoma", metadata$disease), 1, 0)
-#metadata$cirrhosis <- ifelse(grepl("cirrhosis", metadata$disease), 1, 0)
+metadata$ascites <- ifelse(grepl("ascites", metadata$disease), 1, 0)
+metadata$hepatitis <- ifelse(grepl("hepatitis", metadata$disease), 1, 0)
+metadata$schistosoma <- ifelse(grepl("schistosoma", metadata$disease), 1, 0)
+metadata$cirrhosis <- ifelse(grepl("cirrhosis", metadata$disease), 1, 0)
 
-#table(metadata$ascites)
-#table(metadata$hepatitis)
-#table(metadata$schistosoma)
-#table(metadata$cirrhosis)
+table(metadata$ascites)
+table(metadata$hepatitis)
+table(metadata$schistosoma)
+table(metadata$cirrhosis)
 
 sum(duplicated(metadata$subject_id)) 
 # Get taxonomic information
@@ -115,8 +115,7 @@ mydata <- merge(
 mydata[, 1]
 mydata <- mydata[, -1]
 y <- mydata$albumine
-names(mydata)
-X=mydata[,-c(1:3,5,7,9:21,23,25:28)]
+X=mydata[,-c(1:5,7,9:21,23,25:28)]
 p=ncol(X)
 
 #rename the columns
@@ -141,11 +140,9 @@ n <- nrow(mydata_full)
 
 cl <- parallel::makeCluster(25)
 registerDoParallel(cl)
-# registerDoRNG(20260501) 
-# set.seed(20260501)
 
-registerDoRNG(20260501) 
-set.seed(20260501)
+registerDoRNG(20261601) 
+set.seed(20261601)
 # ==============================================================================
 # 5. Main Parallel Loop (Data Splitting)
 # ==============================================================================
@@ -250,3 +247,4 @@ if(length(feature_rank)!=0){
 #[1]  132 151 153 157 178 188 193   1   2 152 154 171
 print(selected_index)
 names_x[selected_index]
+length(selected_index)

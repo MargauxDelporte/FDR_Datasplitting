@@ -1,4 +1,4 @@
-library(randomForest)
+library(xgboost)
 
 # Function to calculate R²
 # Function to calculate R²
@@ -30,46 +30,15 @@ results <- data.frame(
   test_rmse = numeric(),
   test_r2 = numeric()
 )
-# --- indices ---
-mydata <- merge(
-  x     = metadata,
-  y     = otu_filtered,
-  by.x  = "subject_id",
-  by.y  = "row.names"
-)
-
-# Drop SampleID after merge
-mydata[, 1]
-mydata <- mydata[, -1]
-names(mydata)[1:35]
-
-y <- mydata$albumine#log(mydata$Total_bilirubin)
-X=mydata[,-c(1:3,7,9:21,23,25:28)] #response and variables with missingness
-p=ncol(X)
-names_x=names(X)
-names(X)=paste0('X',1:p)
-mydata_full=as.data.frame(cbind(y,X))
-names(mydata_full)
-
-# --- indices ---
+# --- check dataset ---
+set.seed(20260501)
 amountTrain <- 0.5
 amountTest  <- 1 - amountTrain
 num_split   <- 1 #25#0#5010   # Number of data splits
 q=0.1
-n=nrow(mydata_full)
+n=nrow(X)
 train_index     <- sample.int(n, size = floor(0.5 * n), replace = FALSE)
 remaining_index <- setdiff(seq_len(n), train_index)
-
-# Quick fix
-X$X1 <- as.numeric(as.factor(X$X1))
-X$X2 <- as.numeric(as.factor(X$X2))
-X$X4 <- as.numeric(as.factor(X$X4))
-X$X6 <- as.numeric(as.factor(X$X6))
-
-# Convert remaining to numeric (columns X3, X5, X7-X210)
-X_matrix <- as.matrix(X)
-
-# Prepare data
 dtrain <- xgb.DMatrix(data = as.matrix(X_matrix[train_index,]), label = y[train_index])
 dtest <- xgb.DMatrix(data = as.matrix(X_matrix[remaining_index,]), label = y[remaining_index])
 y_train=y[train_index]

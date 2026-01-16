@@ -125,7 +125,7 @@ names(mydata)[1:35]
 y <- mydata$albumine#log(mydata$Total_bilirubin)
 hist(mydata$albumine)
 names(mydata)
-X=mydata[,-c(1:3,7,9:21,23,25:28)]
+X=mydata[,-c(1:3,5,7,9:21,23,25:28)]
 p=ncol(X)
 names_x=names(X)
 names(X)=paste0('X',1:p)
@@ -141,10 +141,9 @@ num_split   <- 50
 q=0.1
 set.seed(20260801)
 # Quick fix
-X$X1 <- as.numeric(as.factor(X$X1))
-X$X2 <- as.numeric(as.factor(X$X2))
-X$X4 <- as.numeric(as.factor(X$X4))
-X$X6 <- as.numeric(as.factor(X$X6))
+X$X1 <- as.numeric(as.factor(X$X1))-1
+X$X3 <- as.numeric(as.factor(X$X3))-1
+X$X5 <- as.numeric(as.factor(X$X5))-1
 
 # Convert remaining to numeric (columns X3, X5, X7-X210)
 X_matrix <- as.matrix(X)
@@ -248,8 +247,8 @@ q = 0.1
 nrounds = 100
 param =list(
   objective = "reg:squarederror",
-  eta       = 0.05,
-  max_depth = 3,
+  eta       = 0.03,
+  max_depth = 9,
   subsample = 0.8,
   colsample_bytree = 1,
   lambda    = 2,

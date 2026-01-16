@@ -7,9 +7,9 @@ calculate_r2 <- function(actual, predicted) {
 
 # Define hyperparameter grid
 param_grid <- expand.grid(
-  mtry = c(50, 100, 150, 200, 260, 300),
-  ntree = c(100, 200, 350, 500),
-  nodesize = c(5, 10, 16, 20, 25)
+  mtry = c(10,25,50, 100, 150, 200),
+  ntree = c(100, 200, 350, 500,750,1000),
+  nodesize = c(2,3,4,5, 10,16,25)
 )
 
 # Initialize results storage
@@ -24,26 +24,7 @@ results <- data.frame(
 )
 names(mydata)
 # prepare the data
-mydata <- merge(
-  x     = metadata,
-  y     = otu_filtered,
-  by.x  = "subject_id",
-  by.y  = "row.names"
-)
-
-# Drop SampleID after merge
-mydata[, 1]
-mydata <- mydata[, -1]
-names(mydata)[1:35]
-
-y <- mydata$albumine#log(mydata$Total_bilirubin)
-X=mydata[,-c(1:3,7,9:21,23,25:28)] #response and variables with missingness
-head(X[,1:25])
-p=ncol(X)
-names_x=names(X)
-names(X)=paste0('X',1:p)
-mydata_full=as.data.frame(cbind(y,X))
-names(mydata_full)
+nrow(mydata_full) #237
 
 # --- indices ---
 set.seed(20260501)
@@ -162,3 +143,26 @@ cat("\n=== Final Model Performance ===\n")
 cat(sprintf("R² on test set 1: %.4f\n", R2_final1))
 cat(sprintf("R² on test set 2: %.4f\n", R2_final2))
 cat(sprintf("Average R²: %.4f\n", mean(c(R2_final1, R2_final2))))
+
+# Train final model with final parameters
+final_model <- randomForest(
+  y ~ ., 
+  mtry = 10,
+  ntree = 500,
+  nodesize = 4,
+  data = dataTrain
+)
+
+# Final evaluation
+pred1_final <- predict(final_model, newdata = as.data.frame(X[sample_index1, , drop = FALSE]))
+pred2_final <- predict(final_model, newdata = as.data.frame(X[sample_index2, , drop = FALSE]))
+
+R2_final1 <- calculate_r2(y[sample_index1], pred1_final)
+R2_final2 <- calculate_r2(y[sample_index2], pred2_final)
+
+cat("\n=== Final Model Performance ===\n")
+cat(sprintf("R² on test set 1: %.4f\n", R2_final1))
+cat(sprintf("R² on test set 2: %.4f\n", R2_final2))
+cat(sprintf("Average R²: %.4f\n", mean(c(R2_final1, R2_final2))))
+
+
