@@ -1,26 +1,42 @@
+rm(list = ls())
+
+mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
+setwd(mywd)
+source(paste0(mywd,'/Functions/HelperFunctions.R'))
+source(paste0(mywd,'/Functions/ApplyGBMKnockoff.R'))
+
+
+source(paste0(mywd,'/Functions Dai/knockoff.R'))
+source(paste0(mywd,'/Functions Dai/analysis.R'))
+source(paste0(mywd,'/Functions Dai/MBHq.R'))
+source(paste0(mywd,'/Functions Dai/DS.R'))
+source(paste0(mywd,'/Functions Dai/fdp_power.R'))
+
+#devtools::install_github("Jeremy690/DSfdr/DSfdr",force = TRUE)
+library(xgboost)
+library(gbm)
+library(ranger)
+library(MASS)
+
+library(glmnet)
+library(knockoff)
+library(mvtnorm)
+library(hdi)
+
 library(readr)
 library(doParallel)
 library(doRNG)      # Reproducible parallel random numbers
-library(microbiome)
-library(earth)
 library(dplyr)
-library(earth)        # MARS
 library(foreach)
-library(doParallel)
-library(ranger)  
-library(randomForest)
-source(paste0('C:/Users/mde4023/Downloads/FDR_Datasplitting','/Functions/HelperFunctions.R'))
-# Install packages if needed
-if (!require("BiocManager", quietly = TRUE))
-  install.packages("BiocManager")
 
-if (!require("curatedMetagenomicData", quietly = TRUE))
-  BiocManager::install("curatedMetagenomicData")
+# Load library
 library(curatedMetagenomicData)
+library(dplyr)
 
 # ==============================================================================
 # 1. File Paths & Data Import
 # ==============================================================================
+# Get the data - returns a TreeSummarizedExperiment object
 qin_data <- curatedMetagenomicData(
   "QinN_2014.relative_abundance",
   dryrun = FALSE,
@@ -42,12 +58,6 @@ metadata$hepatitis <- ifelse(grepl("hepatitis", metadata$disease), 1, 0)
 metadata$schistosoma <- ifelse(grepl("schistosoma", metadata$disease), 1, 0)
 metadata$cirrhosis <- ifelse(grepl("cirrhosis", metadata$disease), 1, 0)
 
-table(metadata$ascites)
-table(metadata$hepatitis)
-table(metadata$schistosoma)
-table(metadata$cirrhosis)
-
-sum(duplicated(metadata$subject_id)) 
 # Get taxonomic information
 taxonomy <- rowData(qin_tse)
 
@@ -93,13 +103,14 @@ keep_abund <- colSums(otu_rel > min_relab) / nrow(otu_rel) >= min_relab_prev
 keep       <- keep_prev & keep_abund
 
 otu_filtered <- otu_t[, keep, drop = FALSE]
-ncol(otu_filtered)
-ncol(otu_t)
+# ncol(otu_filtered)
+# ncol(otu_t)
 
-#namess_filtered=unlist(namess)[which(keep)]
 # ==============================================================================
 # 3. Merge with phenotype (age) & basic setup
 # ==============================================================================
+
+#names(metadata) 
 
 # Check alignment
 stopifnot(all(metadata$subject_id %in% rownames(otu_t)))
@@ -123,33 +134,69 @@ names_x=names(X)
 names(X)=paste0('X',1:p)
 mydata_full=as.data.frame(cbind(y,X))
 
-#keep only complete cases
-mydata_full=mydata_full[complete.cases(mydata_full),]
-
 # ==============================================================================
-# 4. Parameters and Parallel Setup
+# 4. Parameters and  Setup
 # ==============================================================================
 amountTrain <- 0.5
 amountTest  <- 1 - amountTrain
 num_split   <- 50
 q=0.1
-# Setup Parallel Backend
+set.seed(20260801)
+# Quick fix
+names_x[1:8]
+X$X2 <- as.numeric(as.factor(X$X2))-1
+X$X4 <- as.numeric(as.factor(X$X4))-1
+n <- dim(X)[1]; p <- dim(X)[2]
+# Convert remaining to numeric (columns X3, X5, X7-X210)
+X_matrix <- as.matrix(X)
 
-p <- ncol(mydata_full)-1   # number of OTUs
-n <- nrow(mydata_full) 
+# ==============================================================================
+#Helper functions
+# ==============================================================================
 
+# Function to calculate Permuted R2 for a specific feature j
+permR2 <- function(data, Y, j, model) {
+  Xperm <- data
+  # Permute column j
+  Xperm[, j] <- sample(data[, j], replace = FALSE)
+  
+  # Predict using permuted data
+  pred_perm <- predict(model, newdata = as.data.frame(Xperm))
+  
+  # Calculate R2
+  rsq_perm <- 1 - sum((Y - pred_perm)^2) / sum((Y - mean(Y))^2)
+  return(rsq_perm)
+}
+
+
+
+detectCores()
 cl <- parallel::makeCluster(10)
 registerDoParallel(cl)
+# registerDoRNG(20260501) 
+# set.seed(20260501)
 
-registerDoRNG(20261601) 
-set.seed(20261601)
+registerDoRNG(20261801) 
+set.seed(20261801)
 # ==============================================================================
 # 5. Main Parallel Loop (Data Splitting)
 # ==============================================================================
+# 312        10 0.05     500       0.8              0.8 0.6340689 0.6728212 0.6534450       12
+param = list(
+  objective = "reg:squarederror",
+  eta       = 0.010,
+  max_depth = 7,
+  subsample = 0.6,
+  colsample_bytree = 0.6,
+  lambda    = 0,
+  alpha     = 0.5
+)
+nrounds = 100
+
 res_mat <- foreach(iter = 1:num_split,
                    .combine = "rbind",
-                   .packages = c("randomForest")) %dorng% {
-                     
+                   .packages = c("xgboost")) %dorng% {
+                     set.seed(iter)
                      permR2 <- function(data, Y, j, model) {
                        Xperm <- data
                        # Permute column j
@@ -164,9 +211,8 @@ res_mat <- foreach(iter = 1:num_split,
                      }
                      source(paste0('C:/Users/mde4023/Downloads/FDR_Datasplitting','/Functions/HelperFunctions.R'))
                      data_full=mydata_full
-                     X=mydata_full[,-1]
-                     y=mydata_full[,1]
-                     # --- indices ---
+                     X=X_matrix
+                                # --- indices ---
                      train_index     <- sample.int(n, size = floor(amountTrain * n), replace = FALSE)
                      remaining_index <- setdiff(seq_len(n), train_index)
                      
@@ -175,20 +221,16 @@ res_mat <- foreach(iter = 1:num_split,
                      sample_index1 <- sample(remaining_index, size = size_half, replace = FALSE)
                      sample_index2 <- setdiff(remaining_index, sample_index1)
                      
-                     dataTrain <- data_full[train_index, , drop = FALSE]
-                     
                      # --- fit RF using parameter vector pm ---350 260 16
-                     mynlm <- randomForest(
-                       y ~ ., 
-                       mtry=200,
-                       ntree=500,#500,
-                       nodesize=25,#10,
-                       data    = dataTrain
-                     )
+                     dtrain <- xgb.DMatrix(data = X[train_index,], label = y[train_index])
+                     bst <- xgb.train(params   = param,
+                                      data     = dtrain,
+                                      nrounds  = nrounds,
+                                      verbose  = 0)
                      
                      # --- R² on the two halves ---
-                     pred1 <- predict(mynlm, newdata = as.data.frame(X[sample_index1, , drop = FALSE]))
-                     pred2 <- predict(mynlm, newdata = as.data.frame(X[sample_index2, , drop = FALSE]))
+                     pred1 <- predict(bst, newdata = as.data.frame(X[sample_index1, , drop = FALSE]))
+                     pred2 <- predict(bst, newdata = as.data.frame(X[sample_index2, , drop = FALSE]))
                      
                      y1 <- y[sample_index1]
                      y2 <- y[sample_index2]
@@ -198,9 +240,9 @@ res_mat <- foreach(iter = 1:num_split,
                      
                      # --- permutation-based drops ---
                      Rnew1 <- sapply(seq_len(p), function(j)
-                       permR2(as.data.frame(X[sample_index1, , drop = FALSE]), Y = y1, j = j, model = mynlm))
+                       permR2(as.data.frame(X[sample_index1, , drop = FALSE]), Y = y1, j = j, model = bst))
                      Rnew2 <- sapply(seq_len(p), function(j)
-                       permR2(as.data.frame(X[sample_index2, , drop = FALSE]), Y = y2, j = j, model = mynlm))
+                       permR2(as.data.frame(X[sample_index2, , drop = FALSE]), Y = y2, j = j, model = bst))
                      
                      beta1  <- R2orig1 - Rnew1
                      beta2  <- R2orig2 - Rnew2
@@ -222,7 +264,7 @@ R2orig1_vec    <- res_mat[, 2]
 R2orig2_vec    <- res_mat[, 3]
 
 inclusion_rate_mat <- res_mat[, -(1:3), drop = FALSE]  # num_split x p
-
+mean(c(R2orig1_vec,R2orig2_vec))
 # MDS inclusion rates (avg across splits)
 ### multiple data-splitting (MDS) result
 ### multiple data-splitting (MDS) result
@@ -245,6 +287,6 @@ if(length(feature_rank)!=0){
   selected_index <- setdiff(feature_rank, null_feature)
 }
 #[1]  132 151 153 157 178 188 193   1   2 152 154 171
-print(selected_index)
+inclusion_rate
+length(selected_index)
 names_x[selected_index]
-mean(c(R2orig1_vec,R2orig2_vec))

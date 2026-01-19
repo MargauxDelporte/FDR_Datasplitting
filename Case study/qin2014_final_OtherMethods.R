@@ -148,6 +148,9 @@ X$X5 <- as.numeric(as.factor(X$X5))-1
 # Convert remaining to numeric (columns X3, X5, X7-X210)
 X_matrix <- as.matrix(X)
 
+# write.csv(x=X_matrix,file='X_matrix_Qin2014.csv',row.names=FALSE)
+# write.csv(x=y,file='y.csv',row.names=FALSE)
+
 # ==============================================================================
 # 5. Dai data splitting
 # ==============================================================================

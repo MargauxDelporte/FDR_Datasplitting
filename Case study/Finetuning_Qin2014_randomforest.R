@@ -113,6 +113,7 @@ for (i in 1:nrow(param_grid)) {
 # Sort results by average R²
 results <- results[order(-results$selected), ]
 results <- results[order(-results$R2_avg), ]
+write.csv(results, file = "RandomForest_Qin2014_finetuning_results.csv", row.names = FALSE)
 # Display top 10 results
 cat("\n=== Top 10 Parameter Combinations ===\n")
 print(head(results, 25))
