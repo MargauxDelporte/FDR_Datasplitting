@@ -2,11 +2,11 @@ library(openxlsx)
 library(dplyr)
 library(ggplot2)
 library(ggpubr)
-
+library(cowplot)
 #import results
 s1=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario1/Scenario1.xlsx')
 s2=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario2/Scenario2.xlsx')
-s3=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario3b/Scenario3.xlsx')
+s3=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario3/Scenario3.xlsx')
 s4=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario4/Scenario4.xlsx')
 
 myresults <- list(
@@ -92,10 +92,22 @@ FDRPlot_all <- ggplot(combined_results, aes(x = Signal_noisy, y = as.numeric(Avg
   theme_minimal()
 
 # Combined view
-ggarrange(
-  FDRPlot_all, PowerPlot_all, 
+Fig1 <- ggarrange(
+  FDRPlot_all, PowerPlot_all,
   nrow = 2,
-  common.legend = TRUE, 
+  common.legend = TRUE,
   legend = "bottom"
 )
-1-0.8^6
+
+# add "TOP" marker in outer margin
+Fig1_top <- ggdraw(Fig1) +
+  draw_label("TOP", x = 0.98, y = 0.995, hjust = 1, vjust = 1, size = 10)
+ggsave(
+  filename = "Delporte_Fig1.eps",
+  plot = Fig1_top,
+  device = cairo_ps,        # good font embedding
+  width = 11.69,
+  height = 8.27,
+  units = "in",
+  fallback_resolution = 800
+)
