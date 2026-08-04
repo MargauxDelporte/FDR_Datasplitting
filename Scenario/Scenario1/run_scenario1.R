@@ -1,7 +1,7 @@
 ###Linear model
 rm(list = ls())
-
-mywd='/home/mde4023/FDR_Datasplitting'
+mywd='C:/Users/mraga/Downloads/FDR_Datasplitting'
+#mywd='/home/mde4023/FDR_Datasplitting'
 setwd(mywd)
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 source(paste0(mywd,'/Scenario/Scenario1/TriangleLinRegTrainMS.R'))
@@ -27,7 +27,7 @@ q <- 0.1
 set.seed(456)
 signal_index <- sample(c(1:p), size = p0, replace = F)
 
-
+#i=5
 Compare_SignalStrength=function(i,s){
   set.seed(s)
   delta <- i

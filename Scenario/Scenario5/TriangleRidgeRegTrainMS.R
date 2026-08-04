@@ -13,7 +13,8 @@ permR2TriangleRidgeTrain<-function(mydata,j,model){
   rsquared=1-sum((mydata$y-predictLM)^2)/sum((mydata$y-mean(mydata$y))^2)
   return(rsquared)
 }
-myseed=5
+#myseed=5
+#num_split=3
 ApplyTriangleRidgeTrain<-function(X, y, q,myseed,num_split=1,signal_index=signal_index){
   amountTrain=0.333
   amountTest=1-amountTrain
@@ -40,8 +41,9 @@ ApplyTriangleRidgeTrain<-function(X, y, q,myseed,num_split=1,signal_index=signal
     y = yTrain,
     family = "gaussian",
     type.measure = "mse",
-  #  alpha = 0,
-    nfolds = 25,
+ lambda=seq(from=0.01,to=0.9,by=0.005),
+ alpha = 0,
+  nfolds = 25,
     standardize = F,
     relax=T
   )
@@ -80,9 +82,9 @@ ApplyTriangleRidgeTrain<-function(X, y, q,myseed,num_split=1,signal_index=signal
   
 
   mirror<-sign(beta1*beta2)*(abs(beta1)+abs(beta1))
-  #hist(mirror)
+  #hist(mirror) q=0.10
   selected_index<-SelectFeatures(mirror,abs(mirror),q)
-  
+  selected_index
   ### number of selected variables j=1
   if(length(selected_index)!=0){
     num_select[iter] <- length(selected_index)

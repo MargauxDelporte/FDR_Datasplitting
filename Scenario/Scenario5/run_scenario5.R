@@ -2,7 +2,8 @@
 rm(list = ls())
 
 #mywd='/home/mde4023/FDR_Datasplitting'
-mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
+#mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
+mywd='C:/Users/mraga/Downloads/FDR_Datasplitting'
 setwd(mywd)
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 source(paste0(mywd,'/Scenario/Scenario5/TriangleRidgeRegTrainMS.R'))
@@ -19,16 +20,15 @@ library(mvtnorm)
 library(parallel)
 #install.packages("hdi") 
 ### algorithmic settings
-num_split <- 10
-n <- 800
+num_split <- 50
+n <- 500
 p <- 100
 p0 <- 10
 q <- 0.05
-rho <- 0.1
-set.seed(456)
+rho <- 0.05
+set.seed(889)
 signal_index <- sample(c(1:p), size = p0, replace = F)
-
-#i=8
+#View(cor(X))
 
 Compare_SignalStrength=function(i,s){
   set.seed(s)
@@ -42,7 +42,6 @@ Compare_SignalStrength=function(i,s){
   X1 <- rmvnorm(n1, rep(-1, p), sigma = R0)
   X2 <- rmvnorm(n2, rep(1, p), sigma = R0)
   X  <- rbind(X1, X2)
-  X  <- rbind(X1, X2)
   beta_star <- rep(0, p)
   beta_star[signal_index] <- rnorm(p0, mean = 0, sd = delta*sqrt(log(p)/n))
   
@@ -50,12 +49,12 @@ Compare_SignalStrength=function(i,s){
   y <- X%*%beta_star + rnorm(n, mean = 0, sd = 1)
   
   ###my own methods:
-  g=ApplyTriangleRidgeTrain(X=as.data.frame(X), y, q=q,num_split=num_split, signal_index=signal_index, myseed = 1)
+  g=ApplyTriangleRidgeTrain(X=as.data.frame(X), y, q=q,num_split=num_split, signal_index=signal_index, myseed = 5)
   
   ResultsDataFrame=c('LinReg DS',i, as.numeric(g$DS_fdp),as.numeric(g$DS_power))
   ResultsDataFrame=rbind(ResultsDataFrame,c('LinReg MS',i, as.numeric(g$MDS_fdp),as.numeric(g$MDS_power)))
-  ResultsDataFrame
-  return(ResultsDataFrame)
+  #ResultsDataFrame
+  #return(ResultsDataFrame)
   ### Competition
   DS_result <- DS(X,y, num_split=num_split, q=q)
   ResultsDataFrame=rbind(ResultsDataFrame,c('DataSplitting',i,DS_result$DS_fdp,DS_result$DS_power))
@@ -63,12 +62,12 @@ Compare_SignalStrength=function(i,s){
   
   knockoff_result <- knockoff(X, y, q=q)
   ResultsDataFrame=rbind(ResultsDataFrame,c('Knockoff',i,knockoff_result$fdp,knockoff_result$power))
-  
- # BH_result <- MBHq(X, y, q=q, num_split)
-#  ResultsDataFrame=rbind(ResultsDataFrame,c('BH',i,BH_result$fdp,BH_result$power))
-  
+  BH_result <- MBHq(X, y, q=q)
+  #   BH_result <-p.adjust(pvals, method = "BY")
+  ResultsDataFrame=rbind(ResultsDataFrame,c('BH',i,BH_result$fdp,BH_result$power))
   ### save data
-  return(ResultsDataFrame)}
+  return(ResultsDataFrame)
+  }
 
 Compare_SignalStrength(i=8,s=runif(1)*10000000)
 
