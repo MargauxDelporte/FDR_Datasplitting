@@ -41,8 +41,8 @@ ApplyTriangleRidgeTrain<-function(X, y, q,myseed,num_split=1,signal_index=signal
     y = yTrain,
     family = "gaussian",
     type.measure = "mse",
- lambda=seq(from=0.01,to=0.9,by=0.005),
- alpha = 0,
+  #lambda=seq(from=0.01,to=0.3,by=0.005),
+  #alpha = 0,
   nfolds = 25,
     standardize = F,
     relax=T
@@ -60,14 +60,14 @@ ApplyTriangleRidgeTrain<-function(X, y, q,myseed,num_split=1,signal_index=signal
     predict(
       ridge_fit,
       newx = xTest1,
-      s = "lambda.min"
+      s = "lambda.1se"
     )
   )
   predictLM2 <- as.numeric(
     predict(
       ridge_fit,
       newx = xTest2,
-      s = "lambda.min"
+      s = "lambda.1se"
     )
   )
 
@@ -82,7 +82,8 @@ ApplyTriangleRidgeTrain<-function(X, y, q,myseed,num_split=1,signal_index=signal
   
 
   mirror<-sign(beta1*beta2)*(abs(beta1)+abs(beta1))
-  #hist(mirror) q=0.10
+  #hist(mirror[-signal_index]) q=0.1
+  #hist(mirror[signal_index])
   selected_index<-SelectFeatures(mirror,abs(mirror),q)
   selected_index
   ### number of selected variables j=1

@@ -4,16 +4,18 @@ library(ggplot2)
 library(ggpubr)
 library(cowplot)
 #import results
-s1=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario1/Scenario1.xlsx')
-s2=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario2/Scenario2.xlsx')
-s3=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario3/Scenario3.xlsx')
-s4=read.xlsx('C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario4/Scenario4.xlsx')
+s1=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario1/Scenario1.xlsx')
+s2=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario2/Scenario2.xlsx')
+s3=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario3/Scenario3.xlsx')
+s4=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario4/Scenario4.xlsx')
+s5=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario5/Scenario5.xlsx')
 
 myresults <- list(
   Scenario1 = s1, 
   Scenario2 = s2, 
   Scenario3 = s3, 
-  Scenario4 = s4
+  Scenario4 = s4,
+  Scenario5 = s5
 )
 
 # Store aggregated results

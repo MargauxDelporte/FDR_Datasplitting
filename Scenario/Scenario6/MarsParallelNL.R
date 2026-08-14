@@ -16,9 +16,17 @@ permR2Mars<-function(data,Y,j,model){
   rsq_perm
   return(rsq_perm)
 }
-ApplyMarsTrain_parallel <- function(X, y, q, myseed, num_split = 50,
-                                    signal_index = signal_index,
-                                    plot_hist = FALSE) {
+ApplyMarsTrain_parallel <- function(
+    X, y, q, myseed,
+    num_split = 50,
+    signal_index = signal_index,
+    plot_hist = FALSE,
+    degree = 1,
+    nk = 50,
+    penalty = 3,
+    minspan = 10,
+    thresh = 0.001
+) {
   
   stopifnot(nrow(X) == length(y))
   set.seed(myseed)
@@ -56,9 +64,12 @@ ApplyMarsTrain_parallel <- function(X, y, q, myseed, num_split = 50,
                        dataTrain <- data[train_index, , drop = FALSE]
                        mars_poly <- earth(
                          y ~ .,
-                         data    = dataTrain,
-                         minspan=2,
-                         thresh=0.0001,
+                         data = dataTrain,
+                         degree  = degree,
+                         nk      = nk,
+                         penalty = penalty,
+                         minspan = minspan,
+                         thresh  = thresh
                        )
                        lm <- mars_poly
                        
