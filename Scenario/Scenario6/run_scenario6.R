@@ -6,7 +6,7 @@ setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
 source(paste0(mywd,'/Scenario/Scenario6/MarsParallelNL.R'))
-
+source(paste0(mywd,'/Functions/ApplyGBMKnockoff.R'))
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
 source(paste0(mywd,'/Functions Dai/MBHq2.R'))
@@ -48,7 +48,7 @@ i=13
 f=5
 s=5
 #######set up the method for the comparison############# 
-Compare_SignalStrength <- function(i, s, f=500) {
+Compare_SignalStrength <- function(i, s, f=5) {
   set.seed(s)
   delta <- i
   # simulate data
@@ -67,7 +67,20 @@ Compare_SignalStrength <- function(i, s, f=500) {
   y <- (X^2 %*% beta_star + rnorm(n))
   
   # run your custom methods
-  g1 <- ApplyMarsTrain_parallel( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
+  g1 <- ApplyMarsTrain_parallel(
+    X = X,
+    y = y,
+    q = q,
+    myseed = 1 ,
+    num_split = num_split,
+    signal_index = signal_index,
+    degree = 2,
+    nk = 75,
+    penalty = 2,
+    minspan = 5,
+    thresh = 0.0005,
+  )
+  ApplyMarsTrain_parallel( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
   # FDR methods
   DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
   knockoff_result<- ApplyGBMKnockoff(    X = X, y = y, q = q,param=params)
@@ -101,6 +114,7 @@ param_grid <- expand.grid(
   s = 1:200,
   i = 7:13
 )
+Compare_SignalStrength(i=7,s=559,f=5)
 
 # make sure output dir exists
 out_dir <- file.path(mywd, "Scenario/Scenario6/Temp2")
