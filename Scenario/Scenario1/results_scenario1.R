@@ -6,7 +6,7 @@ library(ggpubr)
 library(readr)
 
 # Path to your folder
-csv_dir <- "C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario1/Temp2"
+csv_dir <- "C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario1/Temp2"
 csv_files <- list.files(
   path       = csv_dir,
   pattern    = "\\.csv$",
@@ -17,11 +17,44 @@ csv_files <- list.files(
 # Read each file into a list of data.frames
 data_list <- lapply(csv_files, read.csv, stringsAsFactors = FALSE)
 all_data <- bind_rows(data_list, .id = "source_file")
+head(all_data)
+
+#drop classic benjamini hoghberg
+all_data=subset(all_data,all_data$V1!='BH')
+
+#use  Benjamini-Yekutieli results
+csv_dir <- "C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario1/Temp2/BH"
+csv_files <- list.files(
+  path       = csv_dir,
+  pattern    = "\\.csv$",
+  full.names = TRUE
+)
+bh_list <- lapply(csv_files, read.csv, stringsAsFactors = FALSE)
+df <- do.call(
+  rbind,
+  lapply(bh_list, function(x) {
+    data.frame(
+      Method = as.character(x[1, 1]),
+      Delta  = as.numeric(x[2, 1]),
+      FDP    = as.numeric(x[3, 1]),
+      Power  = as.numeric(x[4, 1])
+    )
+  })
+)
+
+rownames(df) <- NULL
+head(df)
+head(all_data)
+seed=rep(1:200,7)
+df=cbind(seed,df)
 names(all_data)=c('seed','Method','SignalStrength','FDR','Power')
+names(df)=c('seed','Method','SignalStrength','FDR','Power')
+all_data <- rbind(all_data,df)
+
 all_data <- all_data %>%
   mutate(Method  = case_when(
-    Method == "BH" ~ "Benjamini–Hochberg (BH)",
-    Method == "Benjamini-Hochberg (BH)" ~ "Benjamini–Hochberg (BH)",
+    Method == "BH" ~ "Benjamini-Yekutieli (BH)",
+    Method == "BH" ~ "Benjamini-Yekutieli (BH)",
     Method == "DataSplitting" ~ "Dai (single split)",
     Method == "MultipleDataSplitting" ~ "Dai (50 splits)",
     Method == "Knockoff" ~ "Knockoff",
@@ -30,7 +63,7 @@ all_data <- all_data %>%
     TRUE ~ Method  # default if none match
   ))
 
-#write.xlsx(all_data,file='C:/Users/mde4023/Downloads/FDR_Datasplitting/Scenario/Scenario1/Scenario1.xlsx')
+#write.xlsx(all_data,file='C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario1/Scenario1.xlsx')
 
 resultsagg <- all_data %>%
   group_by(Method, SignalStrength) %>%

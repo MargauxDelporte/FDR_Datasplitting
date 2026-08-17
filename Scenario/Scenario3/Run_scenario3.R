@@ -1,7 +1,8 @@
 ### High dimension linear model
 rm(list = ls())
 
-mywd='C:/Users/mde4023/Downloads/FDR_Datasplitting'
+
+mywd='/home/margaux_delporte_uri_edu/'
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
@@ -9,7 +10,7 @@ source(paste0(mywd,'/Scenario/Scenario3/MarsParallelHD.R'))
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
-source(paste0(mywd,'/Functions Dai/MBHq.R'))
+source(paste0(mywd,'/Functions Dai/MBHq2.R'))
 source(paste0(mywd,'/Functions Dai/DS.R'))
 source(paste0(mywd,'/Functions Dai/fdp_power.R'))
 
@@ -18,13 +19,12 @@ library(MASS)
 library(glmnet)
 library(knockoff)
 library(mvtnorm)
-library(hdi)
 library(parallel)
 
 ### algorithmic settings
 num_split <- 50
-n <-400
-p <- 500
+n <-500
+p <- 550
 p0 <- 10
 q <- 0.1
 set.seed(456)
@@ -75,7 +75,7 @@ Compare_SignalStrength <- function(i, s) {
   return(ResultsDataFrame)
 }
 
-
+Compare_SignalStrength(i=7,s=7)
 #######run the code#############
 
 # === PARAMETER GRID ===

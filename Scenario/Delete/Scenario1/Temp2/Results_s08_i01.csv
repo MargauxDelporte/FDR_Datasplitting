@@ -1,0 +1,7 @@
+"Method","delta","fdp","power","mean_VIF","max_VIF"
+"LinReg DS","1","0","0","1.24","1.29"
+"LinReg MS","1","0","0","1.24","1.29"
+"DataSplitting","1","0","0","1.24","1.29"
+"MultipleDataSplitting","1","0","0","1.24","1.29"
+"Knockoff","1","0","0","1.24","1.29"
+"BH","1","0","0","1.24","1.29"

@@ -9,6 +9,7 @@ s2=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario2/Scen
 s3=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario3/Scenario3.xlsx')
 s4=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario4/Scenario4.xlsx')
 s5=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario5/Scenario5.xlsx')
+s6=read.xlsx('C:/Users/mraga/Downloads/FDR_Datasplitting/Scenario/Scenario5/Scenario5.xlsx')
 
 myresults <- list(
   Scenario1 = s1, 

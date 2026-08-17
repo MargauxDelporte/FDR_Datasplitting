@@ -1,7 +1,7 @@
 ### High dimension linear model
 rm(list = ls())
 
-mywd='/home/mde4023/FDR_Datasplitting'
+mywd='C:/Users/mraga/Downloads/FDR_Datasplitting'
 setwd(mywd)
 
 source(paste0(mywd,'/Functions/HelperFunctions.R'))
@@ -10,7 +10,7 @@ source(paste0(mywd,'/Scenario/Scenario2/MarsParallelNL.R'))
 
 source(paste0(mywd,'/Functions Dai/knockoff.R'))
 source(paste0(mywd,'/Functions Dai/analysis.R'))
-source(paste0(mywd,'/Functions Dai/MBHq.R'))
+source(paste0(mywd,'/Functions Dai/MBHq2.R'))
 source(paste0(mywd,'/Functions Dai/DS.R'))
 source(paste0(mywd,'/Functions Dai/fdp_power.R'))
 
@@ -22,16 +22,15 @@ library(MASS)
 library(glmnet)
 library(knockoff)
 library(mvtnorm)
-library(hdi)
 library(parallel)
 library(foreach)
 library(doParallel)
 
 ## algorithmic settings
 num_split <- 50
-n <-500
-p <- 100
-p0 <- 10
+n <-1500
+p <- 250
+p0 <- 25
 q <- 0.1
 
 ###choose the parameters
@@ -60,7 +59,19 @@ Compare_SignalStrength <- function(i, s) {
   y <- (X^2 %*% beta_star + rnorm(n))
   
   # run your custom methods
-  g1 <- ApplyMarsTrain_parallel( X = X, y = y, q = q, num_split = num_split,signal_index = signal_index, myseed = 1)
+  g1 <- ApplyMarsTrain_parallel(
+    X = X,
+    y = y,
+    q = q,
+    myseed = 1 ,
+    num_split = num_split,
+    signal_index = signal_index,
+    degree = 2,
+    nk = 75,
+    penalty = 2,
+    minspan = 5,
+    thresh = 0.0005,
+  )
   # FDR methods
   DS_result      <- DS(          X = X, y = y, q = q, num_split = num_split)
   knockoff_result<- ApplyGBMKnockoff(    X = X, y = y, q = q,param=params)
@@ -88,7 +99,7 @@ Compare_SignalStrength <- function(i, s) {
   
   return(ResultsDataFrame)
 }
-
+#Compare_SignalStrength(i=7,s=5590)
 # build grid
 param_grid <- expand.grid(
   s = 1:200,

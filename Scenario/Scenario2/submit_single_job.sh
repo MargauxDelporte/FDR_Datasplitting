@@ -1,5 +1,5 @@
-#!/bin/bash -l
-#SBATCH --partition=scu-cpu
+#!/bin/bash
+#SBATCH --partition=cpu
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=51
 #SBATCH --job-name=scen2
@@ -7,26 +7,22 @@
 #SBATCH --mem=200G
 #SBATCH --output=scenario2_%j.out
 #SBATCH --error=scenario2_%j.err
-#SBATCH --mail-user=mde4023@med.cornell.edu
-#SBATCH --mail-type=END
 
-# Initialize conda (needed for batch jobs)
-source /home/mde4023/miniconda3/etc/profile.d/conda.sh
+# Load R inside the batch job
+module purge
+module load r/4.4.0
 
-# Activate R environment
-conda activate r_env
+# Show which R is being used
+echo "R location:"
+which R
+R --version
 
-# Set cores for parallel processing
 export OMP_NUM_THREADS=$SLURM_CPUS_PER_TASK
 
-# Navigate to working directory
-cd /home/mde4023/FDR_Datasplitting/Scenario/Scenario2
+cd /home/margaux_delporte_uri_edu/Scenario/Scenario2
 
-# Run the R script
-R CMD BATCH --no-save run_scenario2.R scenario2.Rout
+echo "Starting R job at $(date)"
 
-# Deactivate conda
-conda deactivate
+R CMD BATCH --no-save run_scenario6.R scenario2.Rout
 
 echo "Job completed at $(date)"
-EOF
