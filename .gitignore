@@ -2,4 +2,12 @@ Scenario/HDNonlinearScenario5_mars.R
 Rplots.pdf
 Results/ResultsHD scenario/.Rhistory
 .Rhistory
-.Rhistory
+
+# Local R and operating-system state
+.RData
+.Rproj.user/
+.DS_Store
+
+# Current reproducibility workflow outputs and checkpoints
+reproducibility/results/
+reproducibility/tests/_output/
